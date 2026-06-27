@@ -894,7 +894,11 @@ export default function CreateListingScreen() {
         description: description.trim() || undefined,
         category: apiCategoryForUi(category),
         base_price_cash: price,
-        location: location.trim(),
+        // Send the controlled location VALUE (e.g. "New Cairo") that the picker
+        // stored in `locationValue`, NOT the Arabic display label in `location`.
+        // The backend matches location against the English area/city taxonomy, so
+        // sending the label fails the strict match and rejects the listing (400).
+        location: (locationValue ?? location).trim(),
         specs: specsClean,
         media,
         payment_options: paymentOptions,

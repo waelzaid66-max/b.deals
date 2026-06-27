@@ -9,6 +9,16 @@ const router: IRouter = Router();
 const DB_CHECK_TIMEOUT_MS = 2000;
 
 /**
+ * Root liveness. The platform deploy probe hits `/api` directly, which mounts
+ * this router at its root — previously no route matched `/api`, so the probe got
+ * a non-200 and the deploy was marked unhealthy. This must NOT touch the database
+ * (liveness != readiness); it only proves the process is up and serving.
+ */
+router.get("/", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
+/**
  * Liveness: is the process up and able to serve? Intentionally trivial — it must
  * not touch external dependencies, so an unhealthy database does not cause the
  * orchestrator to kill an otherwise-healthy process.
