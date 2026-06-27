@@ -14,6 +14,7 @@ import {
 } from "@workspace/db/schema";
 import { and, eq, gte, lte, ne, sql } from "drizzle-orm";
 import { bestMatch, normalizeText, slugify, type MatchCandidate } from "../lib/fuzzy";
+import { logger } from "../lib/logger";
 
 /* ── Types ─────────────────────────────────────────────── */
 
@@ -512,31 +513,40 @@ export async function detectDuplicate(params: {
   ];
   if (excludeListingId) conditions.push(ne(listings.id, excludeListingId));
 
-  const candidates = await db
-    .select({
-      id: listings.id,
-      sim: simExpr,
-      modelId: listingAttributes.modelId,
-      year: sql<number | null>`CASE WHEN ${listingAttributes.specs} ->> 'year' ~ '^[0-9]{1,4}$' THEN (${listingAttributes.specs} ->> 'year')::int ELSE NULL END`,
-    })
-    .from(listings)
-    .leftJoin(listingAttributes, eq(listingAttributes.listingId, listings.id))
-    .where(and(...conditions))
-    .orderBy(sql`${simExpr} DESC`)
-    .limit(50);
+  try {
+    const candidates = await db
+      .select({
+        id: listings.id,
+        sim: simExpr,
+        modelId: listingAttributes.modelId,
+        year: sql<number | null>`CASE WHEN ${listingAttributes.specs} ->> 'year' ~ '^[0-9]{1,4}$' THEN (${listingAttributes.specs} ->> 'year')::int ELSE NULL END`,
+      })
+      .from(listings)
+      .leftJoin(listingAttributes, eq(listingAttributes.listingId, listings.id))
+      .where(and(...conditions))
+      .orderBy(sql`${simExpr} DESC`)
+      .limit(50);
 
-  for (const c of candidates) {
-    const sim = Number(c.sim) || 0;
-    const sameModel = !!modelId && c.modelId === modelId;
-    const sameYear = year != null && c.year != null && c.year === year;
-    // Strong textual (trigram) match, OR same model + same year within the ±5%
-    // price band (a near-identical relisting even if the title was reworded).
-    if (sim >= 0.7 || (sameModel && sameYear)) {
-      return { isDuplicate: true, duplicateOfId: c.id };
+    for (const c of candidates) {
+      const sim = Number(c.sim) || 0;
+      const sameModel = !!modelId && c.modelId === modelId;
+      const sameYear = year != null && c.year != null && c.year === year;
+      // Strong textual (trigram) match, OR same model + same year within the ±5%
+      // price band (a near-identical relisting even if the title was reworded).
+      if (sim >= 0.7 || (sameModel && sameYear)) {
+        return { isDuplicate: true, duplicateOfId: c.id };
+      }
     }
-  }
 
-  return { isDuplicate: false, duplicateOfId: null };
+    return { isDuplicate: false, duplicateOfId: null };
+  } catch (err) {
+    // pg_trgm's similarity() is unavailable (the extension couldn't be created on
+    // boot — ensureDbExtensions is intentionally non-fatal so the server still
+    // binds its port and serves). Degrade gracefully: SKIP duplicate detection
+    // rather than 500 the create/update. Trust score still demotes weak listings.
+    logger.error({ err }, "detectDuplicate: similarity() unavailable; skipping duplicate detection");
+    return { isDuplicate: false, duplicateOfId: null };
+  }
 }
 
 /* ── Listing abuse: spam content ───────────────────────── */
