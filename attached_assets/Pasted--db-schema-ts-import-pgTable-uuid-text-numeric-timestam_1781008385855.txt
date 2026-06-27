@@ -1,0 +1,137 @@
+/* db/schema.ts */
+
+import {
+pgTable,
+uuid,
+text,
+numeric,
+timestamp,
+boolean,
+integer,
+jsonb,
+pgEnum,
+index
+} from “drizzle-orm/pg-core”;
+
+/* ENUMS */
+
+export const userRoleEnum = pgEnum(“user_role”, [
+“individual”,
+“dealer”,
+“company”,
+“enterprise”
+]);
+
+export const listingCategoryEnum = pgEnum(“listing_category”, [
+“car”,
+“real_estate”,
+“industrial”
+]);
+
+export const listingStatusEnum = pgEnum(“listing_status”, [
+“active”,
+“sold”,
+“archived”
+]);
+
+export const mediaTypeEnum = pgEnum(“media_type”, [“image”, “video”]);
+
+export const paymentModeEnum = pgEnum(“payment_mode”, [
+“cash”,
+“seller_installment”,
+“bank_finance”
+]);
+
+/* USERS */
+
+export const users = pgTable(“users”, {
+id: uuid(“id”).defaultRandom().primaryKey(),
+name: text(“name”).notNull(),
+role: userRoleEnum(“role”).notNull(),
+isVerified: boolean(“is_verified”).default(false)
+});
+
+/* LISTINGS */
+
+export const listings = pgTable(
+“listings”,
+{
+id: uuid(“id”).defaultRandom().primaryKey(),
+userId: uuid(“user_id”).references(() => users.id),
+title: text(“title”).notNull(),
+category: listingCategoryEnum(“category”).notNull(),
+basePriceCash: numeric(“base_price_cash”).notNull(),
+location: text(“location”).notNull(),
+status: listingStatusEnum(“status”).default(“active”),
+createdAt: timestamp(“created_at”).defaultNow()
+},
+(table) => ({
+createdIdx: index(“idx_created_at”).on(table.createdAt),
+priceIdx: index(“idx_price”).on(table.basePriceCash)
+})
+);
+
+/* ATTRIBUTES */
+
+export const listingAttributes = pgTable(“listing_attributes”, {
+id: uuid(“id”).defaultRandom().primaryKey(),
+listingId: uuid(“listing_id”).references(() => listings.id).unique(),
+specs: jsonb(“specs”).notNull()
+});
+
+/* MEDIA */
+
+export const listingMedia = pgTable(“listing_media”, {
+id: uuid(“id”).defaultRandom().primaryKey(),
+listingId: uuid(“listing_id”).references(() => listings.id),
+type: mediaTypeEnum(“type”),
+url: text(“url”).notNull(),
+isThumbnail: boolean(“is_thumbnail”).default(false)
+});
+
+/* PAYMENT */
+
+export const paymentOptions = pgTable(“payment_options”, {
+id: uuid(“id”).defaultRandom().primaryKey(),
+listingId: uuid(“listing_id”).references(() => listings.id),
+mode: paymentModeEnum(“mode”),
+downPayment: numeric(“down_payment”),
+monthlyPayment: numeric(“monthly_payment”),
+durationMonths: integer(“duration_months”)
+});
+
+/* INTERACTIONS */
+
+export const interactions = pgTable(“interactions”, {
+listingId: uuid(“listing_id”).references(() => listings.id).primaryKey(),
+views: integer(“views”).default(0),
+clicks: integer(“clicks”).default(0)
+});
+
+# 🚀 BANCO CODE GENERATION 2: MOBILE CONVERSION UI (REACT NATIVE / EXPO)
+**ROLE:** Act as a Principal React Native Engineer and Mobile Conversion Architect.
+**ENVIRONMENT:** Expo, React Native, React Native Reanimated, Tailwind (NativeWind).
+
+**🛑 CRITICAL DIRECTIVE:**
+You are executing the V10 CONVERSION ENGINE for the BANCO Mobile App. 
+You are NOT just building a UI; you are building a funnel that forces action. 
+Rule 1: NO scrolling required to contact the seller. 
+Rule 2: NO login required to browse. 
+Rule 3: ZERO data calculations on the frontend (rely completely on the BFF JSON payload).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## THE BFF PAYLOAD CONTRACT (WHAT YOU WILL CONSUME)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Assume the `/feed` API provides this exact JSON structure per listing. You only render it.
+```json
+{
+  "id": "l-101",
+  "media_preview": "[https://cdn.banco.com/img1.jpg](https://cdn.banco.com/img1.jpg)",
+  "price_display": "2,500,000 EGP",
+  "installment_badge": "Starts from 25K/month",
+  "title": "BMW X5 2023 M-Sport",
+  "location": "New Cairo",
+  "urgency_signal": "🔥 Viewed 120 times today", 
+  "trust_signal": "Verified Dealer",
+  "smart_badge": "Best Price"
+}

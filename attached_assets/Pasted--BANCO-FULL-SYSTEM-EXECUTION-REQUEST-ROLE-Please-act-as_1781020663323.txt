@@ -1,0 +1,247 @@
+🚀 BANCO — FULL SYSTEM EXECUTION REQUEST
+
+ROLE
+
+Please act as a Senior Full-Stack Engineer and System Architect responsible for completing the BANCO platform to a production-ready level.
+
+⸻
+
+CONTEXT
+
+The BANCO system has already been fully designed, including:
+
+* Core Backend Engine (Database, Feed, Ranking)
+* BFF Layer (Mobile-ready responses)
+* Conversion Engine (Action-driven system)
+* Dealer OS (B2B dashboard)
+* Monetization & Ads logic
+* Security & Compliance (Google Play requirements)
+* Mobile App architecture (React Native / Expo)
+
+⸻
+
+REQUEST
+
+Kindly review the entire system carefully and proceed with execution based on the following:
+
+1. FULL UNDERSTANDING
+
+* Read and understand all previous architecture and logic
+* Do not treat this as a new project
+* Do not ignore any existing component
+
+⸻
+
+2. GAP ANALYSIS & FIXING
+
+* Identify any missing connections between modules
+* Detect any incorrect or incomplete logic
+* Fix all issues using proper industry standards
+
+Examples:
+
+* Lead tracking not linked to billing
+* Ads not affecting ranking correctly
+* Inconsistent API responses
+* Weak data validation
+
+⸻
+
+3. SYSTEM COMPLETION
+
+Continue building and completing the system end-to-end:
+
+* Finalize backend APIs (Feed, Search, Listings, Leads)
+* Ensure BFF responses are clean and mobile-ready
+* Complete data validation and normalization
+* Enforce monetization rules properly
+* Ensure all modules are connected and working together
+
+⸻
+
+4. DATA & MARKET STRUCTURE
+
+* Replace any free text with structured data (brands, models, categories, locations)
+* Ensure listings are clean, valid, and searchable
+* Prevent duplicates
+* Ensure all listings include proper media and attributes
+
+⸻
+
+5. MONETIZATION IMPLEMENTATION
+
+Apply the following rules:
+
+* Individuals:
+    * 3 listings/month free
+    * Then 50 EGP per listing per day
+* Companies / Dealers:
+    * Subscription starting from 500 EGP
+* Banks:
+    * Starting from 1000 EGP for listing exposure
+
+Ensure:
+
+* Billing is properly tracked
+* No misuse or unlimited free usage
+
+⸻
+
+6. SECURITY & COMPLIANCE
+
+* Ensure authentication is working correctly
+* Protect dealer routes
+* Implement account deletion properly
+* Ensure Privacy Policy and Terms are respected
+
+⸻
+
+7. PERFORMANCE & STABILITY
+
+* Optimize API performance
+* Avoid blocking operations
+* Ensure stable and consistent responses
+* Prevent crashes or invalid outputs
+
+⸻
+
+EXECUTION STYLE
+
+Please do not wait for step-by-step instructions.
+
+Instead:
+
+* Analyze → Fix → Complete → Continue
+
+⸻
+
+DELIVERY
+
+After execution, please provide:
+
+1. Summary of missing parts you found
+2. What you fixed
+3. What you completed
+4. Current system readiness
+
+⸻
+
+NOTE
+
+If any part is unclear:
+
+* Use standard marketplace best practices
+* Do not stop progress
+* Make a reasonable decision and proceed
+
+⸻
+
+Thank you for your effort. Please proceed with full execution.
+
+}
+أحتاج منك مراجعة وتنفيذ شاملة للنظام الحالي (BANCO) بناءً على كل المراحل السابقة، مع التركيز على استكمال النواقص وليس إعادة البناء.
+
+المطلوب تحديدًا:
+
+1. فهم كامل للنظام الحالي
+
+* راجع كل الموديولات: Core Engine + BFF + Mobile + Dealer OS + Conversion + Ads + Data + Compliance
+* لا تبدأ تنفيذ قبل ما تفهم العلاقات بينهم (خصوصًا: Feed → BFF → Mobile + Leads → Billing)
+
+2. إصلاح المشاكل الحالية فورًا
+
+* مشكلة الصلاحيات (role unset) في Dealer OS
+* تأكد أن كل user له role واضح (individual / dealer / company / enterprise)
+* ربط Clerk مع DB بشكل صحيح (sync + metadata)
+
+3. استكمال أنظمة الدخول (Auth System)
+
+* تفعيل:
+    * Email OTP (أساسي)
+    * Google login
+    * Apple login
+    * Facebook login
+    * LinkedIn login
+* إضافة biometric login (fingerprint / face) داخل الموبايل
+* الحفاظ على session بشكل آمن
+
+4. بناء نظام خدمة العملاء (Customer Support System)
+
+* نظام تذاكر (Support Tickets)
+* Live chat بسيط أو WhatsApp fallback
+* Email notifications (SendGrid أو Resend)
+* tracking لكل مشكلة user
+
+5. نظام الإيميلات (Email Infrastructure)
+
+* OTP emails
+* Lead notifications
+* Dealer notifications
+* Weekly analytics emails
+
+6. تنظيم البروفايل بالكامل
+
+* user profile + seller profile + company profile
+* إضافة:
+    * verification status
+    * activity history
+    * saved listings
+    * leads history (للتجار)
+
+7. تطبيق Data Layer صح (مهم جدًا)
+
+* منع أي free text في:
+    * brands
+    * models
+    * locations
+* ربط listings بجداول master data
+* إضافة validation + normalization قبل الحفظ
+
+8. تحسين جودة البيانات (Marketplace Quality)
+
+* duplicate detection
+* media validation (رفض بدون صور)
+* trust scoring لكل listing
+* boost تلقائي للـ listings الكاملة
+
+9. تنفيذ نظام الاشتراكات والإعلانات
+
+* الأفراد:
+    * 3 إعلانات مجاني شهريًا
+    * بعد كده 50 جنيه / إعلان / يوم
+* الشركات:
+    * اشتراك يبدأ من 500 جنيه
+* البنوك:
+    * اشتراك يبدأ من 1000 جنيه
+* ربط ده مع ads_campaigns + billing system
+
+10. التحقق من الاستقرار والأداء
+
+* كل API يرجع نفس الشكل (data / error / meta)
+* منع أي raw DB response
+* التأكد إن feed < 150ms
+* logging + error tracking مفعل
+
+11. الموبايل
+
+* تأكد إن:
+    * مفيش أي logic في frontend
+    * كل البيانات جاية جاهزة من BFF
+    * login + deep linking + splash dark mode شغالين
+
+12. قبل أي feature جديد
+
+* لو في تضارب أو نقص في السيستم:
+    → حلّه بطريقة production-ready
+    → مش workaround
+
+المهم:
+لا تنفذ بشكل جزئي، اشتغل كأنك بتجهز النظام للإطلاق الفعلي (Production Ready).
+
+ابدأ بمراجعة كاملة، وبعدها:
+
+* اعرض المشاكل
+* ثم نفّذ الحلول
+* ثم استكمل النواقص
+
+أنا محتاج التنفيذ يكون منظم، واضح، ومبني على أساس النظام الحالي ب

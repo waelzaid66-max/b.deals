@@ -1,0 +1,297 @@
+🚀 BANCO — MOBILE APP FULL AUDIT & COMPLETION COMMAND (STRICT MODE)
+
+ROLE:
+Act as a Senior Mobile Product Architect + Marketplace UX Auditor.
+
+MISSION:
+Review ALL previously provided BANCO documents, specs, and features, then:
+
+→ AUDIT
+→ FIX
+→ COMPLETE
+
+the MOBILE APPLICATION ONLY
+
+⚠️ HARD RULES (NON-NEGOTIABLE):
+
+- DO NOT modify backend
+- DO NOT redesign system from scratch
+- DO NOT remove any existing feature
+- DO NOT add random features
+- DO NOT simulate financing (BANCO is NOT a lender)
+
+YOU MUST:
+
+✔ respect all previous specs  
+✔ connect all features correctly  
+✔ add REALISTIC DATA only  
+✔ complete missing UX flows  
+✔ optimize for CONVERSION  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 1 — FULL SYSTEM AUDIT (MOBILE ONLY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Review ALL screens:
+
+- Home Feed
+- Search
+- Listing Detail
+- RFQ
+- Profile
+- Categories:
+  Cars / Real Estate / Industrial / Materials / Production Lines / Suppliers
+
+For EACH screen:
+
+1. Identify:
+   - missing UI elements
+   - broken flows
+   - unclear data
+   - weak conversion points
+
+2. Validate:
+   - Can user understand price instantly?
+   - Can user act in 1 tap?
+   - Is trust visible?
+
+If any answer = NO → mark as CRITICAL ISSUE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 2 — DATA CORRECTION (REAL DATA ONLY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Replace ANY weak data with REAL structured data:
+
+1) CARS:
+
+- Full brands list:
+  Toyota, Nissan, BMW, Mercedes, Hyundai, Kia, MG, BYD, Chevrolet, Peugeot, Renault, Honda, Ford, Audi, Volkswagen…
+
+- Each brand MUST include:
+  → Models (e.g. BMW X1 / X3 / X5 / 3 Series / 5 Series)
+  → Years (2010–2025)
+  → Fuel types (Petrol / Diesel / Hybrid / Electric)
+
+2) REAL ESTATE:
+
+- Locations MUST be structured:
+  Country → City → District → Compound
+
+Example:
+Egypt → Cairo → New Cairo → Fifth Settlement
+
+- Property types:
+  Apartment / Villa / Duplex / Office / Retail / Warehouse
+
+3) INDUSTRIAL:
+
+- Categories:
+  Machines / Factories / Production Lines / Equipment
+
+- Must include:
+  → Capacity (tons/day)
+  → Power (kW)
+  → Origin country
+  → Required materials
+
+4) RAW MATERIALS:
+
+- Metals: Steel / Aluminum / Copper
+- Plastics: PET / PVC / HDPE / PP
+- Chemicals / Food materials
+
+Each listing MUST show:
+
+→ price per ton / kg  
+→ MOQ  
+→ origin  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 3 — UI COMPLETION (SCREEN BY SCREEN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Complete EACH screen:
+
+1) HOME FEED:
+
+Must include:
+
+- Smart categories strip
+- Dynamic sections:
+  → Deals
+  → Installments
+  → Verified
+  → Nearby
+  → Industrial
+  → Global Supply
+
+- Cards MUST show:
+  → Image/Video
+  → BIG PRICE
+  → “Starts from X/month”
+  → Trust badge
+
+- Add micro-triggers:
+  → “3 people contacted today”
+  → “Trending”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) SEARCH SCREEN:
+
+Must support:
+
+- Arabic + English mixed queries
+- Autocomplete:
+  → brands
+  → models
+  → locations
+
+Top filters:
+
+✔ price  
+✔ location  
+✔ installment  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) LISTING DETAIL PAGE:
+
+Order MUST be:
+
+1. Media
+2. Price
+3. Monthly
+4. Trust
+5. Action
+
+Add:
+
+- Multi-offer comparison
+- Seller info (verified)
+- Similar listings
+
+Sticky CTA:
+
+✔ Call  
+✔ WhatsApp  
+✔ Chat  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) PAYMENT DISPLAY (STRICT LOGIC)
+
+ISLAMIC:
+
+- fixed total
+- fixed monthly
+- label: “Sharia Compliant”
+
+CONVENTIONAL:
+
+- down payment
+- monthly
+- duration
+- total payable
+
+CARD RULE:
+
+→ ALWAYS show lowest monthly
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) RFQ SYSTEM:
+
+Replace chat-style with:
+
+- “Request Best Offer”
+
+User inputs:
+
+- budget
+- monthly target
+
+Results:
+
+- offers as cards
+- ranked by price
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) PROFILE SCREEN:
+
+Must include:
+
+- Name / Company
+- Verification badge
+- Social links:
+  → Instagram
+  → LinkedIn
+  → Website
+
+Sections:
+
+- My Listings
+- Saved Listings
+- Activity
+
+Trust metrics:
+
+- response rate
+- active listings
+- years active
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) INDUSTRIAL FLOW (CRITICAL DIFFERENCE)
+
+UI MUST change behavior:
+
+- specs FIRST (not images)
+- technical data prominent
+- cross linking:
+
+Machine → Required Materials  
+Material → Used in Machines  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 4 — CONVERSION OPTIMIZATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ensure:
+
+- price readable in <1 second
+- monthly visible immediately
+- trust visible instantly
+- action available always
+
+If user hesitates → FIX UI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 5 — FINAL VALIDATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System is COMPLETE only if:
+
+✔ user opens app → sees listings immediately  
+✔ understands price instantly  
+✔ sees installment clearly  
+✔ trusts seller  
+✔ contacts in 1 tap  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO MOBILE APP MUST BE:
+
+✔ fast  
+✔ clear  
+✔ trustworthy  
+✔ action-driven  
+
+NOT:
+
+❌ confusing  
+❌ overloaded  
+❌ slow  
+❌ financing simulator  
+
+EXECUTION MODE:
+
+Audit → Fix → Complete → Validate → DONE

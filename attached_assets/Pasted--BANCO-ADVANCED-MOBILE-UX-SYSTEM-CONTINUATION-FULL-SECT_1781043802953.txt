@@ -1,0 +1,346 @@
+🚀 BANCO — ADVANCED MOBILE UX SYSTEM (CONTINUATION: FULL SECTIONS EXPANSION)
+
+ROLE:
+Act as Principal Marketplace System Architect + Economic UX Designer.
+
+MISSION:
+Complete ALL remaining BANCO sections with:
+✔ Real-world data structure
+✔ Correct economic behavior
+✔ Full integration with previous system
+
+⚠️ RULE:
+Each section MUST connect to:
+Feed → Decision → Deal → Supply Chain
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13) 🏢 INVESTMENT OPPORTUNITIES SECTION (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Turn BANCO into capital movement platform (NOT financing)
+
+SUB-SECTIONS:
+
+1. Factories for Sale
+2. Businesses for Sale
+3. Production Line Investments
+4. Franchise Opportunities
+5. Partnership Opportunities
+
+━━━━━━━━━━━━━━━━━━━━━━━
+LISTING STRUCTURE:
+
+* Investment type
+* Total value
+* Expected ROI (% سنوي)
+* Payback period (سنوات)
+* Location
+* Industry
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DETAIL PAGE:
+
+* Financial summary (simple, not accounting)
+* Revenue range (approx)
+* Cost structure (basic)
+* Growth potential
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ACTIONS:
+
+* Request Details
+* Contact Owner
+* Submit Interest
+
+⚠️ RULE:
+NO fake numbers → only seller-provided or estimated ranges
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14) 🏪 SUPPLIERS & COMPANIES DIRECTORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Create LinkedIn + Alibaba hybrid inside BANCO
+
+━━━━━━━━━━━━━━━━━━━━━━━
+COMPANY PROFILE:
+
+* Company name
+* Logo
+* Industry
+* Country
+* Years in business
+
+━━━━━━━━━━━━━━━━━━━━━━━
+CAPABILITIES:
+
+* Production capacity
+* Supply ability
+* Export markets
+
+━━━━━━━━━━━━━━━━━━━━━━━
+PRODUCTS:
+
+* Linked listings
+* Categories
+
+━━━━━━━━━━━━━━━━━━━━━━━
+TRUST DATA:
+
+* Verified badge
+* Response rate
+* Active deals
+* Rating (future)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ACTIONS:
+
+* Follow company
+* Contact
+* Request RFQ
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15) 🌍 IMPORT / EXPORT FLOW (GLOBAL TRADE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Replace traditional sourcing process
+
+━━━━━━━━━━━━━━━━━━━━━━━
+USER FLOW:
+
+User presses:
+“Request Global Supply”
+
+INPUT:
+
+* Product name (free text + suggestions)
+* Quantity
+* Destination country
+* Budget
+
+━━━━━━━━━━━━━━━━━━━━━━━
+SYSTEM RESPONSE:
+
+* Suppliers list
+* Country of origin
+* Shipping time
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DETAIL:
+
+* Incoterms (optional display)
+* MOQ
+* Delivery estimate
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+16) 📦 LOGISTICS & DELIVERY VISIBILITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Add realism to deals
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DISPLAY:
+
+* Estimated delivery time
+* Shipping origin
+* Local vs imported
+
+━━━━━━━━━━━━━━━━━━━━━━━
+FOR INDUSTRIAL:
+
+* Shipping type:
+    → Container
+    → Bulk
+    → Air
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+17) 📈 MARKET INTELLIGENCE (REAL DATA UX)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Support decision, not decoration
+
+━━━━━━━━━━━━━━━━━━━━━━━
+SECTIONS:
+
+1. Car Prices Trends
+2. Real Estate Trends
+3. Raw Material Prices
+4. Industrial Demand
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DISPLAY TYPES:
+
+* Trend arrows:
+    ↑ Rising
+    ↓ Falling
+    → Stable
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ALERTS:
+
+* Price drop
+* New listings
+* High demand
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+18) 🔔 NOTIFICATION SYSTEM (CONVERSION ENGINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Bring user back
+
+━━━━━━━━━━━━━━━━━━━━━━━
+TYPES:
+
+* New listing in interest
+* Price drop
+* RFQ reply
+* Seller response
+* New offers
+
+━━━━━━━━━━━━━━━━━━━━━━━
+RULE:
+
+Notifications MUST be relevant
+NO spam
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+19) ❤️ SAVED & WATCHLIST SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Retarget users
+
+━━━━━━━━━━━━━━━━━━━━━━━
+FEATURES:
+
+* Save listing
+* Save search
+* Track price changes
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DISPLAY:
+
+Saved tab:
+
+* Listings
+* Searches
+* Alerts
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+20) ⚠️ REPORT & SAFETY SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Protect marketplace
+
+━━━━━━━━━━━━━━━━━━━━━━━
+REPORT TYPES:
+
+* Fake price
+* Scam
+* Duplicate
+* Wrong info
+
+━━━━━━━━━━━━━━━━━━━━━━━
+USER FLOW:
+
+Tap “Report”
+
+→ choose reason
+→ submit
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+21) 🧠 SMART RECOMMENDATION ENGINE (UX ONLY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BASED ON:
+
+* Clicks
+* Saved listings
+* Search history
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DISPLAY:
+
+* “You may like”
+* “Similar to your search”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+22) 📊 USER DASHBOARD (ALL ROLES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FOR INDIVIDUAL:
+
+* Saved listings
+* Recent views
+
+FOR DEALER / COMPANY:
+
+* Listings
+* Leads
+* Performance
+
+━━━━━━━━━━━━━━━━━━━━━━━
+METRICS:
+
+* Views
+* Contacts
+* Conversion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+23) 🔗 FULL SYSTEM CONNECTION (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EVERYTHING MUST CONNECT:
+
+CAR:
+→ dealer
+→ financing display
+→ RFQ
+
+REAL ESTATE:
+→ developer
+→ installment
+→ map
+
+INDUSTRIAL:
+→ materials
+→ suppliers
+→ production lines
+
+MATERIAL:
+→ machine
+→ factory
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL SYSTEM STATE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO becomes:
+
+✔ Consumer marketplace (cars + real estate)
+✔ B2B marketplace (industrial + materials)
+✔ Deal engine (RFQ)
+✔ Supply chain network
+✔ Decision platform (price + installment clarity)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+No isolated feature allowed.
+
+Every feature MUST:
+
+→ connect to deal
+→ increase trust
+→ accelerate decision
+
+If not → REMOVE IT
+
+E

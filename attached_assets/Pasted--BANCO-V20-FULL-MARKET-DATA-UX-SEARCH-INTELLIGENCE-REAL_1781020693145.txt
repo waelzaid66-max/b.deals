@@ -1,0 +1,309 @@
+“}
+BANCO — V20 FULL MARKET DATA + UX + SEARCH INTELLIGENCE (REAL-WORLD BUILD)
+
+ROLE:
+Act as a Principal Product Architect + Data Engineer + Marketplace Research Specialist.
+
+MISSION:
+You are required to transform BANCO from a “technical system” into a REAL MARKETPLACE PRODUCT based on actual market data, user behavior, and proven marketplace structures.
+
+This task includes:
+
+* deep data research
+* full category expansion
+* UX restructuring
+* search intelligence upgrade
+
+This is NOT coding only.
+This is PRODUCT + DATA + UX + MARKET EXECUTION.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. FULL MARKET RESEARCH (MANDATORY BEFORE BUILD)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before implementing anything:
+
+You MUST research real marketplaces:
+
+* OLX Egypt
+* Dubizzle
+* Property Finder
+* Facebook Marketplace
+
+Extract:
+
+✔ category structure
+✔ filters used
+✔ listing formats
+✔ pricing display
+✔ user flow
+
+Then:
+
+Rebuild BANCO based on REAL patterns — NOT assumptions.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) CATEGORY SYSTEM (REAL MARKET STRUCTURE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You must build a FULL hierarchy:
+
+CARS:
+
+Brands:
+BMW, Mercedes, Toyota, Hyundai, Nissan, Kia, MG
+
+Models per brand:
+
+* BMW → X1, X3, X5, 3 Series, 5 Series
+* Mercedes → A, C, E, GLC, GLE, G-Class
+* Toyota → Corolla, Camry, Land Cruiser
+
+Attributes:
+
+* year
+* mileage
+* fuel (petrol, diesel, hybrid, electric)
+* transmission (auto/manual)
+* condition (new/used)
+
+REAL ESTATE:
+
+Types:
+
+* Apartments
+* Villas
+* Duplex
+* Offices
+* Shops
+* Land
+
+Locations:
+
+* New Cairo
+* Sheikh Zayed
+* 6 October
+* New Capital
+* Nasr City
+
+Attributes:
+
+* area (sqm)
+* rooms
+* finishing
+* floor
+* delivery status
+
+INDUSTRIAL:
+
+Types:
+
+* Factories
+* Machines
+* Production Lines
+* Warehouses
+
+Attributes:
+
+* capacity
+* power
+* output
+* usage type
+
+❗ ALL must be structured — NO free text
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) REAL DATA SEEDING (NOT FAKE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You MUST generate:
+
+100–200 listings minimum
+
+Rules:
+
+Cars:
+
+* mix price ranges (300K → 10M EGP)
+* mix new & used
+* real Egyptian market ranges
+
+Real Estate:
+
+* apartments 80–300 sqm
+* villas 200–800 sqm
+* prices based on New Cairo / Zayed
+
+Industrial:
+
+* machines & factories with logical specs
+
+Each listing MUST include:
+
+* real title (not generic)
+* 3–5 images
+* optional video
+* payment options
+* realistic description
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) SEARCH ENGINE (REAL USER BEHAVIOR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Search must behave like real users think:
+
+Support Arabic:
+
+“bmw x5 قسط”
+“شقة 150 متر التجمع”
+“مصنع للبيع اكتوبر”
+
+System must detect:
+
+* category
+* price
+* location
+* intent (buy / installment)
+
+Add:
+
+✔ autocomplete
+✔ trending searches
+✔ recent searches
+✔ typo tolerance
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) DISPLAY MODES (PROFESSIONAL MARKET UX)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Implement:
+
+1. Feed (scroll)
+2. Grid (category browsing)
+3. Full-screen swipe (mobile immersive)
+
+Each listing card MUST show:
+
+* image
+* price (BIG)
+* installment badge
+* title
+* location
+* trust badge
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) SMART SHORTCUTS (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add:
+
+* Best Deals
+* Installment Only
+* Verified Sellers
+* Near You
+* New Listings
+
+These are NOT UI — they are filters.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) LOGO & BRAND FIX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fix completely:
+
+* logo size
+* spacing
+* alignment
+* consistency
+
+Must appear in:
+
+* splash
+* header
+* profile
+
+No distortion allowed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) UX FLOW (REALISTIC USER JOURNEY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must:
+
+1. open app
+2. see listings immediately
+3. understand price instantly
+4. click in 1–2 seconds
+5. contact seller in 1 tap
+
+If flow is longer → FAIL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) QUALITY CONTROL (MARKET TRUST)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject:
+
+* no images
+* missing attributes
+
+Boost:
+
+* verified sellers
+* full listings
+* video listings
+
+Add:
+trust_score per listing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) FINAL EXPECTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After this implementation:
+
+BANCO must feel like:
+
+✔ OLX-level browsing
+✔ PropertyFinder-level structure
+✔ TikTok-level smoothness
+
+NOT:
+
+❌ prototype
+❌ demo
+❌ unfinished app
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT completing features.
+
+You are building:
+
+A REAL MARKET.
+
+If data is weak → system fails
+If UX is confusing → user leaves
+If search is bad → product dies
+
+Fix everything accordingl
+
+# 🚀 BANCO V19: MARKET EXPANSION & SEARCH UPGRADE
+**MISSION:** Upgrade BANCO to a full-scale, nested marketplace. 
+
+**EXECUTION STEPS:**
+1. **REBUILD CATEGORIES:** Drop existing flat categories and implement the `Nested Taxonomy` (Category -> Sub-Category -> Attributes). 
+2. **SEARCH ENGINE UPGRADE:** Implement the "Smart Query Parser" to support Arabic/English mixing + Slang (e.g., 'قسط', 'كاش', 'تجمع'). 
+3. **UI OVERHAUL:** 
+   - Integrate the Logo (attached) using a fixed-aspect ratio container in Header & Splash.
+   - Implement `FlashList` for Feed.
+   - Implement "Action Chips" (Installment, Verified, Best Price).
+4. **DATA INJECTION:** Run the seed script with the 50+ real-world asset structures.
+5. **DISPLAY MODES:** Ensure `ListingDetail` handles the new `Swipe Mode` + `Sticky CTA`.
+6. **QUALITY CONTROL:** Activate the `Moderation Engine` – reject listings lacking images or mandatory sub-category specs.
+
+**DIRECTIVE:** 
+"Treat the existing system as a base and expand the hierarchy without breaking current data. Use the provided Logo assets. Ensure every screen follows the #000000 Dark Mode aesthetic."

@@ -1,0 +1,418 @@
+“}
+/**
+
+* 🚀 BANCO — MASTER SYSTEM AUDIT & EXECUTION PROMPT (ALI-TEMU HYBRID ENGINE)
+* ROLE:
+* Act as a Principal Systems Architect + Marketplace Economist + Senior Backend Engineer.
+* MISSION:
+* You are NOT building features.
+* You are rebuilding BANCO as a FULL HYBRID MARKETPLACE ENGINE:
+* → Classifieds (OLX)
+* → E-commerce Feed (Temu)
+* → B2B Deal Engine (Alibaba)
+* Your task is to:
+* AUDIT → FIX → COMPLETE → CONNECT → STABILIZE
+* DO NOT skip steps.
+    */
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) SYSTEM REALITY CHECK (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO must behave as:
+
+1. Feed Engine (Temu-style)
+2. Deal Engine (Alibaba-style)
+3. Trust Engine (Anti-fraud + verification)
+4. Data Engine (Structured + normalized)
+5. Monetization Engine (CPL + subscriptions)
+
+If ANY of these is weak → system fails.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. FULL SYSTEM AUDIT (STEP ZERO)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You MUST audit:
+
+✔ Database schema (relations, missing tables)
+✔ API contracts (response consistency)
+✔ BFF layer (UI-ready transformation)
+✔ Feed engine (ranking + ads injection)
+✔ Search engine (parsing + filtering + taxonomy)
+✔ User system (roles, profiles, activity)
+✔ Dealer OS (permissions + CRM)
+✔ Billing system (wallet + CPL + subscriptions)
+✔ Mobile integration (no logic on frontend)
+✔ Compliance (Google Play policies)
+✔ Data quality (duplicates, missing attributes)
+
+OUTPUT REQUIRED:
+
+* Missing components
+* Broken flows
+* Data inconsistencies
+* UX/conversion gaps
+* Compliance issues
+
+DO NOT write code before audit is complete.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) CRITICAL FIXES (BLOCKERS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fix BEFORE any new feature:
+
+1. ROLE SYSTEM (CRITICAL)
+    * DB is source of truth
+    * Sync to Clerk metadata
+    * Implement /me endpoint
+    * Fix Dealer OS access completely
+2. GLOBAL ERROR SYSTEM
+    * Catch ALL errors
+    * Return:
+        { data: null, error: { code, message }, meta: {} }
+3. RATE LIMITING
+    Apply to:
+    * /feed
+    * /listings
+    * /search
+    * /saves
+4. SCHEMA HARDENING
+    Add:
+    * users.balance
+    * users.reputation_score
+    * users.verification_tier
+    * listings.status:
+        [draft, pending_approval, active, sold, archived]
+    * listings.location_id (NO raw text)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) ALIBABA ENGINE (DEAL SYSTEM)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build a REAL negotiation system:
+
+A) RFQ SYSTEM (CORE)
+
+User can:
+→ Request asset or financing
+
+Create table:
+rfq_requests:
+
+* id
+* user_id
+* category
+* specs (JSONB)
+* budget_range
+* status
+
+Dealers:
+→ submit offers
+
+⸻
+
+B) DEAL ENGINE (NOT CHAT)
+
+Create:
+deals:
+
+* id
+* buyer_id
+* seller_id
+* listing_id / rfq_id
+* price
+* down_payment
+* installment
+* duration
+* status:
+    [draft, negotiating, locked, completed]
+
+⸻
+
+C) OFFER SYSTEM
+
+offers:
+
+* deal_id
+* sender_id
+* payload (price/terms)
+* status
+
+Flow:
+buyer → offer
+seller → accept / reject / counter
+
+⸻
+
+D) MULTI-SUPPLIER COMPETITION
+
+Allow:
+multiple offers per RFQ
+
+Sort by:
+
+* price
+* trust_score
+* response speed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) TEMU ENGINE (FEED + CONVERSION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) FEED CORE
+
+Infinite scroll:
+
+* fast
+* addictive
+* mobile-first
+
+Mix:
+
+* organic
+* recommended
+* nearby
+* sponsored
+
+⸻
+
+B) PSYCHOLOGICAL TRIGGERS
+
+Add:
+
+* urgency_signal:
+    “3 people requested today”
+* price anchors:
+    original_price vs discounted
+* smart badges:
+    “Best Deal”
+    “Hot”
+
+⸻
+
+C) PERFORMANCE
+
+* TTFB < 150ms
+* payload < 100KB
+* lazy loading images
+* video autoplay (muted)
+
+⸻
+
+D) MICRO INTERACTIONS
+
+* tap scale 0.96
+* smooth transitions (<300ms)
+* skeleton loaders ONLY
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) TRUST ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build scoring system:
+
+trust_score =
+
+* verified seller
+* complete data
+* good media
+
+* duplicate listing
+* missing fields
+
+⸻
+
+Verification tiers:
+
+* new
+* verified
+* premium
+* enterprise
+
+⸻
+
+Fraud signals:
+
+* duplicate listings
+* repeated phone
+* spam uploads
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) DATA ENGINE (NO FREE TEXT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MUST enforce:
+
+* brands table
+* models table
+* locations table
+* categories → subcategories
+
+⸻
+
+NO RAW TEXT:
+
+❌ “bmw x5”
+✔ brand_id + model_id
+
+⸻
+
+Add:
+
+attributes_definitions table
+
+Dynamic specs controlled by category
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) MONETIZATION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INDIVIDUAL:
+
+* 3 free listings/month
+* then 50 EGP/listing/day
+
+DEALER:
+
+* Basic: 500 EGP
+* Pro: 1500 EGP
+* Enterprise: 5000 EGP
+
+BANKS:
+
+* 1000+ EGP
+
+⸻
+
+CPL MODEL:
+
+* WhatsApp = 5 EGP
+* Call = 7 EGP
+
+⸻
+
+Tables:
+
+wallet
+transactions
+subscriptions
+lead_billing
+
+⸻
+
+Rules:
+
+IF wallet = 0
+→ disable listings
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) ADMIN CONTROL CENTER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Admin sees:
+
+* all users
+* all listings
+* all leads
+* all revenue
+
+⸻
+
+Moderation queue:
+
+pending_review
+approved
+rejected
+flagged
+
+⸻
+
+Actions:
+
+* approve
+* reject
+* ban user
+* remove duplicate
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) USER SYSTEM (COMPLETE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Profile includes:
+
+* personal info
+* listings
+* saved items
+* activity history
+* wallet balance
+* leads history (dealers)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) SUPPORT SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+tickets:
+
+* id
+* user_id
+* issue
+* status
+
+⸻
+
+Add:
+
+* WhatsApp fallback
+* email notifications
+* admin responses
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) MOBILE RULE (STRICT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Frontend MUST:
+
+❌ NOT calculate anything
+✔ ONLY render BFF data
+
+⸻
+
+Use:
+
+FlashList (NOT FlatList)
+
+⸻
+
+Deep linking:
+
+banco://listing/:id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) FINAL EXECUTION RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT:
+
+* build partial systems
+* break API contracts
+* modify schema destructively
+
+DO:
+
+* fix → validate → then build
+* connect all systems end-to-end
+
+⸻
+
+FINAL GOAL:
+
+BANCO must feel like:
+
+* Temu (scroll)
+* Alibaba (deal)
+* Amazon (trust)
+
+If user hesitates → system failed

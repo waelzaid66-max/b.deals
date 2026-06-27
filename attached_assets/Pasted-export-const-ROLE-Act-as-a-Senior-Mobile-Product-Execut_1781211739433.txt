@@ -1,0 +1,764 @@
+export const ROLE:
+Act as a Senior Mobile Product Execution Engineer for BANCO.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 MISSION:
+
+Complete the Real Estateموبايل ابلكيشن قسم  عربي وانجليزي  inside the Mobile App ONLY using existing backend data.
+
+NO new backend.
+NO partial features.
+NO disconnected logic.
+
+Everything must be:
+
+
+✔ Visible in Mobile UI
+✔ Clickable
+✔ Fully usable
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 CORE UNDERSTANDING:
+
+BANCO Real Estate is NOT a listing app.
+
+It is:
+
+→ Investment Engine
+→ Property Marketplace
+→ Land & Industrial Platform
+→ GPS + Smart Search System
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🏢 1) MAIN REAL ESTATE CATEGORIES (MANDATORY)
+
+Implement ALL:
+
+* ResidentialProperties
+* CommercialProperties
+* AdministrativeProperties
+* MedicalProperties
+* Factories
+* Warehouses
+* IndustrialProperties
+* IndustrialLand
+* AgriculturalLand
+* ResidentialLand
+* CommercialLand
+* RealEstateProjects
+* InvestmentProperties
+* ResortsAndCoastal
+* InternationalProperties
+
+Each category MUST:
+
+✔ appear in UI
+✔ have real data
+✔ open listings
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌍 2) LOCATION SYSTEM (CRITICAL)
+
+Egypt FULL support:
+
+* All governorates
+* All major cities
+* New Cairo / 6 October / New Capital / North Coast / Sokhna
+
+Global:
+
+* UAE (Dubai, Abu Dhabi…)
+* Saudi Arabia (Riyadh, Jeddah…)
+
+MUST INCLUDE:
+
+✔ Country selector
+✔ Governorate filter
+✔ City filter
+✔ Area filter
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🗺 3) MAP + GPS SYSTEM (CORE FEATURE)
+
+Implement inside Mobile:
+
+* Live Map View
+* Satellite View
+* User GPS location
+* “Near Me” properties
+* Radius search
+* Draw area search (polygon)
+
+Each listing must:
+
+✔ show exact location
+✔ open on map
+✔ allow navigation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 4) ADVANCED SEARCH (MANDATORY)
+
+Search must support:
+
+* Arabic + English
+* Natural language
+* Smart suggestions
+
+Examples:
+
+* “شقة في التجمع قسط”
+* “ارض زراعية قريبة مني”
+* “مصنع للبيع في اكتوبر”
+
+Filters:
+
+* Price / Installment
+* Area
+* Rooms
+* Property type
+* Land type
+* Location
+* Verified
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 5) LISTING DISPLAY (CRITICAL)
+
+Card must show:
+
+* Image
+* Price
+* Installment
+* Location
+* Type
+* Verified badge
+
+Detail page must include:
+
+* Full gallery
+* Cash price
+* Installment plans
+* Property specs
+* Seller data
+* Map location
+* Nearby services
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💰 6) INVESTMENT & LAND LOGIC
+
+For:
+
+* Industrial Land
+* Agricultural Land
+* Factories
+
+Must include:
+
+* Area (feddan / m²)
+* Usage type
+* Water availability
+* Electricity
+* Road access
+
+Add:
+
+* ROI indicator
+* Investment type
+* Expected return
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📥 7) REQUEST SYSTEM (VERY IMPORTANT)
+
+User must be able to:
+
+* Request property
+* Request land
+* Request factory
+
+Input:
+
+* Budget
+* Location
+* Area
+* Notes
+
+Output:
+
+✔ appears to sellers
+✔ generates leads
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔔 8) SMART FEATURES
+
+Implement:
+
+* Price drop alerts
+* Saved properties
+* Saved search
+* Nearby schools
+* Nearby hospitals
+* Distance & travel time
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ EXECUTION RULES:
+
+* DO NOT build backend
+* DO NOT create new APIs
+* DO NOT work outside mobile
+
+ONLY:
+
+→ Connect existing data
+→ Display everything
+→ Complete flows
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 FINAL GOAL:
+
+User must:
+
+→ open app
+→ search property
+→ view on map
+→ understand price
+→ request / contact
+
+WITHOUT any missing step
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If ANY feature is not visible:
+
+→ it is NOT DONEBANCO_REALESTATE_DATA = {
+
+  categories: [
+    "Apartment",          // شقق
+    "Villa",              // فيلا
+    "Duplex",             // دوبلكس
+    "Penthouse",          // بنتهاوس
+    "Studio",             // استوديو
+    "Townhouse",          // تاون هاوس
+    "TwinHouse",          // توين هاوس
+
+    "CommercialShop",     // محل تجاري
+    "Office",             // مكتب
+    "Clinic",             // عيادة
+    "Pharmacy",           // صيدلية
+    "Restaurant",         // مطعم / كافيه
+
+    "Warehouse",          // مخزن
+    "Factory",            // مصنع
+
+    "ResidentialLand",    // أرض سكنية
+    "CommercialLand",     // أرض تجارية
+    "IndustrialLand",     // أرض صناعية
+    "AgriculturalLand"    // أرض زراعية
+  ],
+
+  egypt: {
+    governorates: [
+      "Cairo",
+      "Giza",
+      "Alexandria",
+      "Dakahlia",
+      "Red Sea",
+      "Beheira",
+      "Fayoum",
+      "Gharbia",
+      "Ismailia",
+      "Menofia",
+      "Minya",
+      "Qalyubia",
+      "New Valley",
+      "Suez",
+      "Aswan",
+      "Assiut",
+      "Beni Suef",
+      "Port Said",
+      "Damietta",
+      "Sharkia",
+      "South Sinai",
+      "Kafr El Sheikh",
+      "Matrouh",
+      "Luxor",
+      "Qena",
+      "North Sinai",
+      "Sohag"
+    ],
+
+    majorCities: [
+      "New Cairo",
+      "6 October",
+      "Sheikh Zayed",
+      "Nasr City",
+      "Heliopolis",
+      "Maadi",
+      "Zamalek",
+      "Mohandessin",
+      "Obour",
+      "Shorouk",
+      "New Capital",
+      "Ain Sokhna",
+      "North Coast",
+      "Hurghada",
+      "Sharm El Sheikh"
+    ]
+  },
+
+  uae: {
+    cities: [
+      "Dubai",
+      "Abu Dhabi",
+      "Sharjah",
+      "Ajman",
+      "Ras Al Khaimah",
+      "Fujairah",
+      "Umm Al Quwain"
+    ]
+  },
+
+  saudi: {
+    cities: [
+      "Riyadh",
+      "Jeddah",
+      "Mecca",
+      "Medina",
+      "Dammam",
+      "Khobar",
+      "Tabuk",
+      "Abha"
+    ]
+  },
+
+  propertySpecs: {
+    area: "m2",                  // المساحة
+    rooms: [1,2,3,4,5,6,7,8],
+    bathrooms: [1,2,3,4,5],
+    floor: "number",
+    totalFloors: "number",
+
+    finishing: [
+      "Fully Finished",
+      "Semi Finished",
+      "Core & Shell",
+      "Luxury Finished"
+    ],
+
+    furnishing: [
+      "Furnished",
+      "Semi Furnished",
+      "Unfurnished"
+    ],
+
+    view: [
+      "Sea View",
+      "Garden View",
+      "Street View",
+      "Pool View"
+    ]
+  },
+
+  payment: {
+    cash: true,
+
+    installment: [
+      "3 Years",
+      "5 Years",
+      "7 Years",
+      "10 Years",
+      "12 Years"
+    ]
+  },
+
+  listingType: [
+    "Sale",           // بيع
+    "Rent",           // إيجار
+    "BuyRequest"      // طلب شراء
+  ],
+
+  usage: [
+    "Residential",
+    "Commercial",
+    "Administrative",
+    "Medical",
+    "Industrial",
+    "Agricultural"
+  ],
+
+  media: {
+    imagesMin: 3,
+    imagesMax: 20,
+    video: true
+  }
+};
+
+export const BANCO_REAL_ESTATE_CATEGORIES = [
+
+  "ResidentialProperties",
+  "CommercialProperties",
+  "AdministrativeProperties",
+  "MedicalProperties",
+
+  "Factories",
+  "Warehouses",
+  "IndustrialProperties",
+
+  "IndustrialLand",
+  "AgriculturalLand",
+  "ResidentialLand",
+  "CommercialLand",
+
+  "RealEstateProjects",
+  "InvestmentProperties",
+  "ResortsAndCoastal",
+
+  "InternationalProperties"
+
+];
+
+export const BANCO_EGYPT_LOCATIONS = {
+
+  Cairo: [
+    "New Cairo","Nasr City","Heliopolis","Maadi","Zamalek",
+    "Downtown","Shubra","Helwan"
+  ],
+
+  Giza: [
+    "6 October","Sheikh Zayed","Haram","Faisal","Dokki","Mohandessin"
+  ],
+
+  Alexandria: [
+    "Smouha","Sidi Gaber","Stanley","Miami","Agami","Borg El Arab"
+  ],
+
+  Dakahlia: ["Mansoura"],
+  Gharbia: ["Tanta","Mahalla"],
+  Sharqia: ["Zagazig"],
+  Qalyubia: ["Banha","Obour","Shubra El Kheima"],
+  Beheira: ["Damanhour"],
+  KafrElSheikh: ["Kafr El Sheikh"],
+  Damietta: ["Damietta"],
+  PortSaid: ["Port Said"],
+  Ismailia: ["Ismailia"],
+  Suez: ["Suez"],
+
+  RedSea: ["Hurghada","El Gouna"],
+  SouthSinai: ["Sharm El Sheikh"],
+  Matrouh: ["North Coast","Marsa Matrouh"],
+  AinSokhna: ["Ain Sokhna"],
+
+  Luxor: ["Luxor"],
+  Aswan: ["Aswan"],
+  Assiut: ["Assiut"],
+  Sohag: ["Sohag"],
+  Minya: ["Minya"],
+  BeniSuef: ["Beni Suef"],
+  Fayoum: ["Fayoum"],
+
+  NewCapital: ["New Administrative Capital"]
+};
+
+export const BANCO_GLOBAL_LOCATIONS = {
+
+  UAE: [
+    "Dubai","Abu Dhabi","Sharjah","Ajman",
+    "Ras Al Khaimah","Fujairah","Umm Al Quwain"
+  ],
+
+  SaudiArabia: [
+    "Riyadh","Jeddah","Mecca","Medina",
+    "Dammam","Khobar","Tabuk","Abha","Neom"
+  ]
+};
+
+export const BANCO_REAL_ESTATE_REQUESTS = [
+
+  "BuyProperty",
+  "SellProperty",
+
+  "RequestApartment",
+  "RequestVilla",
+
+  "RequestFactory",
+  "RequestWarehouse",
+
+  "RequestIndustrialLand",
+  "RequestAgriculturalLand",
+
+  "RequestInvestment",
+  "RequestProject"
+
+];
+
+export const BANCO_MAP_FEATURES = {
+
+  mapTypes: [
+    "GoogleMap",
+    "SatelliteView",
+    "StreetView"
+  ],
+
+  features: [
+    "GPSLocation",
+    "NearMeSearch",
+    "DrawSearchArea",
+    "RadiusSearch",
+    "PolygonSearch",
+
+    "NearbySchools",
+    "NearbyHospitals",
+    "NearbyRoads",
+
+    "DistanceCalculator",
+    "TravelTimeEstimate"
+  ]
+};
+
+export const BANCO_REAL_ESTATE_SEARCH = {
+
+  filters: [
+    "Country",
+    "Governorate",
+    "City",
+    "Area",
+
+    "PropertyType",
+    "LandType",
+
+    "PriceRange",
+    "Installment",
+
+    "AreaSize",
+    "Rooms",
+    "Bathrooms",
+
+    "Finishing",
+    "Furnished",
+
+    "View",
+    "Floor",
+
+    "NearbyPlaces",
+    "Developer",
+    "Verified"
+  ],
+
+  smartSearchExamples: [
+    "شقة في التجمع قسط",
+    "ارض زراعية قريبة مني",
+    "مصنع للبيع في العاشر",
+    "فيلا الساحل الشمالي",
+    "ارض صناعية في اكتوبر"
+  ]
+};
+
+export const BANCO_REAL_ESTATE_PRICING = {
+
+  cash: true,
+
+  installment: [
+    "3 Years",
+    "5 Years",
+    "7 Years",
+    "10 Years",
+    "12 Years",
+    "15 Years"
+  ],
+
+  fields: [
+    "TotalPrice",
+    "DownPayment",
+    "MonthlyInstallment",
+    "DeliveryDate"
+  ]
+};
+
+export const BANCO_AREA_INTELLIGENCE = {
+
+  averagePricePerMeter: "auto",
+
+  priceTrend: [
+    "Rising",
+    "Stable",
+    "Falling"
+  ],
+
+  demandLevel: [
+    "High",
+    "Medium",
+    "Low"
+  ],
+
+  rentalYield: "percentage",
+
+  bestFor: [
+    "Living",
+    "Investment",
+    "Commercial"
+  ]
+};
+
+export const BANCO_MAP_ADVANCED = {
+
+  layers: [
+    "Properties",
+    "Land",
+    "Factories",
+    "Projects"
+  ],
+
+  features: [
+    "DrawAreaSearch",
+    "HeatmapPrices",
+    "ClusterListings",
+    "LiveNearby",
+    "StreetPreview"
+  ]
+};
+
+export const BANCO_DEMAND_ENGINE = {
+
+  requestTypes: [
+    "Buy",
+    "Rent",
+    "Invest",
+    "FactoryRequest",
+    "LandRequest"
+  ],
+
+  smartMatching: true,
+
+  autoSendToSellers: true
+};
+
+export const BANCO_LISTING_SCORE = {
+
+  score: "0-100",
+
+  basedOn: [
+    "priceAccuracy",
+    "location",
+    "imagesQuality",
+    "marketDemand"
+  ],
+
+  labels: [
+    "Best Deal",
+    "Good Price",
+    "Overpriced"
+  ]
+};
+
+export const BANCO_INVESTMENT_MODE = {
+
+  roi: "percentage",
+
+  expectedGrowth: "percentage",
+
+  rentalIncome: "monthly",
+
+  breakEvenYears: "number"
+};
+export const BANCO_INDUSTRIAL_DATA = {
+
+  factory: [
+    "ProductionCapacity",
+    "PowerUsage",
+    "Licenses",
+    "MachinesIncluded"
+  ],
+
+  land: [
+    "ZoningType",
+    "WaterSource",
+    "Electricity",
+    "RoadAccess"
+  ]
+};
+export const BANCO_AI_SEARCH = {
+
+  supports: [
+    "Arabic",
+    "English",
+    "Mixed"
+  ],
+
+  examples: [
+    "شقة قسط في الشيخ زايد",
+    "ارض زراعية قريبة مني",
+    "مصنع جاهز تشغيل",
+    "فيلا استثمار في الساحل"
+  ]
+};
+export const BANCO_COMPARISON = {
+
+  compareFields: [
+    "price",
+    "installment",
+    "area",
+    "location",
+    "roi"
+  ]
+};
+
+export const BANCO_ALERTS = {
+
+  types: [
+    "PriceDrop",
+    "NewListing",
+    "HighDemandArea",
+    "BetterOffer"
+  ]
+};
+
+طريقة العرض داخل الموبايل (دي الأهم)
+
+Home Feed:
+
+* 🔥 Best Deals
+* 💰 Installment
+* 📍 Near You
+* 📈 High Demand
+* 🏗 Investment Opportunities
+* 🌍 International
+
+⸻
+
+Listing Card:
+
+* صورة
+* السعر
+* القسط
+* المنطقة
+* Badge (Best Deal / Verified)
+
+⸻
+
+Listing Detail:
+
+* Gallery
+* Map
+* Price + Installment
+* ROI
+* Seller
+* Nearby
+* Actions
+
+⸻
+
+⚠️ أهم 3 قرارات لازم تتنفذ
+
+1. Map مش Feature → ده Core
+2. Request مش زر → ده System
+3. العقار مش Listing → ده Investment

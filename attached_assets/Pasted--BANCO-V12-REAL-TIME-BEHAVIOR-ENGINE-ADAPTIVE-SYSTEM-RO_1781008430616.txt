@@ -1,0 +1,153 @@
+“}
+BANCO — V12 REAL-TIME BEHAVIOR ENGINE (ADAPTIVE SYSTEM)
+
+ROLE:
+Act as a Principal Systems Engineer + Behavioral Intelligence Architect.
+
+You are building the ADAPTIVE LAYER of BANCO.
+
+This system makes the feed react to user behavior in real-time.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Turn static feed → adaptive feed
+
+System must:
+
+* detect user intent
+* react instantly
+* push better listings
+* increase probability of click
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. USER SESSION TRACKING (LIVE)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Track in memory (per session):
+
+{
+session_id,
+last_category,
+last_price_range,
+scroll_depth,
+clicks,
+time_spent
+}
+
+DO NOT store in DB immediately
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) REAL-TIME SIGNALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Detect:
+
+IF user:
+
+* scrolls fast → low interest
+* stops scrolling → high interest
+* clicks category → intent signal
+* opens listing → strong intent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) FEED ADAPTATION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Function:
+
+adaptFeed(session, feed)
+
+Rules:
+
+IF user shows interest in category:
+
+→ boost same category listings
+
+IF user clicks high-price items:
+
+→ shift feed upward in price range
+
+IF user skips listings:
+
+→ replace with stronger (has_video + verified)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) SCROLL INTERRUPTION LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If user scrolls > X items without click:
+
+→ inject:
+
+* premium listing
+* high urgency listing
+* strong installment offer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) CLICK BOOST LOOP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After user clicks:
+
+→ next 5 items:
+
+* same category
+* similar price
+* stronger badges
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) SESSION MEMORY ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Maintain:
+
+user_temp_profile:
+
+{
+preferred_category,
+price_range,
+interaction_level
+}
+
+Used ONLY for session (NOT persisted)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) PERFORMANCE RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This system MUST:
+
+* run under 10ms
+* not block feed API
+* operate in memory
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) INTEGRATION POINT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed flow becomes:
+
+1. fetch listings
+2. rank
+3. inject ads
+4. transform (BFF)
+5. adaptFeed(session, feed)
+6. return
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT showing listings.
+
+You are controlling:
+
+* what user sees next
+* what user clicks
+* what user ignores
+
+Static feed = dead product
+Adaptive feed = high conversion syst

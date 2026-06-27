@@ -1,0 +1,597 @@
+/**
+🚀 BANCO — REAL ESTATE DATA SYSTEM (FULL TAXONOMY + REAL MARKET STRUCTURE)
+
+ROLE:
+Act as a Real Estate Data Architect + Market Intelligence Specialist.
+
+MISSION:
+Build a COMPLETE, REAL, structured real estate data system that:
+
+→ eliminates free text
+→ enforces clean classification
+→ reflects REAL Egyptian & Gulf markets
+
+CRITICAL RULE:
+NO RANDOM TEXT
+NO GENERIC NAMES
+ONLY structured, selectable data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🏗 PRIMARY CATEGORY STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MAIN CATEGORY:
+
+REAL ESTATE
+
+━━━━━━━━━━━━━━━━━━━━━━━
+SUB-CATEGORIES (LEVEL 1)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+1) Residential
+2) Commercial
+3) Administrative
+4) Industrial Real Estate
+5) Land / Plots
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🏠 RESIDENTIAL TAXONOMY (DETAILED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPES:
+
+- Apartment
+- Duplex
+- Penthouse
+- Villa
+- Townhouse
+- Twin House
+- Studio
+- Chalet
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ATTRIBUTES (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Area (sqm)
+- Bedrooms
+- Bathrooms
+- Floor Number
+- Total Floors
+- Finishing Type:
+  → Fully Finished
+  → Semi Finished
+  → Core & Shell
+
+- Furnishing:
+  → Furnished
+  → Semi Furnished
+  → Unfurnished
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🏢 COMMERCIAL / ADMIN TAXONOMY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPES:
+
+- Retail Shop
+- Restaurant / Cafe
+- Office Space
+- Co-working Space
+- Clinic
+- Medical Center
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ATTRIBUTES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Area
+- Floor
+- License Type
+- Fit-out status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🏭 INDUSTRIAL REAL ESTATE (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TYPES:
+
+- Factory
+- Warehouse
+- Storage Facility
+- Industrial Land
+
+━━━━━━━━━━━━━━━━━━━━━━━
+ATTRIBUTES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Total Area
+- Built Area
+- Power Capacity
+- Zoning Type
+- Access Roads
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🗺 LOCATION HIERARCHY (EGYPT — REAL DATA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+LEVEL 1:
+
+- Cairo
+- Giza
+- Alexandria
+- North Coast
+- Ain Sokhna
+- New Administrative Capital
+
+━━━━━━━━━━━━━━━━━━━━━━━
+LEVEL 2 (CAIRO EXAMPLE)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- New Cairo
+- Nasr City
+- Heliopolis
+- Maadi
+- Shorouk
+- Rehab
+
+━━━━━━━━━━━━━━━━━━━━━━━
+LEVEL 3 (NEW CAIRO)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Fifth Settlement
+- First Settlement
+- Third Settlement
+
+━━━━━━━━━━━━━━━━━━━━━━━
+LEVEL 4 (FIFTH SETTLEMENT)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- South 90 Street
+- North 90 Street
+- Lotus
+- Andalus
+- District 1-5
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🌍 GULF MARKET EXTENSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+UAE:
+
+- Dubai
+  → Dubai Marina
+  → Downtown
+  → Business Bay
+  → JVC
+  → JLT
+
+- Abu Dhabi
+
+Saudi:
+
+- Riyadh
+- Jeddah
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 🏗 PROJECT / COMPOUND STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each listing MUST be linked to:
+
+- Project Name
+- Developer
+
+━━━━━━━━━━━━━━━━━━━━━━━
+MAJOR DEVELOPERS (EGYPT)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Emaar Misr
+- Talaat Moustafa Group
+- Palm Hills
+- Mountain View
+- Sodic
+- Orascom Development
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 📅 PROJECT STATUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Under Construction
+- Ready to Move
+- Delivered
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 💰 PRICING STRUCTURE (REAL MARKET)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Must support:
+
+- Total Price
+- Price per meter
+
+━━━━━━━━━━━━━━━━━━━━━━━
+INSTALLMENT STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Down Payment (%)
+- Monthly Payment
+- Duration (years)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 🧠 AREA INTELLIGENCE DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each area must include:
+
+- Avg Price per sqm
+- Demand Level:
+  → High
+  → Medium
+  → Low
+
+- Growth Trend:
+  → Rising
+  → Stable
+  → Declining
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 📍 LOCATION DISPLAY LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Display:
+
+- Area Name
+- Compound
+- Nearby Landmarks
+
+Example:
+
+“Fifth Settlement – Near AUC – South 90”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 🧩 FILTER STRUCTURE (STRICT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIMARY FILTERS:
+
+- Price
+- Location
+- Installment
+
+SECONDARY:
+
+- Rooms
+- Area
+- Delivery Date
+- Finishing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13) 🚨 DATA VALIDATION RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject listing if:
+
+- no area
+- no price
+- no images
+- no property type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14) 🧠 MARKET REALITY RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Egypt Market:
+
+- Installments = primary driver
+- Location = trust factor
+- Developer = decision trigger
+
+Gulf Market:
+
+- ROI focus higher
+- rental yield important
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Real estate data is NOT text
+
+It is:
+
+- hierarchy
+- structure
+- location intelligence
+
+If data messy:
+→ search fails
+→ trust dies
+
+If data structured:
+→ discovery improves
+→ conversion increases
+*/
+/**
+🚀 BANCO — AUTOMOTIVE SYSTEM (FULL REAL DATA + TAXONOMY + MARKET STRUCTURE)
+
+ROLE:
+Act as an Automotive Data Architect + Marketplace Specialist.
+
+MISSION:
+Build a COMPLETE car marketplace system with:
+
+→ real brands
+→ real models
+→ structured classification
+→ zero free text
+
+CRITICAL RULE:
+Cars data MUST be:
+
+→ hierarchical
+→ searchable
+→ standardized
+
+NO random typing
+NO messy entries
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🚗 PRIMARY CATEGORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CARS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🏷 BRAND STRUCTURE (REAL MARKET)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GERMAN:
+
+- BMW
+- Mercedes-Benz
+- Audi
+- Volkswagen
+- Porsche
+- Opel
+
+JAPANESE:
+
+- Toyota
+- Nissan
+- Honda
+- Mitsubishi
+- Mazda
+- Suzuki
+- Lexus
+- Infiniti
+
+KOREAN:
+
+- Hyundai
+- Kia
+- Genesis
+
+AMERICAN:
+
+- Ford
+- Chevrolet
+- Jeep
+- Dodge
+- Cadillac
+
+CHINESE:
+
+- Chery
+- MG
+- Geely
+- BYD
+- Haval
+- Changan
+
+EUROPEAN:
+
+- Peugeot
+- Renault
+- Fiat
+- Skoda
+- Seat
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🚘 MODEL STRUCTURE (EXAMPLES REAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BMW:
+
+- 316i
+- 318i
+- 320i
+- 330i
+- X1
+- X3
+- X5
+- X6
+
+Mercedes:
+
+- C180
+- C200
+- E200
+- E300
+- GLC
+- GLE
+- S-Class
+
+Toyota:
+
+- Corolla
+- Camry
+- Yaris
+- Fortuner
+- Land Cruiser
+- Prado
+
+Hyundai:
+
+- Accent
+- Elantra
+- Tucson
+- Santa Fe
+
+Kia:
+
+- Cerato
+- Sportage
+- Sorento
+
+MG:
+
+- MG5
+- MG6
+- ZS
+- RX5
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 📅 YEAR STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Range:
+
+- 1990 → current year
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) ⚙️ ENGINE + FUEL TYPES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fuel:
+
+- Petrol
+- Diesel
+- Hybrid
+- Electric
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🚦 CONDITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- New
+- Used
+- Certified Used
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 🧠 CAR ATTRIBUTES (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Mileage (KM)
+- Transmission:
+  → Automatic
+  → Manual
+
+- Body Type:
+  → Sedan
+  → SUV
+  → Hatchback
+  → Coupe
+  → Pickup
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 📍 LOCATION (EGYPT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Cairo
+- Giza
+- Alexandria
+
+Sub areas:
+
+- Nasr City
+- Maadi
+- New Cairo
+- Sheikh Zayed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 💰 PRICE STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Total price
+- Optional installment
+
+━━━━━━━━━━━━━━━━━━━━━━━
+INSTALLMENT TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+ISLAMIC:
+
+- fixed total
+- fixed monthly
+
+CONVENTIONAL:
+
+- down payment
+- monthly
+- duration
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 📸 MEDIA REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- minimum 3 images
+- interior + exterior
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 🧠 MARKET REALITY (EGYPT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- most searched:
+
+→ Toyota Corolla
+→ Hyundai Elantra
+→ Kia Cerato
+
+- installment = major driver
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 🔍 FILTER STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Primary:
+
+- price
+- brand
+- model
+
+Secondary:
+
+- year
+- mileage
+- fuel
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13) 🚨 VALIDATION RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject if:
+
+- no brand
+- no model
+- no price
+- no images
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cars system is NOT list of names
+
+It is:
+
+- structured hierarchy
+- real brands
+- clean data
+
+If brands wrong:
+→ search fails
+
+If models missing:
+→ UX breaks
+*/

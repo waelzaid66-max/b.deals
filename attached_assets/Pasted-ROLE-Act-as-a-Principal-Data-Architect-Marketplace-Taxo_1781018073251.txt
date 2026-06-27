@@ -1,0 +1,164 @@
+ROLE:
+Act as a Principal Data Architect + Marketplace Taxonomy Engineer.
+
+You are building the MASTER DATA SYSTEM for BANCO.
+
+This is NOT optional.
+
+This layer defines:
+
+* how listings are stored
+* how search works
+* how filters work
+* how users trust results
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Transform:
+
+Messy marketplace → Structured, controlled, searchable system
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1) MASTER TABLES (STRICT NORMALIZATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CREATE:
+
+brands:
+- id
+- name (BMW, Mercedes, Toyota, Hyundai, Nissan)
+- category (car)
+
+models:
+- id
+- brand_id FK
+- name (X5, C180, Corolla, Tucson)
+- body_type (SUV, Sedan, Hatchback, Pickup)
+- production_start_year
+- production_end_year
+
+car_variants:
+- id
+- model_id FK
+- name (M-Sport, AMG, Highline)
+- engine (1.5T, 2.0T, V8)
+- transmission (automatic, manual)
+- drivetrain (FWD, RWD, AWD)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) REAL ESTATE TAXONOMY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+property_types:
+
+- apartment
+- villa
+- townhouse
+- twinhouse
+- penthouse
+- duplex
+- office
+- clinic
+- shop
+- land
+
+finishing_types:
+
+- finished
+- semi_finished
+- core_shell
+
+ownership_types:
+
+- resale
+- primary
+- installment_ready
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) INDUSTRIAL TAXONOMY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+industrial_types:
+
+- factory
+- warehouse
+- machine
+- production_line
+
+industries:
+
+- food
+- beverage
+- plastic
+- textile
+- pharmaceutical
+- chemical
+- engineering
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) LOCATION SYSTEM (CONTROLLED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+locations:
+
+- id
+- city (Cairo, Giza)
+- area (New Cairo, Nasr City, Sheikh Zayed, October)
+- zone_type (residential, industrial, mixed)
+
+❗ Listings MUST reference location_id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) HARD RULES (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ NO free text for:
+- brand
+- model
+- fuel
+- condition
+- property_type
+
+✔ ONLY ENUM or FK
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) DATA INJECTION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+When creating listing:
+
+1. match brand
+2. match model
+3. match category taxonomy
+4. reject if not found
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) MARKET COVERAGE (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seed FULL market:
+
+Cars:
+- BMW, Mercedes, Audi, Toyota, Hyundai, Nissan, Kia
+- ALL models (last 10–15 years)
+
+Real Estate:
+- New Cairo, Zayed, October, Capital
+- Apartments + Villas + Offices
+
+Industrial:
+- Factories + Equipment + Production lines
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT storing listings.
+
+You are building:
+
+* a structured market language
+* a controlled taxonomy system

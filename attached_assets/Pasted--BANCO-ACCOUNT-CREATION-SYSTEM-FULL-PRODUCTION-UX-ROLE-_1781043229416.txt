@@ -1,0 +1,1132 @@
+/**
+🚀 BANCO — ACCOUNT CREATION SYSTEM (FULL PRODUCTION UX)
+
+ROLE:
+Act as Senior Mobile UX Designer + Identity System Architect
+
+MISSION:
+Design a COMPLETE account creation experience for BANCO mobile app
+
+GOAL:
+User must:
+
+→ trust platform instantly
+→ create account in < 30 seconds
+→ feel secure (no scam fear)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🧠 ENTRY POINTS (REAL FLOW)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User can enter signup from:
+
+- First app open (soft prompt)
+- After clicking:
+  → Save
+  → Contact seller
+  → Post listing
+
+RULE:
+Do NOT force signup immediately
+Delay until action needed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🔐 SIGN UP OPTIONS (REAL MARKET STANDARD)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIMARY METHODS:
+
+- Continue with Email (OTP)
+- Continue with Google
+- Continue with Apple
+- Continue with Facebook
+- Continue with LinkedIn
+
+SECONDARY:
+
+- Phone number (optional fallback)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 📱 SCREEN DESIGN (STEP 1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HEADER:
+
+“Create your BANCO account”
+“ابدأ حسابك على بانكو”
+
+SUBTEXT:
+
+“Access verified deals, save listings, and connect instantly”
+“شوف أفضل العروض، احفظ الإعلانات، وتواصل فورًا”
+
+BUTTONS:
+
+[Continue with Google]
+[Continue with Apple]
+[Continue with Email]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) ✉️ EMAIL OTP FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP:
+
+- user enters email
+- receives 6-digit code
+
+TEXT:
+
+“Enter verification code”
+“ادخل كود التحقق”
+
+“Code sent to your email”
+“تم إرسال الكود إلى بريدك”
+
+ERROR:
+
+“Invalid code. Try again”
+“الكود غير صحيح”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 👤 PROFILE SETUP (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User selects:
+
+- Individual
+- Dealer
+- Company
+
+TEXT:
+
+“What best describes you?”
+“اختار نوع حسابك”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🧠 TRUST BUILDING ELEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show during signup:
+
+- “Verified sellers”
+- “Secure communication”
+- “No spam policy”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 🎨 ANIMATIONS (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Button tap → scale 0.96
+- OTP success → checkmark animation
+- Account created → smooth fade + success icon
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 🚨 ANTI-FRAUD UX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- limit multiple account creation
+- show:
+
+“We protect our users from fake accounts”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Signup must feel:
+
+→ fast
+→ safe
+→ professional
+
+NOT heavy
+NOT annoying
+*/
+/**
+🚀 BANCO — EMAIL COMMUNICATION SYSTEM
+
+ROLE:
+Act as Email UX Specialist
+
+MISSION:
+Design REAL email templates for BANCO
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) ✉️ OTP EMAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ENGLISH:
+
+Subject:
+Your BANCO verification code
+
+Body:
+
+Hello,
+
+Your verification code is:
+
+123456
+
+This code will expire in 5 minutes.
+
+If you didn’t request this, please ignore.
+
+BANCO Team
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+ARABIC:
+
+العنوان:
+كود التحقق من بانكو
+
+النص:
+
+مرحبًا،
+
+كود التحقق الخاص بك هو:
+
+123456
+
+صالح لمدة 5 دقائق.
+
+إذا لم تطلب هذا الكود، تجاهل الرسالة.
+
+فريق بانكو
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🔔 LEAD NOTIFICATION EMAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Subject:
+New buyer interested in your listing
+
+Body:
+
+You received a new inquiry.
+
+Listing:
+BMW X5 2022
+
+Action:
+WhatsApp Click
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 📊 WEEKLY REPORT EMAIL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Subject:
+Your weekly performance report
+
+Body:
+
+Listings views: 1200
+Leads: 35
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🎨 EMAIL DESIGN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Dark theme
+- BANCO logo at top
+- clear CTA buttons
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Emails must be:
+
+→ short
+→ clear
+→ professional
+*/
+/**
+🚀 BANCO — PROFILE SYSTEM (TRUST + IDENTITY)
+
+ROLE:
+Act as Marketplace Identity Designer
+
+MISSION:
+Build profile system that increases trust
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🧠 PROFILE HEADER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Name / Company
+- Profile image
+- Verification badge
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🔗 SOCIAL LINKS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Instagram
+- LinkedIn
+- Website
+- WhatsApp
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 📊 SELLER METRICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Listings count
+- Response rate
+- Active since
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 📂 SECTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- My Listings
+- Saved Listings
+- My Activity
+- Leads (for sellers)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🧠 TRUST LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show:
+
+- Verified badge
+- Real activity
+- Fast response
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Profile must answer:
+
+“Can I trust this seller?”
+*/
+/**
+🚀 BANCO — SETTINGS + SECURITY SYSTEM
+
+ROLE:
+Act as UX Security Architect
+
+MISSION:
+Build full control panel for user
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) ⚙️ SETTINGS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Account info
+- Change password
+- Notification settings
+- Language (Arabic / English)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🔐 SECURITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Change email
+- Enable 2FA
+- Active sessions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🧾 ACCOUNT DELETION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Flow:
+
+“Are you sure?”
+
+Options:
+
+- Delete permanently
+- Deactivate
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🎧 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- Contact support
+- Report user
+- FAQ
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🚨 SAFETY MESSAGES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- “Never pay before inspection”
+- “Report suspicious listings”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must feel:
+
+→ control
+→ safety
+→ transparency
+*/
+
+عاوز اكمل بنفس الدقة ارجوك الحث بعمق شديد جداا واديني داتا صحيحة استكمال بالكامل ممنوع التشتيت ابعتلي تعريفات كاملة لباقي الاقسام وتطويرات الموبايل ابلكيشن من كل الجوانب ليفوق اقوي المنصات واستعرض طرق التقسيط الاسلامي والمباشر والبنكي وحط اماكن واضحة للاقسام واكتب دباجات قوية بدون الفاظ بروكر او ممول خليك ذكي احنا خدمة احترافية 
+/**
+🚀 BANCO — COMPLETE MOBILE APP SYSTEM (ADVANCED REAL-WORLD UX + DATA)
+
+ROLE:
+Act as Senior Product Architect + Marketplace UX Strategist
+
+MISSION:
+Build a FULL mobile marketplace experience that:
+
+→ beats OLX / Dubizzle / Alibaba / Temu
+→ focuses on trust + clarity + conversion
+→ supports real-world Egyptian + GCC behavior
+
+CRITICAL RULE:
+BANCO = Professional service platform
+NOT broker
+NOT lender
+
+Tone must be:
+→ clean
+→ confident
+→ institutional
+→ intelligent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 📱 APP MAIN STRUCTURE (NAVIGATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BOTTOM NAV (MAX 4):
+
+1. Home
+2. Search
+3. Saved
+4. Profile
+
+FLOATING ACTION:
+
+→ “Post Asset”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🏠 HOME (SMART MARKET FEED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP BAR:
+
+- Search input
+- Notifications
+- Profile avatar
+
+━━━━━━━━━━━━━━━━━━━━━━━
+SECTIONS (REAL BEHAVIOR)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Featured Opportunities
+→ high value + strong visuals
+
+2. Flexible Payment Options
+→ installment-first listings
+
+3. Verified Sellers
+→ trust section
+
+4. Near You
+→ location-based
+
+5. Market Highlights
+→ trending listings
+
+━━━━━━━━━━━━━━━━━━━━━━━
+CARD TEXT (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+EN:
+
+“Starting from 8,500/month”
+“Verified Seller”
+“Available in New Cairo”
+
+AR:
+
+“يبدأ من ٨٥٠٠ شهريًا”
+“بائع موثّق”
+“متاح في التجمع”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🔍 SEARCH EXPERIENCE (SMART + FAST)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SEARCH INPUT:
+
+Supports:
+
+- Arabic / English
+- mixed queries:
+  “bmw x5 قسط”
+  “شقة التجمع”
+
+━━━━━━━━━━━━━━━━━━━━━━━
+RESULT TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- listings
+- categories
+- suggestions
+
+━━━━━━━━━━━━━━━━━━━━━━━
+FILTER PRIORITY
+━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIMARY (visible):
+
+- Price
+- Location
+- Monthly payment
+
+SECONDARY:
+
+- Category
+- Condition
+- Seller type
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 📄 LISTING DETAIL (HIGH-CONVERSION STRUCTURE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOP:
+
+- media gallery (images + video)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+PRICE BLOCK (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+EN:
+
+Cash Price:
+1,250,000 EGP
+
+From:
+8,500/month
+
+AR:
+
+السعر النقدي:
+١,٢٥٠,٠٠٠ جنيه
+
+يبدأ من:
+٨٥٠٠ شهريًا
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 💰 PAYMENT DISPLAY SYSTEM (ADVANCED — REAL MARKET)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) 🕌 ISLAMIC MODEL (SUPPLIER DIRECT)
+
+UI:
+
+Label:
+“Fixed Plan”
+
+EN:
+
+Total Price:
+1,200,000 EGP
+
+Monthly:
+10,000 EGP
+
+Duration:
+120 months
+
+AR:
+
+إجمالي السعر:
+١,٢٠٠,٠٠٠ جنيه
+
+القسط الشهري:
+١٠,٠٠٠ جنيه
+
+المدة:
+١٢٠ شهر
+
+RULE:
+NO interest mention
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) 🏦 CONVENTIONAL MODEL (BANK STYLE)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+EN:
+
+Down Payment:
+200,000 EGP
+
+Monthly:
+9,200 EGP
+
+Duration:
+96 months
+
+Total:
+1,350,000 EGP
+
+AR:
+
+مقدم:
+٢٠٠,٠٠٠ جنيه
+
+قسط:
+٩٢٠٠ جنيه
+
+المدة:
+٩٦ شهر
+
+الإجمالي:
+١,٣٥٠,٠٠٠ جنيه
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) 🧠 DISPLAY LOGIC (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+ON CARD:
+
+→ show lowest monthly ONLY
+
+ON DETAIL:
+
+→ show ALL options
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🏭 INDUSTRIAL UX (DIFFERENT FLOW)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ORDER:
+
+1. technical specs
+2. production capacity
+3. materials required
+4. origin
+5. price
+
+━━━━━━━━━━━━━━━━━━━━━━━
+SMART TEXT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+EN:
+
+“Production capacity: 500 units/day”
+“Requires: PET, HDPE”
+
+AR:
+
+“طاقة الإنتاج: ٥٠٠ وحدة يوميًا”
+“المواد المطلوبة: PET, HDPE”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 🧱 RAW MATERIAL DISPLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CARD:
+
+- material name
+- price per ton
+- origin
+
+DETAIL:
+
+- grade
+- MOQ
+- usage
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 👤 PROFILE EXPERIENCE (TRUST-FIRST)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HEADER:
+
+- name
+- company
+- badge
+
+━━━━━━━━━━━━━━━━━━━━━━━
+METRICS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+EN:
+
+“Active since 2020”
+“Responds within 10 minutes”
+
+AR:
+
+“نشط منذ ٢٠٢٠”
+“يرد خلال ١٠ دقائق”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 📢 ADS SYSTEM (NATIVE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- identical to listings
+- small label:
+
+“Sponsored” / “إعلان ممول”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 📰 MARKET INSIGHTS SECTION (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Purpose:
+
+→ build authority
+→ increase trust
+
+━━━━━━━━━━━━━━━━━━━━━━━
+CONTENT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- car price trends
+- real estate updates
+- industrial demand
+
+━━━━━━━━━━━━━━━━━━━━━━━
+EXAMPLE TEXT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+EN:
+
+“Car prices increased by 5% this month due to currency changes.”
+
+AR:
+
+“ارتفعت أسعار السيارات بنسبة ٥٪ هذا الشهر بسبب تغيرات العملة.”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 🎨 ANIMATION SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- tap → scale 0.96
+- scroll → smooth inertia
+- image swipe → natural physics
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 🔐 TRUST & SAFETY (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MESSAGES:
+
+EN:
+
+“Never transfer money before inspection.”
+
+AR:
+
+“لا تقم بتحويل أموال قبل المعاينة.”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO is:
+
+→ discovery engine
+→ decision engine
+→ trust engine
+
+If user:
+
+→ understands price instantly → SUCCESS
+→ feels safe → SUCCESS
+→ contacts seller → SUCCESS
+*/
+/**
+🚀 BANCO — FULL ECOSYSTEM PROMPT (REAL MARKET DATA + ROLES + UX)
+
+ROLE:
+Act as Principal Marketplace Architect + Real Economy System Designer
+
+MISSION:
+Build a COMPLETE mobile-first platform that connects:
+
+→ Individuals
+→ Dealers
+→ Companies
+→ Banks
+→ Suppliers
+→ Manufacturers
+
+Across:
+
+→ Cars
+→ Real Estate
+→ Industrial
+→ Raw Materials
+→ Production Lines
+
+CRITICAL RULE:
+BANCO is NOT a broker
+BANCO is NOT a lender
+
+BANCO = professional marketplace + deal environment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🧠 USER TYPES (REAL MARKET ROLES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) 👤 INDIVIDUAL USER
+
+Behavior:
+
+- browsing assets
+- comparing prices
+- searching for installment
+
+Needs:
+
+- clear price
+- monthly visibility
+- trust signals
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) 🚗 CAR DEALER / SHOWROOM
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Behavior:
+
+- listing inventory
+- selling quickly
+- generating leads
+
+Needs:
+
+- visibility
+- trust badge
+- fast contact
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) 🏢 COMPANY / REAL ESTATE DEVELOPER
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Behavior:
+
+- selling units
+- showing payment plans
+
+Needs:
+
+- structured offers
+- location clarity
+- map integration
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) 🏭 SUPPLIER / INDUSTRIAL SELLER
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Behavior:
+
+- selling machines / materials
+- negotiating deals
+
+Needs:
+
+- RFQ system
+- specs clarity
+- supplier credibility
+
+━━━━━━━━━━━━━━━━━━━━━━━
+E) 🏦 BANK / FINANCIAL PARTNER
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Behavior:
+
+- offering installment options
+
+Needs:
+
+- exposure inside listings
+- trust positioning
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🚗 AUTOMOTIVE SYSTEM (REAL STRUCTURE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DATA:
+
+- Brand → Model → Year
+- Mileage
+- Condition
+- Fuel type
+- Transmission
+
+REAL MARKET INSIGHT:
+
+Top demand:
+
+- Toyota Corolla
+- Hyundai Elantra
+- Kia Cerato
+
+UX PRIORITY:
+
+- image first
+- price big
+- installment visible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🏢 REAL ESTATE SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURE:
+
+- Location:
+  → Cairo / New Cairo / Sheikh Zayed
+
+- Type:
+  → Apartment
+  → Villa
+  → Office
+
+- Attributes:
+  → Area (sqm)
+  → Rooms
+  → Finishing
+
+UX FEATURES:
+
+- map view
+- price per meter
+- installment plans
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🏭 INDUSTRIAL SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURE:
+
+- Production lines
+- Machines
+- Equipment
+
+DATA:
+
+- capacity
+- power
+- labor
+- origin
+
+UX DIFFERENCE:
+
+- specs first
+- business-focused view
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🧱 RAW MATERIAL SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURE:
+
+- Plastics (PET, PVC, HDPE)
+- Metals (Steel, Aluminum)
+- Chemicals
+- Food materials
+
+DATA:
+
+- price per ton
+- origin
+- MOQ
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🔗 SUPPLY CHAIN LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each machine shows:
+
+→ required materials
+
+Each material shows:
+
+→ used in machines
+
+RESULT:
+
+→ full ecosystem
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 💰 PAYMENT DISPLAY SYSTEM (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) FIXED PLAN (ISLAMIC STYLE)
+
+- total price fixed
+- monthly fixed
+
+TEXT:
+
+EN:
+“Fixed total price”
+“Monthly payment”
+
+AR:
+“سعر ثابت”
+“قسط ثابت”
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) BANK INSTALLMENT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- down payment
+- monthly
+- duration
+
+━━━━━━━━━━━━━━━━━━━━━━━
+DISPLAY RULE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+CARD:
+
+→ show lowest monthly
+
+DETAIL:
+
+→ show all offers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 🤝 RFQ SYSTEM (DEAL ENGINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User:
+
+→ requests best offer
+
+Inputs:
+
+- budget
+- monthly target
+
+Sellers:
+
+→ send offers
+
+UI:
+
+- compare offers
+- select best
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 📱 MOBILE EXPERIENCE (HIGH-END UX)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOME:
+
+- dynamic feed
+- sections:
+  → deals
+  → verified
+  → near you
+
+SEARCH:
+
+- smart suggestions
+- Arabic + English
+
+DETAIL:
+
+- media
+- price
+- installment
+- specs
+
+CTA:
+
+- Call
+- WhatsApp
+- Chat
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 👤 PROFILE SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INCLUDES:
+
+- name
+- company
+- verification
+
+METRICS:
+
+- response rate
+- listings count
+
+SOCIAL:
+
+- Instagram
+- LinkedIn
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 📢 ADS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- native ads
+- same as listings
+
+LABEL:
+
+“Sponsored”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 📰 MARKET INSIGHTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CONTENT:
+
+- price trends
+- demand changes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13) 🔐 TRUST & SAFETY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MESSAGES:
+
+EN:
+“Verify before payment”
+
+AR:
+“تأكد قبل الدفع”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14) 🎨 DESIGN SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Theme:
+
+- black (#000000)
+- white text
+- gold/blue accents
+
+Animations:
+
+- tap → scale 0.96
+- smooth scroll
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO is:
+
+→ marketplace
+→ deal engine
+→ trust platform
+
+If:
+
+user understands price → SUCCESS
+user trusts seller → SUCCESS
+user contacts → SUCCESS
+
+Everything else = unnecessary
+*/

@@ -1,0 +1,379 @@
+🚀 BANCO — FULL MOBILE UX SYSTEM (CORRECTED HYBRID MARKETPLACE ENGINE)
+
+ROLE:
+Act as Principal Product Architect + Economic System Designer.
+
+MISSION:
+Build BANCO as a REAL economic engine that connects:
+
+* Individuals (buyers)
+* Dealers & Companies (sellers)
+* Suppliers & Manufacturers (B2B)
+* Banks & Partners (payment providers)
+
+⚠️ CORE TRUTH:
+BANCO is NOT browsing app
+BANCO is:
+→ Discovery Engine
+→ Decision Engine
+→ Deal Engine
+→ Supply Chain Connector
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) SYSTEM FLOW (NON-NEGOTIABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ALL FEATURES MUST SERVE THIS FLOW:
+
+Feed → Interest → Price Understanding → Trust → Action → Deal
+
+If any feature does not support this flow → REMOVE IT
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. 🧠 HOME FEED — THE CONTROL LAYER
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GOAL:
+Push user to decision in seconds
+
+TOP BAR:
+
+* Smart Search (Arabic + English + slang)
+* Notifications:
+    → Leads
+    → RFQ replies
+    → Price alerts
+* Profile
+
+CATEGORY STRIP (ECONOMIC ENTRY POINTS):
+
+* Cars
+* Real Estate
+* Industrial
+* Raw Materials
+* Production Lines
+* Suppliers
+* Investment Opportunities
+* Import & Global Supply
+
+⚠️ IMPORTANT:
+Each category = DIFFERENT BEHAVIOR MODEL
+
+━━━━━━━━━━━━━━━━━━━━━━━
+FEED STRUCTURE (NOT RANDOM)
+
+1. 🔥 Best Deals
+    → price-driven (Temu logic)
+2. 💰 Installment Opportunities
+    → monthly-driven (BANCO core)
+3. 🛡 Verified Sellers
+    → trust-driven
+4. 📍 Near You
+    → location-driven
+5. 📈 High Demand
+    → engagement-driven
+6. 🆕 Recently Added
+7. 🏭 Industrial Opportunities
+    → factories / machines
+8. 🌍 Global Supply
+    → import/export (Alibaba logic)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+CARD LOGIC (CRITICAL)
+
+Each card MUST show:
+
+* Media (image/video)
+* BIG CASH PRICE
+* “Starts from X/month”
+* Location
+* Seller badge
+
+MICRO TRIGGERS:
+
+* “3 people contacted today”
+* “Verified Dealer”
+* “Trending”
+
+⚠️ RULE:
+User must understand affordability instantly
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🚗 CARS — CONSUMER + DEALER MARKET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+USER INTENT:
+Fast decision
+
+FILTERS:
+
+* Brand → Model → Year
+* Condition
+* Mileage
+* Fuel
+* Payment Type
+
+DETAIL FLOW:
+
+1. Image
+2. Price
+3. Monthly
+4. Trust
+5. Action
+
+ADVANCED:
+
+* Dealer comparison (same car different sellers)
+* RFQ (request better deal)
+* Inspection booking
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🏢 REAL ESTATE — LONG DECISION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+USER INTENT:
+Compare + invest
+
+TOP FEATURES:
+
+* Map (default toggle)
+* Price/m²
+* Area trend
+
+DETAIL:
+
+* Price + installment
+* ROI indicator
+* Developer trust
+
+ADVANCED:
+
+* Schedule viewing
+* Compare units
+* Developer profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🏭 INDUSTRIAL — B2B CORE ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ DIFFERENT LOGIC:
+
+User is NOT browsing
+User is sourcing
+
+SUB-SECTIONS:
+
+* Factories
+* Machines
+* Production Lines
+* Equipment
+
+DETAIL PRIORITY:
+
+1. Specs
+2. Capacity
+3. Materials
+4. Origin
+5. THEN media
+
+ADVANCED:
+
+* RFQ mandatory
+* Supplier comparison
+* Bulk deal negotiation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🧱 RAW MATERIALS — SUPPLY LAYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PURPOSE:
+Feed industrial ecosystem
+
+DATA:
+
+* Price/unit
+* MOQ
+* Origin
+* Delivery time
+
+CRITICAL LINKING:
+
+Material → “Used in Machines”
+Machine → “Requires Materials”
+
+⚠️ THIS CREATES:
+Full supply chain inside BANCO
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) ⚙️ PRODUCTION LINES — BUSINESS BUILDER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NOT LISTING → INVESTMENT TOOL
+
+DATA:
+
+* Output capacity
+* ROI estimation
+* Required materials
+* Components
+
+FLOW:
+User sees line → sees materials → sees suppliers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 🤝 RFQ SYSTEM — DEAL ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+THIS IS CORE DIFFERENTIATOR
+
+BUTTON:
+“Request Best Offer”
+
+INPUT:
+
+* Budget
+* Monthly target
+* Notes
+
+OUTPUT:
+
+* Multiple offers
+* Ranked by value
+
+⚠️ IMPORTANT:
+NOT chat → structured offers
+
+RESULT:
+Competition between sellers → higher conversion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 👤 PROFILE — TRUST ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+USER DECIDES TRUST IN <2 SEC
+
+HEADER:
+
+* Name / Company
+* Logo
+* Badge
+
+SOCIAL LINKS:
+
+* Instagram
+* LinkedIn
+* Website
+* WhatsApp
+
+DATA:
+
+* Response rate
+* Years active
+* Active listings
+
+SECTIONS:
+
+* Listings
+* Leads
+* Saved
+* Activity
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 💰 PAYMENT DISPLAY — CORE DIFFERENTIATOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ BANCO DOES NOT FINANCE
+
+SELLERS PROVIDE OPTIONS
+
+CARD:
+
+* Cash price
+* Lowest monthly
+
+DETAIL:
+
+ISLAMIC:
+
+* Fixed total
+* Fixed monthly
+* No interest
+
+CONVENTIONAL:
+
+* Down payment
+* Monthly
+* Duration
+* Total payable
+
+MULTI-OFFER:
+
+* Best offer highlighted
+* Others below
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 📢 ADS — REVENUE WITHOUT UX DAMAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLACEMENT:
+Every 6 items
+
+RULE:
+Looks like listing
+
+LABEL:
+Sponsored
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 🌍 GLOBAL SUPPLY — ALIBABA LAYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FLOW:
+User requests product
+
+INPUT:
+
+* Product
+* Quantity
+* Country
+
+OUTPUT:
+
+* Suppliers respond
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 📊 MARKET INSIGHTS — DECISION SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SHOW:
+
+* Car trends
+* Property trends
+* Material prices
+* Market movement
+
+ALERTS:
+
+* Price drop
+* New opportunities
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL SYSTEM LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO =
+
+✔ Feed (Discovery)
+✔ Price (Clarity)
+✔ Installment (Decision)
+✔ RFQ (Deal)
+✔ Profile (Trust)
+✔ Supply Chain (Scale)
+
+If system:
+
+* slow → FAIL
+* confusing → FAIL
+* no trust → FAIL
+* no action → FAI

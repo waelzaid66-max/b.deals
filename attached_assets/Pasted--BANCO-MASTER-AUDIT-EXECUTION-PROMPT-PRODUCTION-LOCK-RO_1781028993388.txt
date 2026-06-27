@@ -1,0 +1,248 @@
+🚀 BANCO — MASTER AUDIT & EXECUTION PROMPT (PRODUCTION LOCK)
+
+ROLE:
+Act as a Principal Systems Architect + Senior Backend Engineer + Marketplace Operations Controller.
+
+You are NOT continuing development blindly.
+
+You are taking FULL CONTROL of BANCO and preparing it for REAL production.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) CORE RULE (NON-NEGOTIABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT build new features before fixing existing system issues.
+
+DO NOT allow:
+
+* broken flows
+* inconsistent data
+* disconnected modules
+
+SYSTEM MUST BE:
+✔ deterministic
+✔ consistent
+✔ production-safe
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. FULL SYSTEM UNDERSTANDING (MANDATORY FIRST STEP)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You MUST fully analyze ALL existing modules:
+
+* Core Engine (DB + Feed + Ranking)
+* BFF Layer (data shaping)
+* Mobile App (consumer)
+* Dealer OS (B2B system)
+* Leads System
+* Ads + Boost Engine
+* Monetization + Billing
+* Data Layer (taxonomy + validation)
+* Auth System (Clerk + roles)
+* Compliance (Google Play)
+* SRE / Stability (logging + rate limit)
+
+CRITICAL RELATIONSHIPS:
+
+* Feed → BFF → Mobile
+* Listings → Leads → Billing (CPL)
+* Ads → Ranking → Visibility
+* User Role → Access Control → Dealer OS
+
+DO NOT PROCEED until all flows are understood.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) GAP ANALYSIS (DEEP SYSTEM AUDIT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Identify ALL:
+
+🔴 Missing components
+🟠 Broken logic
+🟡 Partial implementations
+
+Specifically check:
+
+A) DATA LAYER
+
+* Is free-text used instead of structured data?
+* Are brands/models/locations normalized?
+* Is duplicate detection active?
+
+B) AUTH & ROLE SYSTEM
+
+* Is role consistent between DB and Clerk?
+* Is there a single source of truth?
+* Is Dealer OS access working?
+
+C) FEED ENGINE
+
+* Is ranking deterministic?
+* Are trust_score / media_score applied correctly?
+* Are ads affecting ranking?
+
+D) LEADS → BILLING LINK
+
+* Are leads tracked?
+* Are they billed (CPL)?
+* Is fraud protection applied?
+
+E) MONETIZATION
+
+* Are limits enforced?
+* Are subscriptions active?
+* Is wallet implemented?
+
+F) API CONTRACT
+
+* Are ALL endpoints returning:
+    { data, error, meta } ?
+
+G) COMPLIANCE
+
+* Account deletion?
+* Privacy policy?
+* Permissions handling?
+
+H) MOBILE
+
+* Any logic inside frontend? (must be ZERO)
+* Is BFF payload respected?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) CRITICAL FIXES (EXECUTE FIRST — NO EXCEPTIONS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fix immediately:
+
+1. ROLE SYSTEM (BLOCKER)
+
+* DB = source of truth
+* Sync role → Clerk metadata
+* Implement /me endpoint
+* Fix Dealer OS access بالكامل
+
+2. GLOBAL ERROR SYSTEM
+
+* Add centralized error middleware
+* Enforce response format globally
+
+3. RATE LIMITING
+
+* Apply to ALL public endpoints:
+    /feed /listings /search /saves
+
+4. SCHEMA STABILIZATION
+
+* Add:
+    wallet balance
+    listing statuses:
+    draft
+    pending_approval
+* DO NOT break existing schema
+
+5. DATA CONSISTENCY
+
+* Remove raw location text
+* Use canonical location_id
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) SYSTEM VALIDATION (AFTER FIXES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Verify:
+
+✔ Dealer OS accessible
+✔ No raw errors returned
+✔ API contract unified
+✔ No inconsistent roles
+✔ Feed stable
+
+If ANY fails → FIX before continuing.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) CONTROLLED EXECUTION (STRICT ORDER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ONLY after fixes are complete:
+
+STEP 1 → Monetization Engine
+
+* wallet
+* subscriptions
+* CPL billing
+* limit enforcement
+
+STEP 2 → Admin Control Center
+
+* moderation queue
+* fraud signals
+* reports system
+
+STEP 3 → Compliance Layer
+
+* account deletion
+* privacy policy
+* permissions
+
+STEP 4 → Full Auth System
+
+* Google / Apple / Facebook / LinkedIn
+* session management
+
+STEP 5 → User System
+
+* profile
+* listings dashboard
+* wallet UI
+* activity history
+
+STEP 6 → Support System
+
+* tickets
+* notifications
+* email integration
+
+STEP 7 → Search Upgrade
+
+* brand/model mapping
+* recent searches
+
+STEP 8 → Data Expansion
+
+* 100–200 real listings
+* clean taxonomy
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) FINAL PRODUCTION RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FORBIDDEN:
+
+* partial implementations
+* duplicate logic
+* frontend calculations
+* inconsistent API responses
+
+REQUIRED:
+
+* deterministic backend
+* clean data pipeline
+* strong validation
+* full observability
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT building features.
+
+You are delivering:
+
+✔ a trusted marketplace
+✔ a scalable SaaS system
+✔ a monetizable engine
+
+If system is unstable → FAIL
+If system is scalable → SUCCESS

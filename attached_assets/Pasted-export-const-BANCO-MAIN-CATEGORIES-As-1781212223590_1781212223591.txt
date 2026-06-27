@@ -1,0 +1,223 @@
+export const BANCO_MAIN_CATEGORIES = [
+
+  // 🔥 كل ما هو أصل (يُمتلك / يُباع / يُستثمر فيه)
+  "Assets", 
+  // (Cars + Real Estate + Factories + All Lands)
+
+  // ⚙️ كل ما هو تشغيل / إنتاج / تجارة
+  "Production & Supply"
+  // (Production Lines + Raw Materials + Import)
+
+];
+export const BANCO_ASSETS = [
+
+  "Cars",               // سيارات
+  "RealEstate",         // عقارات
+
+  "Factories",          // مصانع
+  "Warehouses",         // مخازن
+
+  "IndustrialLand",     // أراضي صناعية
+  "AgriculturalLand",   // أراضي زراعية
+  "ResidentialLand",    // أراضي سكنية
+  "CommercialLand"      // أراضي تجارية
+
+];
+
+export const BANCO_PRODUCTION = [
+
+  "ProductionLines",    // خطوط إنتاج
+  "RawMaterials",       // مواد خام
+  "ImportExport",       // استيراد وتوريد
+  "Suppliers",          // موردين
+  "IndustrialEquipment" // معدات
+];
+
+ROLE:
+Act as a Product Structuring Architect for BANCO Mobile App.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 CORE IDEA (IMPORTANT):
+
+BANCO is NOT a marketplace of categories.
+
+BANCO is a platform for:
+
+→ What people OWN
+→ What people USE to make money
+
+So the system must be built based on how humans think:
+
+1. أملك إيه؟
+2. أشتغل بإيه؟
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 MAIN STRUCTURE (MANDATORY)
+
+Split the entire platform into ONLY TWO CORE SECTIONS:
+
+1. ASSETS
+2. PRODUCTION & SUPPLY
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔥 1) ASSETS (كل ما يُمتلك)
+
+This section includes EVERYTHING a person or company can:
+
+* own
+* buy
+* sell
+* invest in
+
+Implement EXACTLY:
+
+* Cars
+* Real Estate
+* Factories
+* Warehouses
+* Industrial Land
+* Agricultural Land
+* Residential Land
+* Commercial Land
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 LOGIC:
+
+User mindset:
+
+“معايا فلوس… أشتري إيه؟”
+
+NOT:
+
+“أدخل قسم عربيات لوحده”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚙️ 2) PRODUCTION & SUPPLY (كل ما يشغّل الفلوس)
+
+This section includes everything used to:
+
+* produce
+* manufacture
+* trade
+* supply
+
+Implement:
+
+* Production Lines
+* Raw Materials
+* Industrial Equipment
+* Import & Global Supply
+* Suppliers
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 LOGIC:
+
+User mindset:
+
+“أشغل الفلوس دي إزاي؟”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 REAL MARKET ALIGNMENT (VERY IMPORTANT)
+
+Based on Egyptian + Gulf markets:
+
+ASSETS =
+
+* Real estate (biggest investment sector)
+* Cars (high liquidity asset)
+* Land (industrial + agricultural = strategic assets)
+* Factories (business ownership)
+
+PRODUCTION =
+
+* Lines (start business)
+* Materials (operate business)
+* Import (scale business)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 HUMAN-BASED STRUCTURE (CRITICAL)
+
+All flows must follow this:
+
+User enters app →
+
+Step 1:
+Choose mindset:
+
+* Buy Asset
+* Start Business
+
+Step 2:
+System shows relevant data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 MOBILE UI STRUCTURE
+
+Home MUST show:
+
+* Assets (main tab)
+* Production (main tab)
+
+Inside Assets:
+
+* Cars
+* Properties
+* Factories
+* Lands
+
+Inside Production:
+
+* Lines
+* Materials
+* Import
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 KEY DIFFERENCE FROM MARKET
+
+OLX / Dubizzle:
+
+→ categories
+
+BANCO:
+
+→ decisions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ RULES:
+
+* DO NOT create many main categories
+* DO NOT separate cars / real estate randomly
+* DO NOT build like classifieds apps
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FINAL GOAL:
+
+User must feel:
+
+“أنا مش بدور… أنا باخد قرار”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If this structure is broken:
+
+→ BANCO becomes a normal app
+
+If implemented correctly:
+
+→ BANCO becomes an Investment Platf
+
+
+
+افهم بعمق شديد لو سمحت

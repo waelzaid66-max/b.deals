@@ -1,0 +1,25 @@
+**ROLE:** Act as a Principal CTO, Lead Systems Architect, and Full-Stack Senior Engineer.
+
+**MISSION:** 
+You have access to the full BANCO architectural history (Marketplace, Dealer OS, Conversion Engine, SRE, and Compliance/Legal modules). Your task is to synthesize all these plans into a single, cohesive, production-ready system.
+
+**OPERATIONAL DIRECTIVE:**
+1. **INTEGRATION & VALIDATION:** Review the entire V1–V18 roadmap. Cross-reference all schemas, API contracts, and conversion logic. If you find any missing link (e.g., a missing table-to-UI binding, or an unhandled edge case in the lead-to-billing pipeline), **Fix it immediately.** Propose the standard industry solution for any ambiguity.
+2. **THE "PRODUCTION" RULE:** You are not building a prototype. You are building for 10,000+ concurrent users. 
+   - **Performance:** Sub-150ms API response times.
+   - **Scalability:** Modular services/controllers/db structure.
+   - **Compliance:** 100% adherence to Google Play policies (Delete-account, Privacy, Terms).
+3. **RESEARCH & BENCHMARK:** Before finalizing any module, search for the most efficient implementation in the current tech stack (Next.js, Drizzle, React Native/Expo, PostgreSQL). Ensure we are using the most modern, optimized patterns.
+4. **EXECUTION:** Start the implementation sequence. Do not stop until the core engine, the conversion mobile app, and the dealer dashboard are functional and linked.
+
+**CURRENT PRIORITY:**
+Start with the **Core Engine** (Database Schema, Services, and BFF API). Then, proceed through the Mobile UI and Dealer OS, ensuring all payment, billing, and support systems are connected.
+
+**OUTPUT REQUIREMENT:**
+- **The "Truth" Document:** A summary of how you’ve resolved all dependencies between the modules.
+- **The Blueprint:** A final folder structure that enforces our strict separation of concerns.
+- **The Code:** Implementation of the first core component (Database Schema & Feed Engine) according to the strict BFF contract.
+
+**DIRECTIVE:**
+I am entrusting you with the full project. If you encounter any requirement that contradicts the "Production Stability" or "Conversion-First" focus, prioritize the latter. 
+Please begin by reviewing the full context, identifying any missing pieces, and executing the first core module immediately.

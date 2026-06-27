@@ -1,0 +1,121 @@
+2451”}
+Before continuing, I need you to switch into full production ownership mode and align the system completely.
+
+There was a break in execution earlier, and parts of the system were implemented without full end-to-end validation. We must fix this before any further development.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 1 — CRITICAL SYSTEM FIXES (BLOCKERS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fix these immediately before anything else:
+
+1. Identity & Role System (CRITICAL)
+
+* Unify role source of truth (Database only)
+* Sync role to Clerk publicMetadata
+* Implement /me endpoint returning full user state
+* Fix Dealer OS access issue completely
+
+2. Global Error Handling
+
+* Implement centralized error middleware
+* Enforce response format: { data, error, meta } in ALL cases
+
+3. Rate Limiting (Full Coverage)
+
+* Apply to: /feed, /listings, /search, /saves
+
+4. Schema Stabilization
+
+* Add:
+    * wallet balance field
+    * listing statuses: draft, pending_approval
+* Do NOT break existing schema
+
+5. Data Consistency
+
+* Replace raw location text with canonical location_id
+
+❗ Do NOT start monetization or UI work before this is completed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 2 — BUSINESS CORE (REVENUE + CONTROL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After Phase 1 is verified:
+
+1. Monetization System
+
+* Wallet system
+* CPL billing (5–7 EGP per lead)
+* Subscription tiers (500 / 1500 / 5000 EGP)
+* Listing limits enforcement
+
+2. Admin Control Center
+
+* Moderation queue
+* Fraud detection
+* Reports system
+* User banning
+
+3. Google Play Compliance
+
+* Delete account (API + UI)
+* Privacy Policy
+* Terms of Service
+* Data Safety compliance
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 3 — USER SYSTEM & RETENTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Full Profile System
+
+* My listings (views, clicks, leads)
+* Wallet UI
+* Activity tracking
+* Saved + recently viewed
+
+2. Support System
+
+* Ticket system
+* Complaint handling
+
+3. Auth Expansion
+
+* Google / Apple / Facebook / LinkedIn login
+* Biometric login (FaceID / Fingerprint)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PHASE 4 — MARKET QUALITY & SCALE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Search Upgrade
+
+* Brand/model detection
+* Recent searches
+* Smart recommendations
+
+2. Data Expansion
+
+* 150+ real listings
+* Structured categories only
+
+3. Mobile Optimization
+
+* FlashList integration
+* Deep linking (banco://listing/:id)
+* Full #000000 UI consistency
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RULES (STRICT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* Do NOT build features before fixing core issues
+* Do NOT run conflicting parallel tasks
+* Do NOT modify API contract
+* Do NOT break working components
+
+You are responsible for delivering a complete production-ready marketplace.
+
+Start with PHASE 1 only and return a completion r

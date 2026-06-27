@@ -1,0 +1,280 @@
+BANCO — V21 FULL SYSTEM EXECUTION + VALIDATION (PRODUCTION MODE)
+
+ROLE:
+Act as a Principal System Architect + Senior Backend Engineer + Product Validator.
+
+MISSION:
+You are NOT just implementing BANCO.
+
+You are responsible for:
+
+* validating the entire system
+* detecting missing components
+* fixing inconsistencies
+* completing all layers until production-ready
+
+This is a FULL execution + correction task.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) EXECUTION MODE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT start coding immediately.
+
+FIRST:
+
+1. Review ALL existing system:
+    * DB schema
+    * APIs
+    * BFF layer
+    * Mobile structure
+    * Dealer system
+    * Billing logic
+2. Identify:
+    * missing tables
+    * broken flows
+    * inconsistent data
+    * weak UX points
+3. Provide a short REPORT:
+    * issues found
+    * fixes required
+
+THEN proceed to implementation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. DATABASE — NESTED TAXONOMY (STRICT)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You MUST implement:
+
+categories
+subcategories
+brands
+models
+attributes_definitions
+
+RELATIONS:
+
+Category → Subcategory → Brand → Model
+
+Example:
+
+Cars
+→ SUV
+→ BMW
+→ X5
+
+Rules:
+
+* No free text
+* All listings MUST reference IDs
+* JSONB only for dynamic specs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) REAL DATA SEEDING (MARKET-ACCURATE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Generate 100+ listings minimum.
+
+Cars:
+
+* BMW (X1, X3, X5, 3 Series)
+* Mercedes (C180, E200, GLC, GLE)
+* Toyota (Corolla, Camry, Land Cruiser)
+* Hyundai / Nissan / Kia
+
+Rules:
+
+* realistic Egyptian prices
+* mix new + used
+* mileage ranges
+* installment options
+
+Real Estate:
+
+* New Cairo / Sheikh Zayed / October / Capital
+* Apartments / Villas / Offices
+
+Attributes:
+
+* area (sqm)
+* rooms
+* finishing
+* delivery
+
+Industrial:
+
+* factories
+* machines
+* production lines
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) LIMIT ENGINE (BUSINESS CORE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Implement FULL logic:
+
+INDIVIDUAL:
+
+* 3 free listings / month
+* after that: 50 EGP per listing/day
+
+DEALER / COMPANY:
+
+* subscription tiers:
+    * Basic: 500 EGP
+    * Pro: 1500 EGP
+    * Enterprise: 5000 EGP
+
+BANKS:
+
+* 1000+ EGP subscription
+
+Rules:
+
+* enforce limits at API level
+* block creation if exceeded
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) CPL BILLING SYSTEM (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each lead:
+
+* cost: 5–7 EGP
+
+On action:
+
+* WhatsApp
+* Call
+
+System must:
+
+* deduct from seller wallet
+* log in lead_billing table
+
+If balance = 0:
+→ disable listing visibility
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) SEARCH ENGINE (REAL IMPLEMENTATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Search must:
+
+* support Arabic + English
+* detect:
+    * category
+    * brand
+    * model
+    * price
+    * installment intent
+
+Examples:
+
+“bmw x5 قسط”
+→ car + BMW + X5 + installment
+
+“شقة 150 متر التجمع”
+→ real_estate + area + location
+
+Add:
+
+* autocomplete
+* trending
+* recent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) MOBILE UX (STRICT CONTRACT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Must follow:
+
+* #000000 global theme
+* FlashList ONLY
+* no UI logic
+
+Card:
+
+[image]
+[price BIG]
+[installment badge]
+[title]
+[location + verified]
+
+Detail:
+
+* gallery
+* price
+* installment
+* sticky CTA (Call / WhatsApp)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) LOGO & BRANDING FIX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fix globally:
+
+* splash screen
+* header
+* profile
+
+Rules:
+
+* centered
+* proper padding
+* no distortion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) DATA VALIDATION (STRICT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject:
+
+* missing images
+* missing attributes
+* invalid categories
+
+Standardize:
+
+Cars:
+
+* fuel
+* condition
+* transmission
+
+Real Estate:
+
+* finishing
+* delivery status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) FINAL SYSTEM CHECK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System is READY only if:
+
+✔ feed loads fast (<150ms)
+✔ search returns accurate results
+✔ data looks real
+✔ limits enforced
+✔ billing works
+✔ mobile smooth
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT implementing features.
+
+You are delivering:
+
+A COMPLETE MARKETPLACE SYSTEM.
+
+If anything is missing:
+→ you must detect it
+→ fix it
+→ implement it
+
+No partial delivery allowed.

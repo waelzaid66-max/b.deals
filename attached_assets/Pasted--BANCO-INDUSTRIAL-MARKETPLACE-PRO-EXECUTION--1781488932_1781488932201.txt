@@ -1,0 +1,353 @@
+قسم الاخير المواد الخام وخطوط الانتاج والميكانات.  
+# BANCO INDUSTRIAL MARKETPLACE — PRO EXECUTION SPEC
+
+========================================
+1) LISTING TYPES (UNIFIED MODEL)
+========================================
+
+listingCategory:
+
+- production_line
+- raw_material
+- supplier
+- exporter
+
+
+========================================
+2) OBJECT: IndustrialListing
+========================================
+
+- id
+- title
+- description
+
+- category
+- industryType
+
+- location:
+  - country
+  - city
+  - lat
+  - lng
+
+- pricing:
+
+  - model:
+    - fixed_price
+    - price_on_request
+    - tier_pricing
+
+  - totalPrice
+  - pricePerUnit
+
+  - tierPricing:
+    - minQty
+    - pricePerUnit
+
+- MOQ
+- availability:
+  - in_stock
+  - on_demand
+
+- leadTime (days)
+
+- condition:
+  - new
+  - used
+
+- specifications:
+  - capacity
+  - power
+  - dimensions
+  - materialType
+
+- certifications[]
+
+- media:
+  - images[]
+  - video
+
+- supplier:
+  - id
+  - name
+  - type
+  - verified
+  - rating (1-5)
+
+- logistics:
+  - shippingAvailable (true/false)
+  - shippingMethods:
+    - sea
+    - air
+    - land
+  - estimatedShippingCost
+  - deliveryTime
+
+- financing:
+  - available (true/false)
+
+  - options:
+    - installment
+    - supplier_credit
+    - bank_finance
+
+  - installment:
+    - downPayment
+    - months
+    - monthlyInstallment
+
+  - supplierCredit:
+    - creditDays (30 / 60 / 90)
+
+- createdAt
+
+
+========================================
+3) CATEGORY-SPECIFIC FIELDS
+========================================
+
+A) PRODUCTION LINE:
+
+- productionCapacity
+- requiredSpace
+- powerConsumption
+- includedMachines[]
+
+- ROI_estimation (optional)
+
+
+----------------------------------------
+
+B) RAW MATERIAL:
+
+- materialType
+- purity
+- originCountry
+- packagingType
+
+- shelfLife
+
+
+----------------------------------------
+
+C) SUPPLIER:
+
+- productTypes[]
+- supplyRegions[]
+- deliveryTime
+
+
+----------------------------------------
+
+D) EXPORTER:
+
+- exportCountries[]
+- shippingMethods
+- exportVolume
+
+
+========================================
+4) FILTER ENGINE
+========================================
+
+BASIC:
+
+- category
+- industryType
+- location
+- priceRange
+- MOQ
+- availability
+
+----------------------------------------
+
+ADVANCED:
+
+- capacity range
+- leadTime
+- certifications
+- originCountry
+- shipping availability
+- financing available
+
+----------------------------------------
+
+SEARCH:
+
+- full text
+- verified first
+- high rating boost
+
+
+========================================
+5) RFQ + DIRECT DEAL SYSTEM
+========================================
+
+OBJECT: RFQ
+
+- id
+- listingId
+- buyerId
+- supplierId
+
+- quantity
+- budget
+- message
+
+- status:
+  - pending
+  - negotiation
+  - agreed
+  - closed
+
+- createdAt
+
+
+----------------------------------------
+DIRECT DEAL (NEW)
+----------------------------------------
+
+IF price available:
+
+- زر:
+  - "اشتري الآن"
+  - "ابدأ تقسيط"
+
+ELSE:
+- RFQ only
+
+
+========================================
+6) FINANCING SYSTEM (CRITICAL)
+========================================
+
+- installment calculator:
+
+monthlyInstallment = (totalPrice - downPayment) / months
+
+----------------------------------------
+
+- supplier credit:
+
+- buy now → pay after X days
+
+----------------------------------------
+
+- bank integration (future):
+
+- request financing approval
+
+
+========================================
+7) LOGISTICS ENGINE
+========================================
+
+- auto estimate shipping:
+
+INPUT:
+- weight
+- country
+
+OUTPUT:
+- shipping cost
+- delivery time
+
+----------------------------------------
+
+- track shipment (future)
+
+
+========================================
+8) CHAT + FILE SYSTEM
+========================================
+
+- text
+- image
+- PDF
+- technical specs
+
+----------------------------------------
+
+AUTO FLOW:
+
+RFQ → chat → negotiation
+
+
+========================================
+9) TRUST & RATING SYSTEM
+========================================
+
+- supplier rating
+- verified badge
+- completed deals count
+
+----------------------------------------
+
+ANTI-FRAUD:
+
+- duplicate detection
+- abnormal pricing detection
+
+
+========================================
+10) CONVERSION LAYER
+========================================
+
+- badges:
+  - best price
+  - fast delivery
+  - verified supplier
+
+- urgency:
+  - "تم طلب عرض سعر 10 مرات اليوم"
+
+- insights:
+  - avg price in market
+
+
+========================================
+11) UI RULES (NO COMPLEXITY)
+========================================
+
+listing screen:
+
+- image
+- title
+- price / RFQ
+- capacity / MOQ
+
+buttons:
+
+- طلب عرض سعر
+- شراء الآن (if available)
+- تقسيط (if available)
+
+----------------------------------------
+
+filters:
+
+- bottom sheet
+
+----------------------------------------
+
+chat:
+
+- simple like messenger
+
+
+========================================
+12) CORE FLOW
+========================================
+
+Buyer:
+
+Search → Filter → Open → RFQ / Buy → Chat → Payment → Delivery
+
+Supplier:
+
+Add Listing → Receive RFQ → Negotiate → Close Deal → Ship
+
+
+========================================
+END
+========================================

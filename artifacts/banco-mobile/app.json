@@ -1,0 +1,80 @@
+{
+  "expo": {
+    "name": "BANCO",
+    "slug": "banco-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/banco-splash.png",
+    "scheme": "banco-mobile",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/banco-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "BANCO accesses your photos and videos only when you choose them to add to a listing, a chat message, your profile picture, or your business verification documents and identity photo."
+      }
+    },
+    "android": {
+      "package": "it.banco.mobile",
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": "https://replit.com/"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "BANCO accesses your photos and videos only when you choose them to add to a listing, a chat message, your profile picture, or your business verification documents and identity photo.",
+          "cameraPermission": "BANCO uses the camera only when you choose to take a photo for a listing, or to capture your business verification documents and identity photo during account verification.",
+          "microphonePermission": false
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/banco-logo.png",
+          "color": "#000000"
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "packagingOptions": {
+              "exclude": [
+                "META-INF/versions/9/OSGI-INF/MANIFEST.MF"
+              ]
+            }
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "45f092c8-52f9-4272-880f-48e6b721126f"
+      }
+    },
+    "owner": "waelzaid"
+  }
+}

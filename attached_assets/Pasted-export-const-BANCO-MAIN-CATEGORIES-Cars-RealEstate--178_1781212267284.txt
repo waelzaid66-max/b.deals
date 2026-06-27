@@ -1,0 +1,1352 @@
+export const BANCO_MAIN_CATEGORIES = [
+  "Cars",                 // سيارات
+  "RealEstate",           // عقارات
+  "Industrial",           // صناعي / مصانع
+  "IndustrialLand",       // أراضي صناعية
+  "AgriculturalLand",     // أراضي زراعية (GPS + Map)
+  "RawMaterials",         // مواد خام
+  "ProductionLines"       // خطوط إنتاج
+];
+
+
+اولا السيارات. 
+export const BANCO_CARS_MASTER = {
+  categories: [
+    "Sedan",
+    "SUV",
+    "Hatchback",
+    "Coupe",
+    "Convertible",
+    "Pickup",
+    "Truck",
+    "Van",
+    "Electric",
+    "Hybrid",
+    "Luxury",
+    "Sports",
+    "Commercial"
+  ],
+
+  brands: [
+    // 🇩🇪 GERMANY
+    {
+      name: "BMW",
+      country: "Germany",
+      logo: "Blue/White circular emblem divided into quadrants",
+      type: ["Luxury", "Sedan", "SUV", "Electric"]
+    },
+    {
+      name: "Mercedes-Benz",
+      country: "Germany",
+      logo: "Three-pointed star inside a circle",
+      type: ["Luxury", "Sedan", "SUV"]
+    },
+    {
+      name: "Audi",
+      country: "Germany",
+      logo: "Four interconnected rings",
+      type: ["Luxury", "Sedan", "SUV", "Electric"]
+    },
+    {
+      name: "Volkswagen",
+      country: "Germany",
+      logo: "VW letters inside a circle",
+      type: ["Sedan", "Hatchback", "SUV"]
+    },
+    {
+      name: "Porsche",
+      country: "Germany",
+      logo: "Shield with horse and stripes",
+      type: ["Sports", "Luxury"]
+    },
+
+    // 🇯🇵 JAPAN
+    {
+      name: "Toyota",
+      country: "Japan",
+      logo: "Overlapping oval rings",
+      type: ["Sedan", "SUV", "Hybrid"]
+    },
+    {
+      name: "Lexus",
+      country: "Japan",
+      logo: "Stylized L inside oval",
+      type: ["Luxury", "SUV"]
+    },
+    {
+      name: "Honda",
+      country: "Japan",
+      logo: "H inside rectangle",
+      type: ["Sedan", "SUV"]
+    },
+    {
+      name: "Nissan",
+      country: "Japan",
+      logo: "Circle with horizontal bar",
+      type: ["Sedan", "SUV", "Electric"]
+    },
+    {
+      name: "Mazda",
+      country: "Japan",
+      logo: "Winged M inside oval",
+      type: ["Sedan", "SUV"]
+    },
+    {
+      name: "Mitsubishi",
+      country: "Japan",
+      logo: "Three red diamonds",
+      type: ["SUV", "Pickup"]
+    },
+
+    // 🇺🇸 USA
+    {
+      name: "Ford",
+      country: "USA",
+      logo: "Blue oval with Ford text",
+      type: ["Truck", "SUV", "Sedan"]
+    },
+    {
+      name: "Chevrolet",
+      country: "USA",
+      logo: "Golden bowtie",
+      type: ["SUV", "Truck"]
+    },
+    {
+      name: "Tesla",
+      country: "USA",
+      logo: "Stylized T",
+      type: ["Electric"]
+    },
+    {
+      name: "Jeep",
+      country: "USA",
+      logo: "Bold Jeep text",
+      type: ["SUV", "Off-road"]
+    },
+    {
+      name: "Cadillac",
+      country: "USA",
+      logo: "Crest shield",
+      type: ["Luxury"]
+    },
+
+    // 🇰🇷 KOREA
+    {
+      name: "Hyundai",
+      country: "South Korea",
+      logo: "Slanted H inside oval",
+      type: ["Sedan", "SUV"]
+    },
+    {
+      name: "Kia",
+      country: "South Korea",
+      logo: "Modern stylized KIA text",
+      type: ["Sedan", "SUV"]
+    },
+    {
+      name: "Genesis",
+      country: "South Korea",
+      logo: "Winged emblem with Genesis text",
+      type: ["Luxury"]
+    },
+
+    // 🇫🇷 FRANCE
+    {
+      name: "Renault",
+      country: "France",
+      logo: "Diamond shape",
+      type: ["Hatchback", "Sedan"]
+    },
+    {
+      name: "Peugeot",
+      country: "France",
+      logo: "Lion emblem",
+      type: ["Sedan", "SUV"]
+    },
+
+    // 🇮🇹 ITALY
+    {
+      name: "Ferrari",
+      country: "Italy",
+      logo: "Prancing horse on yellow shield",
+      type: ["Sports", "Luxury"]
+    },
+    {
+      name: "Lamborghini",
+      country: "Italy",
+      logo: "Bull inside shield",
+      type: ["Sports"]
+    },
+    {
+      name: "Fiat",
+      country: "Italy",
+      logo: "FIAT text badge",
+      type: ["Sedan", "Compact"]
+    },
+
+    // 🇨🇳 CHINA
+    {
+      name: "BYD",
+      country: "China",
+      logo: "BYD text",
+      type: ["Electric"]
+    },
+    {
+      name: "Geely",
+      country: "China",
+      logo: "Shield with blue/black sections",
+      type: ["Sedan", "SUV"]
+    },
+    {
+      name: "Chery",
+      country: "China",
+      logo: "Oval with A shape",
+      type: ["SUV"]
+    },
+
+    // 🇸🇪 SWEDEN
+    {
+      name: "Volvo",
+      country: "Sweden",
+      logo: "Circle with arrow (iron symbol)",
+      type: ["SUV", "Safety-focused"]
+    },
+
+    // 🇬🇧 UK
+    {
+      name: "Land Rover",
+      country: "UK",
+      logo: "Green oval Land Rover text",
+      type: ["SUV"]
+    },
+    {
+      name: "Jaguar",
+      country: "UK",
+      logo: "Leaping jaguar",
+      type: ["Luxury"]
+    }
+  ],
+
+  fuelTypes: [
+    "Petrol",
+    "Diesel",
+    "Hybrid",
+    "Electric"
+  ],
+
+  transmissions: [
+    "Automatic",
+    "Manual",
+    "CVT"
+  ]
+};
+export const BANCO_CARS_SYSTEM = {
+
+  // =========================
+  // 1) BRANDS + MODELS (قابل للتوسعة)
+  // =========================
+  brands: [
+    {
+      name: "BMW",
+      country: "Germany",
+      logo: "Blue/White circle",
+      models: [
+        "1 Series",
+        "2 Series",
+        "3 Series",
+        "4 Series",
+        "5 Series",
+        "7 Series",
+        "X1",
+        "X3",
+        "X5",
+        "X6",
+        "i3",
+        "i4",
+        "iX"
+      ]
+    },
+    {
+      name: "Mercedes-Benz",
+      country: "Germany",
+      logo: "Three-pointed star",
+      models: [
+        "A-Class",
+        "C-Class",
+        "E-Class",
+        "S-Class",
+        "GLA",
+        "GLC",
+        "GLE",
+        "G-Class",
+        "EQC",
+        "EQS"
+      ]
+    },
+    {
+      name: "Toyota",
+      country: "Japan",
+      logo: "Oval rings",
+      models: [
+        "Corolla",
+        "Camry",
+        "Yaris",
+        "Land Cruiser",
+        "Prado",
+        "Hilux",
+        "RAV4",
+        "Fortuner"
+      ]
+    },
+    {
+      name: "Hyundai",
+      country: "South Korea",
+      logo: "Slanted H",
+      models: [
+        "Elantra",
+        "Accent",
+        "Tucson",
+        "Santa Fe",
+        "Creta",
+        "Kona"
+      ]
+    },
+    {
+      name: "Kia",
+      country: "South Korea",
+      logo: "KIA modern text",
+      models: [
+        "Cerato",
+        "Sportage",
+        "Sorento",
+        "Picanto",
+        "Rio"
+      ]
+    },
+    {
+      name: "Tesla",
+      country: "USA",
+      logo: "T shape",
+      models: [
+        "Model S",
+        "Model 3",
+        "Model X",
+        "Model Y"
+      ]
+    }
+  ],
+
+  // =========================
+  // 2) VEHICLE TYPES
+  // =========================
+  vehicleTypes: [
+    "Sedan",
+    "SUV",
+    "Hatchback",
+    "Pickup",
+    "Truck",
+    "Coupe",
+    "Convertible",
+    "Van"
+  ],
+
+  // =========================
+  // 3) CONDITION
+  // =========================
+  condition: [
+    "New",
+    "Used",
+    "Like New",
+    "Certified"
+  ],
+
+  // =========================
+  // 4) CORE SPECS (Dynamic Form)
+  // =========================
+  specs: {
+    year: { min: 1980, max: 2026 },
+    mileage: "number_km",
+    engine: [
+      "1000cc",
+      "1300cc",
+      "1500cc",
+      "1600cc",
+      "2000cc",
+      "3000cc"
+    ],
+    fuel: [
+      "Petrol",
+      "Diesel",
+      "Hybrid",
+      "Electric"
+    ],
+    transmission: [
+      "Automatic",
+      "Manual",
+      "CVT"
+    ],
+    drivetrain: [
+      "FWD",
+      "RWD",
+      "AWD",
+      "4WD"
+    ]
+  },
+
+  // =========================
+  // 5) PAYMENT SYSTEM
+  // =========================
+  pricing: {
+    cash: "number",
+
+    installment: {
+      islamic: {
+        total: "fixed",
+        monthly: "fixed",
+        durationMonths: [12, 24, 36, 48, 60]
+      },
+      bank: {
+        downPayment: "number",
+        monthly: "number",
+        durationMonths: [12, 24, 36, 48, 60, 72, 84],
+        interestRate: "percentage"
+      }
+    }
+  },
+
+  // =========================
+  // 6) LISTING FORM (SMART)
+  // =========================
+  listingForm: {
+    requiredFields: [
+      "brand",
+      "model",
+      "year",
+      "condition",
+      "price",
+      "location",
+      "phoneNumbers",
+      "images"
+    ],
+
+    optionalFields: [
+      "mileage",
+      "engine",
+      "fuel",
+      "transmission",
+      "color",
+      "description"
+    ],
+
+    rules: {
+      minImages: 3,
+      maxImages: 15,
+      minDescriptionLength: 30,
+      maxPhoneNumbers: 3
+    }
+  },
+
+  // =========================
+  // 7) USER ACTIONS
+  // =========================
+  actions: [
+    "Call",
+    "WhatsApp",
+    "Chat",
+    "RequestOffer",
+    "ApplyForInstallment"
+  ],
+
+  // =========================
+  // 8) SEARCH ENGINE
+  // =========================
+  search: {
+    supports: [
+      "brand",
+      "model",
+      "price_range",
+      "installment_range",
+      "fuel",
+      "city"
+    ],
+
+    smartExamples: [
+      "BMW 2020",
+      "Toyota قسط",
+      "سيارة اقل قسط",
+      "SUV under 1M"
+    ]
+  },
+
+  // =========================
+  // 9) BADGES (UI)
+  // =========================
+  badges: [
+    "Verified",
+    "InstallmentAvailable",
+    "Trending",
+    "NewListing",
+    "LowPrice"
+  ],
+
+  // =========================
+  // 10) ANALYTICS (IMPORTANT)
+  // =========================
+  analytics: {
+    views: "number",
+    contactsToday: "number",
+    popularityScore: "auto"
+  }
+};
+
+
+{
+  "Germany": [
+    "Audi",
+    "BMW",
+    "Mercedes-Benz",
+    "Maybach",
+    "Smart",
+    "Volkswagen",
+    "Porsche",
+    "Opel",
+    "MAN",
+    "Ruf",
+    "Alpina"
+  ],
+
+  "Japan": [
+    "Toyota",
+    "Lexus",
+    "Honda",
+    "Acura",
+    "Nissan",
+    "Infiniti",
+    "Mazda",
+    "Subaru",
+    "Mitsubishi",
+    "Suzuki",
+    "Daihatsu",
+    "Isuzu",
+    "Hino"
+  ],
+
+  "South Korea": [
+    "Hyundai",
+    "Kia",
+    "Genesis",
+    "KG Mobility"
+  ],
+
+  "United States": [
+    "Ford",
+    "Lincoln",
+    "Chevrolet",
+    "Cadillac",
+    "GMC",
+    "Buick",
+    "Tesla",
+    "Jeep",
+    "Ram",
+    "Dodge",
+    "Chrysler",
+    "Lucid",
+    "Rivian"
+  ],
+
+  "United Kingdom": [
+    "Land Rover",
+    "Range Rover",
+    "Jaguar",
+    "Mini",
+    "Bentley",
+    "Rolls-Royce",
+    "Aston Martin",
+    "McLaren",
+    "Lotus",
+    "Morgan"
+  ],
+
+  "Italy": [
+    "Ferrari",
+    "Lamborghini",
+    "Maserati",
+    "Alfa Romeo",
+    "Fiat",
+    "Abarth",
+    "Lancia",
+    "Pagani"
+  ],
+
+  "France": [
+    "Renault",
+    "Peugeot",
+    "Citroen",
+    "DS Automobiles",
+    "Alpine",
+    "Bugatti"
+  ],
+
+  "Sweden": [
+    "Volvo",
+    "Polestar",
+    "Koenigsegg"
+  ],
+
+  "Czech Republic": [
+    "Skoda",
+    "Tatra"
+  ],
+
+  "Spain": [
+    "SEAT",
+    "Cupra",
+    "Tramontana"
+  ],
+
+  "China": [
+    "BYD",
+    "Geely",
+    "Chery",
+    "MG",
+    "Jetour",
+    "Omoda",
+    "Jaecoo",
+    "Haval",
+    "Tank",
+    "Great Wall",
+    "Hongqi",
+    "NIO",
+    "XPeng",
+    "Li Auto",
+    "Zeekr",
+    "Leapmotor",
+    "Aion",
+    "Wuling",
+    "Baojun",
+    "Bestune",
+    "Dongfeng",
+    "Changan",
+    "FAW",
+    "JAC",
+    "Maxus",
+    "Roewe",
+    "Voyah",
+    "Avatr",
+    "Arcfox",
+    "IM Motors",
+    "Yangwang",
+    "Denza",
+    "Foton"
+  ],
+
+  "India": [
+    "Tata",
+    "Mahindra",
+    "Maruti Suzuki",
+    "Force Motors"
+  ],
+
+  "Russia": [
+    "Lada",
+    "UAZ",
+    "Moskvitch"
+  ],
+
+  "Turkey": [
+    "TOGG"
+  ],
+
+  "UAE": [
+    "W Motors"
+  ],
+
+  "Vietnam": [
+    "VinFast"
+  ],
+
+  "Taiwan": [
+    "Luxgen"
+  ],
+
+  "Malaysia": [
+    "Proton",
+    "Perodua"
+  ],
+
+  "Iran": [
+    "Iran Khodro",
+    "SAIPA",
+    "Pars Khodro"
+  ],
+
+  "Brazil": [
+    "Agrale",
+    "Troller"
+  ],
+
+  "Croatia": [
+    "Rimac"
+  ],
+
+  "Denmark": [
+    "Zenvo"
+  ],
+
+  "Netherlands": [
+    "Spyker",
+    "Donkervoort"
+  ]
+}
+{
+  "Cars": {
+    "Germany": [
+      "BMW",
+      "Mercedes-Benz",
+      "Audi",
+      "Volkswagen",
+      "Porsche",
+      "Opel",
+      "Smart",
+      "Maybach"
+    ],
+
+    "Japan": [
+      "Toyota",
+      "Lexus",
+      "Honda",
+      "Acura",
+      "Nissan",
+      "Infiniti",
+      "Mazda",
+      "Subaru",
+      "Mitsubishi",
+      "Suzuki",
+      "Daihatsu",
+      "Isuzu"
+    ],
+
+    "SouthKorea": [
+      "Hyundai",
+      "Kia",
+      "Genesis",
+      "KG Mobility"
+    ],
+
+    "China": [
+      "BYD",
+      "Geely",
+      "Chery",
+      "MG",
+      "Great Wall",
+      "Haval",
+      "Tank",
+      "Ora",
+      "NIO",
+      "XPeng",
+      "Li Auto",
+      "Zeekr",
+      "Hongqi",
+      "JAC",
+      "Jetour",
+      "Omoda",
+      "Jaecoo",
+      "Roewe"
+    ],
+
+    "UnitedStates": [
+      "Ford",
+      "Lincoln",
+      "Chevrolet",
+      "Cadillac",
+      "GMC",
+      "Buick",
+      "Tesla",
+      "Jeep",
+      "Dodge",
+      "Ram",
+      "Chrysler",
+      "Lucid",
+      "Rivian"
+    ],
+
+    "UnitedKingdom": [
+      "Land Rover",
+      "Range Rover",
+      "Jaguar",
+      "Mini",
+      "Bentley",
+      "Rolls-Royce",
+      "Aston Martin",
+      "McLaren"
+    ],
+
+    "Italy": [
+      "Ferrari",
+      "Lamborghini",
+      "Maserati",
+      "Alfa Romeo",
+      "Fiat",
+      "Abarth",
+      "Lancia"
+    ],
+
+    "France": [
+      "Renault",
+      "Peugeot",
+      "Citroen",
+      "DS Automobiles",
+      "Alpine",
+      "Bugatti"
+    ],
+
+    "Sweden": [
+      "Volvo",
+      "Polestar",
+      "Koenigsegg"
+    ],
+
+    "CzechRepublic": [
+      "Skoda"
+    ],
+
+    "India": [
+      "Tata",
+      "Mahindra",
+      "Maruti Suzuki"
+    ],
+
+    "Russia": [
+      "Lada",
+      "UAZ"
+    ],
+
+    "Turkey": [
+      "TOGG"
+    ],
+
+    "UAE": [
+      "W Motors"
+    ]
+  }
+}
+{
+  "brand": "",
+  "model": "",
+  "generation": "",
+  "year": "",
+  "countryOfOrigin": "",
+  "bodyType": "",
+  "fuelType": "",
+  "transmission": "",
+  "engineCC": "",
+  "horsePower": "",
+  "drivetrain": "",
+  "doors": "",
+  "seats": "",
+  "color": "",
+  "condition": "",
+  "mileage": "",
+  "vin": "",
+  "priceCash": "",
+  "installmentAvailable": true,
+  "monthlyInstallment": "",
+  "downPayment": "",
+  "sellerType": "",
+  "location": "",
+  "gps": "",
+  "images": [],
+  "video": "",
+  "description": ""
+}
+[
+  "Sedan",
+  "SUV",
+  "Crossover",
+  "Coupe",
+  "Convertible",
+  "Hatchback",
+  "Pickup",
+  "Van",
+  "Minivan",
+  "Truck",
+  "Luxury",
+  "Sports",
+  "Supercar",
+  "Hypercar",
+  "Electric",
+  "Hybrid",
+  "Plug-in Hybrid",
+  "Commercial",
+  "Off-Road"
+]
+[
+  "Brand",
+  "Model",
+  "Year",
+  "Price",
+  "Installment",
+  "Country",
+  "Body Type",
+  "Fuel Type",
+  "Transmission",
+  "Mileage",
+  "Engine Size",
+  "Horsepower",
+  "Location",
+  "Dealer",
+  "Verified Seller",
+  "New",
+  "Used"
+]
+
+{
+  "BMW": "Blue and white circle",
+  "Mercedes-Benz": "Three-pointed star",
+  "Audi": "Four rings",
+  "Toyota": "Three overlapping ovals",
+  "Hyundai": "Slanted H",
+  "Kia": "Stylized KIA text",
+  "Tesla": "T-shaped emblem",
+  "Ford": "Blue oval",
+  "Chevrolet": "Golden bowtie",
+  "Volkswagen": "VW circle",
+  "Porsche": "Horse shield",
+  "Ferrari": "Prancing horse",
+  "Lamborghini": "Bull shield",
+  "Volvo": "Iron symbol circle-arrow",
+  "BYD": "BYD text logo"
+}
+{
+  "CarBrand": {
+    "name": "Toyota",
+    "country": "Japan",
+    "logoDescription": "Three overlapping ovals",
+    "models": [
+      "Corolla",
+      "Camry",
+      "Yaris",
+      "Avalon",
+      "Crown",
+      "Prius",
+      "Mirai",
+      "86",
+      "GR Supra",
+      "GR86",
+      "RAV4",
+      "Corolla Cross",
+      "Highlander",
+      "Grand Highlander",
+      "4Runner",
+      "Land Cruiser",
+      "Prado",
+      "Sequoia",
+      "Fortuner",
+      "Rush",
+      "Raize",
+      "Hilux",
+      "Tacoma",
+      "Tundra",
+      "Hiace",
+      "Coaster"
+    ]
+  }
+}
+
+[
+  "Toyota",
+  "Lexus",
+  "Honda",
+  "Acura",
+  "Nissan",
+  "Infiniti",
+  "Mazda",
+  "Subaru",
+  "Mitsubishi",
+  "Suzuki",
+  "Isuzu",
+  "Daihatsu",
+
+  "BMW",
+  "Mercedes-Benz",
+  "Maybach",
+  "Audi",
+  "Volkswagen",
+  "Porsche",
+  "Opel",
+
+  "Ford",
+  "Lincoln",
+  "Chevrolet",
+  "Cadillac",
+  "GMC",
+  "Buick",
+  "Tesla",
+  "Jeep",
+  "Dodge",
+  "Ram",
+  "Chrysler",
+
+  "Hyundai",
+  "Kia",
+  "Genesis",
+
+  "Renault",
+  "Peugeot",
+  "Citroen",
+  "DS",
+
+  "Ferrari",
+  "Lamborghini",
+  "Maserati",
+  "Fiat",
+  "Alfa Romeo",
+
+  "Jaguar",
+  "Land Rover",
+  "Range Rover",
+  "Mini",
+  "Bentley",
+  "Rolls-Royce",
+  "Aston Martin",
+  "McLaren",
+
+  "Volvo",
+  "Polestar",
+
+  "BYD",
+  "Geely",
+  "Chery",
+  "MG",
+  "Jetour",
+  "Omoda",
+  "Jaecoo",
+  "Haval",
+  "Tank",
+  "Great Wall",
+  "NIO",
+  "XPeng",
+  "Li Auto",
+  "Zeekr",
+  "Hongqi"
+]
+
+[
+  "116i",
+  "118i",
+  "120i",
+  "218i",
+  "220i",
+  "320i",
+  "330i",
+  "520i",
+  "530i",
+  "730i",
+  "740i",
+  "750i",
+  "M2",
+  "M3",
+  "M4",
+  "M5",
+  "M8",
+  "X1",
+  "X2",
+  "X3",
+  "X4",
+  "X5",
+  "X6",
+  "X7",
+  "XM",
+  "i3",
+  "i4",
+  "i5",
+  "i7",
+  "iX"
+]
+
+[
+  "A-Class",
+  "CLA",
+  "C-Class",
+  "E-Class",
+  "S-Class",
+  "GLA",
+  "GLB",
+  "GLC",
+  "GLE",
+  "GLS",
+  "G-Class",
+  "AMG GT",
+  "SL",
+  "EQA",
+  "EQB",
+  "EQE",
+  "EQS"
+]
+[
+  "Accent",
+  "Elantra",
+  "Sonata",
+  "Azera",
+  "i10",
+  "i20",
+  "i30",
+  "Venue",
+  "Creta",
+  "Tucson",
+  "Santa Fe",
+  "Palisade",
+  "Kona",
+  "IONIQ 5",
+  "IONIQ 6"
+]
+[
+  "Picanto",
+  "Rio",
+  "Cerato",
+  "K5",
+  "Stinger",
+  "Seltos",
+  "Sportage",
+  "Sorento",
+  "Telluride",
+  "EV6",
+  "EV9"
+]
+{
+  "brand": "",
+  "model": "",
+  "generation": "",
+  "trim": "",
+  "year": "",
+  "country": "",
+  "bodyType": "",
+  "fuelType": "",
+  "transmission": "",
+  "engineSize": "",
+  "horsePower": "",
+  "driveType": "",
+  "seats": "",
+  "doors": "",
+  "color": "",
+  "mileage": "",
+  "condition": "",
+  "cashPrice": "",
+  "installmentAvailable": true,
+  "monthlyInstallment": "",
+  "downPayment": "",
+  "city": "",
+  "gps": "",
+  "sellerType": "",
+  "images": []
+}
+{
+  "LuxuryBrands": [
+    "Rolls-Royce",
+    "Bentley",
+    "Maybach",
+    "Ferrari",
+    "Lamborghini",
+    "Maserati",
+    "Porsche",
+    "BMW",
+    "Mercedes-Benz",
+    "Audi",
+    "Genesis",
+    "Lexus"
+  ],
+
+  "ElectricBrands": [
+    "Tesla",
+    "BYD",
+    "NIO",
+    "XPeng",
+    "Li Auto",
+    "Zeekr",
+    "Polestar",
+    "Lucid",
+    "Rivian",
+    "VinFast",
+    "Leapmotor",
+    "Aion"
+  ],
+
+  "CommercialBrands": [
+    "MAN",
+    "Isuzu",
+    "Hino",
+    "Foton",
+    "Maxus",
+    "Ford",
+    "Ram",
+    "GMC"
+  ],
+
+  "PopularInEgypt": [
+    "Toyota",
+    "Hyundai",
+    "Kia",
+    "Nissan",
+    "Chevrolet",
+    "MG",
+    "Chery",
+    "BYD",
+    "Jetour",
+    "BMW",
+    "Mercedes-Benz",
+    "Audi",
+    "Volkswagen",
+    "Skoda",
+    "Renault",
+    "Peugeot"
+  ]
+}
+{
+  "BMW": [
+    "116i","118i","120i","125i",
+    "216i","218i","220i",
+    "316i","318i","320i","328i","330i","335i","340i",
+    "420i","428i","430i","440i",
+    "520i","525i","528i","530i","535i","540i",
+    "730i","735i","740i","750i","760i",
+    "M2","M3","M4","M5","M6","M8",
+    "X1","X2","X3","X4","X5","X6","X7",
+    "i3","i4","i5","i7","iX"
+  ],
+
+  "Mercedes-Benz": [
+    "A180","A200","A250",
+    "CLA180","CLA200","CLA250",
+    "C180","C200","C300","C43 AMG","C63 AMG",
+    "E200","E300","E350","E43 AMG","E63 AMG",
+    "S350","S450","S500","S580","Maybach S-Class",
+    "GLA","GLB","GLC","GLE","GLS","G-Class",
+    "AMG GT","SL","CLE",
+    "EQA","EQB","EQC","EQE","EQS"
+  ],
+
+  "Audi": [
+    "A1","A3","A4","A5","A6","A7","A8",
+    "Q2","Q3","Q5","Q7","Q8",
+    "TT","R8",
+    "e-tron","Q4 e-tron","Q8 e-tron"
+  ],
+
+  "Toyota": [
+    "Corolla","Corolla Cross","Camry","Yaris","Avalon","Crown",
+    "Prius","Mirai",
+    "RAV4","Highlander","Grand Highlander",
+    "Fortuner","Land Cruiser","Prado","Sequoia","Rush","Raize",
+    "Hilux","Tacoma","Tundra",
+    "Hiace","Coaster"
+  ],
+
+  "Hyundai": [
+    "Accent","Elantra","Sonata","Azera",
+    "i10","i20","i30",
+    "Venue","Creta","Tucson","Santa Fe","Palisade","Kona",
+    "IONIQ 5","IONIQ 6"
+  ],
+
+  "Kia": [
+    "Picanto","Rio","Cerato","K3","K5",
+    "Stinger",
+    "Seltos","Sportage","Sorento","Telluride",
+    "EV6","EV9"
+  ],
+
+  "Nissan": [
+    "Sunny","Sentra","Altima","Maxima",
+    "Micra",
+    "Juke","Qashqai","X-Trail","Pathfinder","Patrol",
+    "Navara",
+    "Leaf","Ariya"
+  ],
+
+  "Honda": [
+    "City","Civic","Accord",
+    "HR-V","CR-V","Pilot","Passport",
+    "Odyssey"
+  ],
+
+  "Chevrolet": [
+    "Spark","Aveo","Optra","Malibu","Impala",
+    "Captiva","Equinox","Traverse","Tahoe","Suburban",
+    "Silverado"
+  ],
+
+  "Ford": [
+    "Fiesta","Focus","Fusion",
+    "Escape","Kuga","Edge","Explorer","Expedition",
+    "Everest",
+    "Ranger","F-150",
+    "Mustang","Mustang Mach-E"
+  ],
+
+  "Volkswagen": [
+    "Polo","Golf","Passat","Jetta","Arteon",
+    "T-Roc","Tiguan","Touareg",
+    "ID.3","ID.4","ID.6"
+  ],
+
+  "Skoda": [
+    "Fabia","Rapid","Octavia","Superb",
+    "Kamiq","Karoq","Kodiaq"
+  ],
+
+  "Renault": [
+    "Logan","Sandero","Megane","Talisman",
+    "Duster","Kadjar","Koleos"
+  ],
+
+  "Peugeot": [
+    "208","301","308","508",
+    "2008","3008","5008"
+  ],
+
+  "MG": [
+    "MG3","MG5","MG6",
+    "ZS","HS","RX5",
+    "MG4 EV","MG ZS EV"
+  ],
+
+  "Chery": [
+    "Arrizo 5","Arrizo 6",
+    "Tiggo 2","Tiggo 3","Tiggo 4","Tiggo 7","Tiggo 8"
+  ],
+
+  "BYD": [
+    "F3","F0",
+    "Dolphin","Atto 3","Han","Tang","Seal"
+  ],
+
+  "Tesla": [
+    "Model S","Model 3","Model X","Model Y"
+  ],
+
+  "Land Rover": [
+    "Defender","Discovery","Discovery Sport",
+    "Range Rover","Range Rover Sport","Range Rover Velar","Range Rover Evoque"
+  ],
+
+  "Volvo": [
+    "S60","S90",
+    "XC40","XC60","XC90",
+    "C40 Recharge"
+  ],
+
+  "Mazda": [
+    "Mazda2","Mazda3","Mazda6",
+    "CX-3","CX-5","CX-9","CX-30"
+  ],
+
+  "Subaru": [
+    "Impreza","Legacy",
+    "Forester","Outback","XV","WRX"
+  ],
+
+  "Mitsubishi": [
+    "Lancer","Attrage",
+    "ASX","Outlander","Pajero","Eclipse Cross","L200"
+  ]
+}

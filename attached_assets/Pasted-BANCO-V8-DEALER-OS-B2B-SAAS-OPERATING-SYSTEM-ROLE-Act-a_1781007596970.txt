@@ -1,0 +1,285 @@
+BANCO — V8 DEALER OS (B2B SAAS OPERATING SYSTEM)
+
+ROLE:
+Act as a Principal SaaS Architect + Enterprise Systems Engineer.
+
+You are NOT building a dashboard.
+
+You are building a DEALER OPERATING SYSTEM.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) CORE OBJECTIVE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System must allow dealer to:
+
+* manage hundreds of listings
+* import inventory instantly
+* track leads
+* convert leads into deals
+* spend money (ads)
+* measure ROI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. SYSTEM ARCHITECTURE (B2B)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Modules:
+
+* Listings Management Engine
+* Bulk Import Engine
+* Lead CRM Engine
+* Ads Control Panel
+* Analytics Engine
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) DEALER DASHBOARD (REAL STRUCTURE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Layout:
+
+Sidebar:
+
+* Dashboard
+* Listings
+* Leads
+* Ads
+* Analytics
+
+Top Metrics:
+
+* Total Listings
+* Active Listings
+* Leads Today
+* Conversion Rate
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) LISTINGS MANAGEMENT (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DataGrid MUST support:
+
+* pagination
+* sorting
+* filters
+* bulk select
+* bulk actions
+
+Actions:
+
+* Activate / Archive
+* Boost
+* Delete
+* Edit
+
+Columns:
+
+* title
+* price
+* status
+* views
+* leads
+* created_at
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) BULK IMPORT ENGINE (HIGH PERFORMANCE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Endpoint:
+
+POST /vendor/import
+
+Pipeline:
+
+1. parse CSV stream (NOT full memory load)
+2. validate each row:
+
+* must have title
+* must have price
+* must match category schema
+
+3. transform:
+
+→ convert into:
+
+* listings
+* attributes JSONB
+
+4. batch insert:
+
+Use:
+
+INSERT INTO listings (…) VALUES (…)
+RETURNING id
+
+Then:
+
+INSERT INTO attributes (…)
+
+❗ Use batching (100–500 rows per batch)
+
+5. transaction:
+
+IF failure:
+
+→ rollback failed batch only
+
+Return:
+
+{
+success_count,
+failed_count,
+errors[]
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) LEAD CRM ENGINE (REAL VALUE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Table:
+
+lead_history:
+
+* id
+* listing_id
+* buyer_id
+* seller_id
+* action_type
+* status (new, contacted, closed)
+* created_at
+
+Features:
+
+* mark as contacted
+* mark as closed
+* filter by status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) LEAD PRIORITIZATION (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sort leads by:
+
+* recency
+* action_type weight:
+
+whatsapp > call > view
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) ADS CONTROL PANEL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dealer can:
+
+* select listing
+* choose boost type
+* select duration
+
+System:
+
+→ create ads_campaign
+
+→ auto expire
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) ANALYTICS ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Metrics:
+
+* views per listing
+* leads per listing
+* conversion rate
+
+Conversion:
+
+leads / views
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) TENANT ISOLATION (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Every query MUST include:
+
+WHERE seller_id = current_user
+
+NO EXCEPTIONS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) PERFORMANCE RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* use pagination always
+* avoid loading all listings
+* use indexes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT building a UI.
+
+You are building:
+
+* dealer control system
+* inventory engine
+* revenue driver
+
+If dealer cannot sell → system failed
+
+# 🚀 BANCO STEP 4: THE B2B SAAS DASHBOARD & BULK IMPORT ENGINE
+**ROLE:** Act as a Principal SaaS Architect and Enterprise Frontend/Backend Engineer.
+**ENVIRONMENT:** Next.js / React, Tailwind CSS, Node.js, PostgreSQL.
+
+**🛑 REALITY CHECK & CORE DIRECTIVE:**
+You are now building the B2B side of BANCO — The Vendor/Dealer SaaS Portal. 
+This is NOT a consumer interface. It must be dense, data-rich, and highly functional. Dealers will use this to manage hundreds of listings, track leads (CRM), and spend money on ads. Performance, Bulk Actions, and Data Grids are your top priorities.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 1. B2B UI/UX DESIGN LANGUAGE (ENTERPRISE GRADE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* **Layout:** Classic SaaS layout. Fixed Left Sidebar (Navigation) + Top Bar (Search & Profile) + Main Content Area.
+* **Theme:** "Professional SaaS Light/Dark". Clean tables, subtle borders, high contrast for text.
+* **Components Required:**
+    * **Data Grids (Tables):** Must support pagination, sorting by column, bulk selection (checkboxes), and inline status toggling (Active/Archived).
+    * **Analytics Cards:** Simple metrics showing: Total Listings, Active Ads, Total Leads, Profile Views.
+    * **Forms:** Multi-step forms for manual listing creation with dynamic fields based on asset category.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 2. THE BULK IMPORT ENGINE (CRITICAL B2B FEATURE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Dealers will not add 100 cars or properties manually. You must build a robust CSV/Excel import pipeline.
+* **Frontend:** Drag-and-drop file uploader with a "Column Mapping" step (e.g., mapping their CSV column "Price" to our DB field `base_price_cash`).
+* **Backend Pipeline (`POST /api/vendor/bulk-import`):**
+    1. Parse CSV stream.
+    2. Validate rows against the category's required JSONB schema.
+    3. **Batch Insert:** Use PostgreSQL `INSERT ... ON CONFLICT` or `COPY` commands for extreme speed. Do NOT use loops with individual inserts.
+    4. Return a detailed success/error report (e.g., "98 imported, 2 failed due to missing price").
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 3. LEAD MANAGEMENT & CRM (THE VALUE PROPOSITION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+This is what vendors pay for. They need to see who is interested in their assets.
+* **Lead Table:** Display `lead_id`, `listing_title`, `action_type` (WhatsApp, Call, Finance Request), `timestamp`.
+* **Lead Analytics:** A chart showing "Leads over the last 30 days" to prove ROI to the dealer.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 4. AD CAMPAIGN & BOOSTING MANAGEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Vendors need a self-serve portal to spend money on visibility.
+* **The "Boost" Modal:** From the listings table, clicking "Boost" opens a modal.
+* **Options:** Select ad duration (3 days, 7 days), select ad type (Top of Search, Feed Native Ad).
+* **Backend Action:** Update `listings.status` or insert into an `active_ads` table with an expiration timestamp.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 5. TENANT ISOLATION (SECURITY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* **Strict RLS / Middleware:** Every single API call in this dashboard MUST verify the JWT token and ensure `seller_id == jwt.user_id`. A dealer must NEVER be able to view, edit, or delete another dealer's listings or leads.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## EXECUTION COMMAND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Build the Frontend **`DealerDashboardLayout`** component including the Sidebar and Top Metrics Cards.
+2. Build the **`ListingsDataGrid`** component with mock data, showing columns for Title, Price, Status, Views, Leads, and a "Boost" action button.
+3. Write the robust Node.js Backend function for the **Bulk Import Engine** (CSV parser + Batch Insert logic into the `listings` and `listing_attributes` tables). Ensure it is transaction-safe.

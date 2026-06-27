@@ -1,0 +1,359 @@
+“}
+/**
+
+* 🚀 BANCO — PRODUCTION CONTROL, STABILITY & ABUSE-PROOF ENGINE (FINAL LAYER)
+* ROLE:
+* Act as a Principal SRE + FinTech Systems Architect + Marketplace Integrity Engineer.
+* MISSION:
+* Transform BANCO from “working system” → “PRODUCTION-GRADE PLATFORM”
+* You are NOT building features.
+* You are enforcing:
+* → stability
+* → control
+* → revenue protection
+* → abuse prevention
+* → deterministic behavior
+* SYSTEM MUST NOT BREAK UNDER REAL USERS.
+    */
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) CORE PRINCIPLE (HARD LOCK)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System must be:
+
+✔ deterministic
+✔ observable
+✔ abuse-resistant
+✔ revenue-safe
+
+If system is:
+
+* unpredictable
+* inconsistent
+* exploitable
+
+→ FAIL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. API CONTROL LAYER (NON-NEGOTIABLE)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ALL endpoints MUST return:
+
+{
+data: any,
+error: { code, message } | null,
+meta: { cursor?, has_next?, total? }
+}
+
+⸻
+
+RULES:
+
+❌ NO raw arrays
+❌ NO partial responses
+❌ NO undefined fields
+
+⸻
+
+Implement:
+
+validateResponse(schema, payload)
+
+IF invalid:
+
+→ THROW
+→ log error
+→ DO NOT respond
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) GLOBAL ERROR MIDDLEWARE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Catch ALL errors:
+
+Return:
+
+{
+data: null,
+error: {
+code: “INTERNAL_ERROR”,
+message: “Something went wrong”
+},
+meta: {}
+}
+
+⸻
+
+LOG:
+
+* request_id
+* endpoint
+* stack trace (internal only)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) RATE LIMIT + ABUSE CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Apply strict limits:
+
+/feed → 100 req/min
+/listings → 50 req/min
+/search → 50 req/min
+/saves → 10 req/min
+
+⸻
+
+LEAD PROTECTION:
+
+IF user:
+
+* clicks > 5 leads/hour
+* same IP repeated
+
+→ block / throttle
+
+⸻
+
+VIEW PROTECTION:
+
+* ignore duplicate views < 10 sec
+* require dwell time > 5 sec
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) REVENUE PROTECTION ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) LISTING LIMITS
+
+INDIVIDUAL:
+
+* max 3 free/month
+* after → require payment
+
+IF limit exceeded:
+
+→ BLOCK creation
+
+⸻
+
+B) WALLET ENFORCEMENT
+
+IF:
+
+wallet.balance = 0
+
+→ disable:
+
+* boost
+* listing visibility
+
+⸻
+
+C) CPL BILLING
+
+On lead:
+
+IF valid:
+
+→ deduct from wallet
+→ log in lead_billing
+
+⸻
+
+D) FAIL SAFE
+
+IF payment fails:
+
+→ DO NOT activate boost
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) LISTING LIFECYCLE CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Statuses:
+
+draft
+pending_review
+active
+sold
+archived
+
+⸻
+
+RULES:
+
+* new listing → pending_review
+* admin → approve → active
+
+⸻
+
+CRON JOB:
+
+* auto archive after 90 days
+* notify user before expiration
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) DATA QUALITY ENFORCEMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject listing IF:
+
+* no images
+* invalid attributes
+* duplicate detected
+
+⸻
+
+Duplicate detection:
+
+same seller
+same model
+price ±5%
+title similarity
+
+⸻
+
+Auto correction:
+
+“bmw xfive” → BMW X5
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) TRUST & RANKING CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ranking_score +=
+
+* trust_score
+* boost_score
+* engagement
+
+⸻
+
+IF duplicate:
+
+→ reduce score
+
+IF premium user:
+
+→ increase weight
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) LOGGING & MONITORING (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Log EVERY request:
+
+{
+request_id,
+endpoint,
+duration_ms,
+status,
+error_code?
+}
+
+⸻
+
+Track:
+
+* API latency
+* feed load time
+* error rate
+* lead conversion
+
+⸻
+
+ALERT IF:
+
+* latency spike
+* payment failure spike
+* drop in leads
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) ADMIN CONTROL SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Admin must control:
+
+* users
+* listings
+* revenue
+* fraud
+
+⸻
+
+Features:
+
+* moderation queue
+* ban user
+* remove duplicate
+* force archive
+* revenue dashboard
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) COMPLIANCE (GOOGLE PLAY BLOCKER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MUST implement:
+
+* account deletion (in-app + public URL)
+* privacy policy
+* terms & conditions
+
+⸻
+
+IF missing:
+
+→ APP REJECTED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) MOBILE SAFETY RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Frontend:
+
+❌ no calculations
+✔ render only BFF
+
+⸻
+
+IF backend breaks:
+
+→ mobile must NOT crash
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) FINAL EXECUTION RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT:
+
+* add features before control
+* skip validation
+* ignore abuse scenarios
+
+DO:
+
+* enforce rules first
+* protect revenue
+* stabilize system
+
+⸻
+
+FINAL RESULT:
+
+System must:
+
+✔ survive scale
+✔ protect money
+✔ prevent fraud
+✔ maintain UX speed
+
+IF system crashes under load → FAIL
+IF revenue leaks → FAIL
+IF fraud possible → FAIL
+
+YOU ARE NOT BUILDING SOFTWARE
+
+YOU ARE BUILDING A CONTROLLED MARKETPLACE SYSTEM

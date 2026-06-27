@@ -1,0 +1,2113 @@
+/**
+🚀 BANCO — ADS & MONETIZATION UX SYSTEM
+
+ROLE:
+Act as a Marketplace Monetization UX Architect.
+
+MISSION:
+Generate revenue WITHOUT destroying user trust.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) CORE PRINCIPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Users HATE ads unless:
+
+→ they look useful
+→ they match intent
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) AD TYPES (REAL IMPLEMENTATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) BOOSTED LISTING:
+
+- appears in feed naturally
+- higher ranking
+- same design as normal card
+
+B) FEATURED LISTING:
+
+- pinned in category
+- appears in “Top Deals”
+
+C) SUPPLIER SPONSOR:
+
+- appears in industrial sections
+- tagged as trusted provider
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) AD UI RULE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ad must look EXACTLY like listing
+
+ONLY difference:
+
+→ small “Sponsored” label
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) FEED INSERTION LOGIC (UX SIDE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- every 5–6 cards → inject ad
+- NEVER at first position
+- NEVER consecutively
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) BOOST SELECTION UX (FOR SELLER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Inside seller flow:
+
+User sees:
+
+- reach estimate
+- impressions estimate
+- leads estimate
+
+Packages:
+
+- 3 days
+- 7 days
+- 14 days
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) PSYCHOLOGICAL TRIGGERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- “Get 3x more visibility”
+- “Appear in top results”
+- “Increase calls”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) FAILURE CONDITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If ad feels like banner → FAIL  
+If ad interrupts scroll → FAIL  
+If ad breaks design → FAIL  
+*/
+/**
+🚀 BANCO — SAVED + BEHAVIOR SYSTEM
+
+ROLE:
+Act as a Behavioral UX Engineer.
+
+MISSION:
+Turn user behavior into conversion loops.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) SAVED LISTINGS (CORE FEATURE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User can:
+
+- save listing
+- unsave listing
+
+UI:
+
+- heart icon
+- instant feedback
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) SAVED SCREEN STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Sections:
+
+1. Recently Saved
+2. Price Dropped
+3. Recommended Similar
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) RETARGETING INSIDE FEED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed must re-show:
+
+- previously viewed listings
+- similar listings
+- lower price alternatives
+
+Label:
+
+→ “Based on your interest”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) BEHAVIOR SIGNALS (UX ONLY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System reacts to:
+
+- clicks
+- scroll time
+- saves
+
+UI reflects:
+
+- “More like this”
+- “You viewed similar”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) PRICE DROP VISUAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- old price (crossed)
+- new price highlighted
+- label:
+  “Price dropped”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) USER FEELING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must feel:
+
+→ system remembers me
+→ I’m getting better deals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) FAILURE CONDITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If saved tab empty → FAIL  
+If no personalization → FAIL  
+*/
+/**
+🚀 BANCO — NOTIFICATION SYSTEM (RE-ENGAGEMENT ENGINE)
+
+ROLE:
+Act as a Mobile Retention Architect.
+
+MISSION:
+Bring users back with HIGH-INTENT triggers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) CORE RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NO spam.
+
+Only send:
+
+→ high-value signals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) NOTIFICATION TYPES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A) PRICE DROP
+
+“Price dropped on BMW X5 you viewed”
+
+B) NEW MATCH
+
+“New listings in your price range”
+
+C) RFQ RESPONSE
+
+“You received 3 offers”
+
+D) LEAD RESPONSE
+
+“Seller replied to you”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) UX STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Notification Center:
+
+- grouped by type
+- sorted by relevance
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) VISUAL PRIORITY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each notification shows:
+
+- image thumbnail
+- price
+- short action text
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) DEEP LINKING BEHAVIOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tap → opens:
+
+- exact listing
+- exact offer
+- exact RFQ
+
+NO home redirect
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) USER CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User can toggle:
+
+- price alerts
+- new listings
+- offers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) FAILURE CONDITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If generic notifications → FAIL  
+If no action after click → FAIL  
+*/
+/**
+🚀 BANCO — CREATE LISTING UX (SELLER FLOW)
+
+ROLE:
+Act as a Marketplace Seller Experience Designer.
+
+MISSION:
+Make listing creation:
+
+→ fast
+→ structured
+→ high quality
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) CORE TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Bad listing = dead marketplace
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) FLOW STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Choose Category
+
+- Cars
+- Real Estate
+- Industrial
+- Raw Materials
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) STEP 2: STRUCTURED INPUT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Cars:
+
+- brand
+- model
+- year
+- mileage
+- condition
+
+Real Estate:
+
+- location
+- area
+- rooms
+- finishing
+
+Industrial:
+
+- type
+- capacity
+- materials
+- origin
+
+⚠️ NO free text for core data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) STEP 3: MEDIA UPLOAD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rules:
+
+- minimum 3 images
+- video optional
+
+Show:
+
+- quality indicator
+- “Add more photos to increase visibility”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) STEP 4: PRICE + PAYMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seller enters:
+
+- cash price
+- installment options
+
+Chooses:
+
+- Islamic
+- Conventional
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) STEP 5: PREVIEW SCREEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User sees:
+
+- final card preview
+- how it appears in feed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) STEP 6: PUBLISH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+After publish:
+
+- show performance tips
+- suggest boost
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) UX GOAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seller must feel:
+
+→ easy
+→ guided
+→ professional
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) FAILURE CONDITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If user confused → FAIL  
+If listing incomplete → FAIL  
+*/
+/**
+🚀 BANCO — FULL REAL MARKET DATA MASTER PROMPT (PRODUCTION LEVEL)
+
+ROLE:
+Act as a Principal Marketplace Data Architect.
+
+MISSION:
+Build a COMPLETE, REAL, STRUCTURED DATA FOUNDATION for BANCO mobile app.
+
+CRITICAL RULES:
+- NO free text
+- NO missing fields
+- NO fake data
+- EVERYTHING must reflect REAL market behavior (Egypt + Global)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🚗 CARS SYSTEM (FULL GLOBAL DATA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURE:
+Brand → Model → Year → Trim → Attributes
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) BRANDS (GLOBAL FULL COVERAGE)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+JAPAN:
+Toyota, Nissan, Honda, Mazda, Mitsubishi, Subaru, Suzuki, Lexus, Infiniti, Acura
+
+GERMANY:
+BMW, Mercedes-Benz, Audi, Volkswagen, Porsche, Opel
+
+KOREA:
+Hyundai, Kia, Genesis, Daewoo
+
+USA:
+Chevrolet, Ford, Jeep, Dodge, GMC, Cadillac, Tesla
+
+FRANCE:
+Peugeot, Renault, Citroën, DS
+
+ITALY:
+Fiat, Alfa Romeo, Ferrari, Lamborghini, Maserati
+
+CHINA:
+MG, Chery, Geely, BYD, BAIC, Haval, Jetour, Exeed, DFSK
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) MODELS (REAL MARKET)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Toyota:
+Corolla, Camry, Yaris, Fortuner, Land Cruiser, Hilux
+
+Hyundai:
+Elantra HD, Elantra AD, Elantra CN7, Accent, Tucson, Santa Fe, Creta
+
+Kia:
+Cerato, Sportage, Sorento, Picanto
+
+Nissan:
+Sunny, Sentra, Qashqai, X-Trail
+
+MG:
+MG5, MG6, MG ZS, MG HS
+
+BMW:
+X1, X3, X5, X7, 3 Series, 5 Series
+
+Mercedes:
+C180, C200, E200, E300, GLC, GLE
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) ATTRIBUTES (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+year: 1990 → 2025
+mileage: 0 → 300000 km
+fuel: petrol | diesel | hybrid | electric
+transmission: automatic | manual
+condition: new | used | certified
+body_type: sedan | SUV | hatchback | pickup
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) PRICE RANGES (EGYPT REALITY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Economy: 600K → 1.2M EGP
+Mid: 1.2M → 2.5M EGP
+Premium: 2.5M → 6M EGP
+Luxury: 6M → 20M+ EGP
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🏢 REAL ESTATE SYSTEM (MAP-DRIVEN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) LOCATIONS (EGYPT REAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Cairo:
+New Cairo, Nasr City, Maadi, Heliopolis
+
+Giza:
+6th October, Sheikh Zayed
+
+New Capital
+
+Alexandria:
+Smouha, Miami, Stanley
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) PROPERTY TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Apartment, Villa, Duplex, Penthouse, Office, Retail
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) ATTRIBUTES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+area: 50 → 1000 sqm
+rooms: 1 → 7
+bathrooms: 1 → 6
+finishing:
+- finished
+- semi finished
+- core & shell
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) PRICING
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Apartments: 1M → 8M EGP
+Villas: 4M → 30M+ EGP
+
+━━━━━━━━━━━━━━━━━━━━━━━
+E) MAP LOGIC (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Pin shows price
+- Zoom reveals details
+- Clusters group listings
+- Live filters update map
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🏭 INDUSTRIAL SYSTEM (B2B CORE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Raw Material → Machine → Production Line → Factory
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) MACHINES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+CNC Machine
+Injection Molding Machine
+Packaging Machine
+Filling Machine
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) PRODUCTION LINES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Plastic Line
+Food Processing Line
+Textile Line
+Paper Production Line
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) RAW MATERIALS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Polypropylene (PP)
+Polyethylene (PE)
+Steel
+Aluminum
+Paper Rolls
+
+━━━━━━━━━━━━━━━━━━━━━━━
+E) ATTRIBUTES (REAL INDUSTRIAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+capacity:
+100kg/hour → 5 tons/day
+
+power:
+10kW → 200kW
+
+origin:
+China | Germany | Turkey | Egypt
+
+condition:
+new | used | refurbished
+
+import_status:
+imported | local | ready stock
+
+━━━━━━━━━━━━━━━━━━━━━━━
+F) RELATION ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Machine → requires → Raw Material  
+Material → used in → Machine  
+Line → includes → Machines  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🧱 RAW MATERIAL MARKET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CATEGORIES:
+Plastic, Metal, Paper, Chemicals
+
+ATTRIBUTES:
+
+grade
+weight
+origin
+price_per_ton
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 💰 PAYMENT SYSTEM (REAL MARKET LOGIC)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) ISLAMIC MODEL
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- fixed total price
+- fixed monthly
+- no interest display
+
+Example:
+Cash: 1,000,000
+Total: 1,200,000
+Monthly: 10,000
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) CONVENTIONAL MODEL
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- down payment
+- monthly
+- duration
+- interest %
+
+Example:
+Down: 200,000
+Monthly: 12,000
+Duration: 84 months
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 📰 ECONOMY NEWS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CATEGORIES:
+
+- Interest Rates
+- Car Market
+- Real Estate Market
+- Industrial Investment
+
+EXAMPLES:
+
+🚗 Car prices increased 15% due to USD changes  
+🏢 Real estate demand rising in New Cairo  
+
+━━━━━━━━━━━━━━━━━━━━━━━
+COMMENTS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- user comments
+- reactions: 👍🔥💰
+- replies
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL SYSTEM TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO is:
+
+- Asset Marketplace
+- Deal Engine
+- Trust System
+- Economic Platform
+
+If:
+
+data is weak → system fails  
+relations missing → system fails  
+price unclear → conversion fails  
+
+ONLY clean structured data = scalable system
+*/
+/**
+🚀 BANCO — FULL REAL MARKET DATA MASTER PROMPT (PRODUCTION LEVEL)
+
+ROLE:
+Act as a Principal Marketplace Data Architect.
+
+MISSION:
+Build a COMPLETE, REAL, STRUCTURED DATA FOUNDATION for BANCO mobile app.
+
+CRITICAL RULES:
+- NO free text
+- NO missing fields
+- NO fake data
+- EVERYTHING must reflect REAL market behavior (Egypt + Global)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🚗 CARS SYSTEM (FULL GLOBAL DATA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STRUCTURE:
+Brand → Model → Year → Trim → Attributes
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) BRANDS (GLOBAL FULL COVERAGE)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+JAPAN:
+Toyota, Nissan, Honda, Mazda, Mitsubishi, Subaru, Suzuki, Lexus, Infiniti, Acura
+
+GERMANY:
+BMW, Mercedes-Benz, Audi, Volkswagen, Porsche, Opel
+
+KOREA:
+Hyundai, Kia, Genesis, Daewoo
+
+USA:
+Chevrolet, Ford, Jeep, Dodge, GMC, Cadillac, Tesla
+
+FRANCE:
+Peugeot, Renault, Citroën, DS
+
+ITALY:
+Fiat, Alfa Romeo, Ferrari, Lamborghini, Maserati
+
+CHINA:
+MG, Chery, Geely, BYD, BAIC, Haval, Jetour, Exeed, DFSK
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) MODELS (REAL MARKET)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Toyota:
+Corolla, Camry, Yaris, Fortuner, Land Cruiser, Hilux
+
+Hyundai:
+Elantra HD, Elantra AD, Elantra CN7, Accent, Tucson, Santa Fe, Creta
+
+Kia:
+Cerato, Sportage, Sorento, Picanto
+
+Nissan:
+Sunny, Sentra, Qashqai, X-Trail
+
+MG:
+MG5, MG6, MG ZS, MG HS
+
+BMW:
+X1, X3, X5, X7, 3 Series, 5 Series
+
+Mercedes:
+C180, C200, E200, E300, GLC, GLE
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) ATTRIBUTES (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+year: 1990 → 2025
+mileage: 0 → 300000 km
+fuel: petrol | diesel | hybrid | electric
+transmission: automatic | manual
+condition: new | used | certified
+body_type: sedan | SUV | hatchback | pickup
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) PRICE RANGES (EGYPT REALITY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Economy: 600K → 1.2M EGP
+Mid: 1.2M → 2.5M EGP
+Premium: 2.5M → 6M EGP
+Luxury: 6M → 20M+ EGP
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🏢 REAL ESTATE SYSTEM (MAP-DRIVEN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) LOCATIONS (EGYPT REAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Cairo:
+New Cairo, Nasr City, Maadi, Heliopolis
+
+Giza:
+6th October, Sheikh Zayed
+
+New Capital
+
+Alexandria:
+Smouha, Miami, Stanley
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) PROPERTY TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Apartment, Villa, Duplex, Penthouse, Office, Retail
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) ATTRIBUTES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+area: 50 → 1000 sqm
+rooms: 1 → 7
+bathrooms: 1 → 6
+finishing:
+- finished
+- semi finished
+- core & shell
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) PRICING
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Apartments: 1M → 8M EGP
+Villas: 4M → 30M+ EGP
+
+━━━━━━━━━━━━━━━━━━━━━━━
+E) MAP LOGIC (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- Pin shows price
+- Zoom reveals details
+- Clusters group listings
+- Live filters update map
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🏭 INDUSTRIAL SYSTEM (B2B CORE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Raw Material → Machine → Production Line → Factory
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) MACHINES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+CNC Machine
+Injection Molding Machine
+Packaging Machine
+Filling Machine
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) PRODUCTION LINES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Plastic Line
+Food Processing Line
+Textile Line
+Paper Production Line
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) RAW MATERIALS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Polypropylene (PP)
+Polyethylene (PE)
+Steel
+Aluminum
+Paper Rolls
+
+━━━━━━━━━━━━━━━━━━━━━━━
+E) ATTRIBUTES (REAL INDUSTRIAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+capacity:
+100kg/hour → 5 tons/day
+
+power:
+10kW → 200kW
+
+origin:
+China | Germany | Turkey | Egypt
+
+condition:
+new | used | refurbished
+
+import_status:
+imported | local | ready stock
+
+━━━━━━━━━━━━━━━━━━━━━━━
+F) RELATION ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Machine → requires → Raw Material  
+Material → used in → Machine  
+Line → includes → Machines  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🧱 RAW MATERIAL MARKET
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CATEGORIES:
+Plastic, Metal, Paper, Chemicals
+
+ATTRIBUTES:
+
+grade
+weight
+origin
+price_per_ton
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 💰 PAYMENT SYSTEM (REAL MARKET LOGIC)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) ISLAMIC MODEL
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- fixed total price
+- fixed monthly
+- no interest display
+
+Example:
+Cash: 1,000,000
+Total: 1,200,000
+Monthly: 10,000
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) CONVENTIONAL MODEL
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- down payment
+- monthly
+- duration
+- interest %
+
+Example:
+Down: 200,000
+Monthly: 12,000
+Duration: 84 months
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 📰 ECONOMY NEWS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CATEGORIES:
+
+- Interest Rates
+- Car Market
+- Real Estate Market
+- Industrial Investment
+
+EXAMPLES:
+
+🚗 Car prices increased 15% due to USD changes  
+🏢 Real estate demand rising in New Cairo  
+
+━━━━━━━━━━━━━━━━━━━━━━━
+COMMENTS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- user comments
+- reactions: 👍🔥💰
+- replies
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL SYSTEM TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO is:
+
+- Asset Marketplace
+- Deal Engine
+- Trust System
+- Economic Platform
+
+If:
+
+data is weak → system fails  
+relations missing → system fails  
+price unclear → conversion fails  
+
+ONLY clean structured data = scalable system
+*/
+/**
+🚀 BANCO — FULL MARKET DATA & DECISION ENGINE (FINAL LAYER)
+
+ROLE:
+Act as a Principal Marketplace Data + UX Intelligence Architect.
+
+MISSION:
+Complete ALL remaining layers of BANCO data system:
+→ Data → Behavior → Decision → Conversion
+
+STRICT RULES:
+- NO missing entities
+- NO fake data
+- NO UI without logic
+- Every data point MUST affect:
+    → ranking
+    → trust
+    → conversion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🧠 USER INTENT ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SYSTEM MUST UNDERSTAND:
+
+User intent types:
+
+1) buyer (ready to buy)
+2) explorer (browsing)
+3) investor (comparing ROI)
+4) industrial buyer (serious sourcing)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) INTENT SIGNALS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+track:
+
+- clicks
+- scroll depth
+- time on listing
+- filter usage
+- repeated searches
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) BEHAVIOR OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+system adapts feed:
+
+- more installment → show financing-heavy listings
+- more luxury → show premium listings
+- more industrial → switch UI density
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 📊 FEED DATA DISTRIBUTION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed is NOT random.
+
+It is composed of:
+
+- 40% best deals
+- 20% verified sellers
+- 15% recommended
+- 15% nearby
+- 10% sponsored
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) ITEM PRIORITY SCORE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+score =
+
+price_attractiveness +
+media_quality +
+trust_score +
+engagement +
+freshness +
+payment_affordability
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🚗 CAR DATA — FULL MARKET STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) FULL BRAND COVERAGE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Japanese:
+Toyota, Nissan, Honda, Mitsubishi, Mazda, Suzuki
+
+German:
+BMW, Mercedes-Benz, Audi, Volkswagen, Porsche
+
+Korean:
+Hyundai, Kia
+
+American:
+Ford, Chevrolet, Jeep, Tesla
+
+Chinese:
+BYD, Chery, Geely, MG, Haval
+
+Luxury:
+Bentley, Rolls-Royce, Ferrari, Lamborghini
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) MARKET SEGMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- economy
+- mid-range
+- premium
+- luxury
+- commercial
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) USAGE TYPE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- personal
+- fleet
+- commercial transport
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) REAL BUYER QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+UI must answer:
+
+- is price fair?
+- is it reliable?
+- how much monthly?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🏢 REAL ESTATE — FULL MARKET STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) PROPERTY TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Residential:
+- apartment
+- villa
+- townhouse
+- duplex
+
+Commercial:
+- office
+- retail shop
+- warehouse
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) LOCATION SYSTEM (EGYPT REAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Cities:
+- Cairo
+- Giza
+- New Cairo
+- Sheikh Zayed
+- 6th October
+
+Areas:
+- Fifth Settlement
+- Nasr City
+- Maadi
+- Mohandessin
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) REAL BUYER DECISION DATA
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- price per meter
+- ROI
+- developer reputation
+- delivery time
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🏭 INDUSTRIAL — FULL B2B STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) MACHINE TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- CNC Machines
+- Injection Molding
+- Packaging Lines
+- Food Processing Lines
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) INDUSTRY TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- food
+- plastic
+- textile
+- metal
+- chemicals
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) DECISION DATA
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- output capacity
+- cost per unit
+- required materials
+- ROI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━/**
+🚀 BANCO — FULL MARKET DATA & DECISION ENGINE (FINAL LAYER)
+
+ROLE:
+Act as a Principal Marketplace Data + UX Intelligence Architect.
+
+MISSION:
+Complete ALL remaining layers of BANCO data system:
+→ Data → Behavior → Decision → Conversion
+
+STRICT RULES:
+- NO missing entities
+- NO fake data
+- NO UI without logic
+- Every data point MUST affect:
+    → ranking
+    → trust
+    → conversion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🧠 USER INTENT ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SYSTEM MUST UNDERSTAND:
+
+User intent types:
+
+1) buyer (ready to buy)
+2) explorer (browsing)
+3) investor (comparing ROI)
+4) industrial buyer (serious sourcing)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) INTENT SIGNALS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+track:
+
+- clicks
+- scroll depth
+- time on listing
+- filter usage
+- repeated searches
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) BEHAVIOR OUTPUT
+━━━━━━━━━━━━━━━━━━━━━━━
+
+system adapts feed:
+
+- more installment → show financing-heavy listings
+- more luxury → show premium listings
+- more industrial → switch UI density
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 📊 FEED DATA DISTRIBUTION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed is NOT random.
+
+It is composed of:
+
+- 40% best deals
+- 20% verified sellers
+- 15% recommended
+- 15% nearby
+- 10% sponsored
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) ITEM PRIORITY SCORE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+score =
+
+price_attractiveness +
+media_quality +
+trust_score +
+engagement +
+freshness +
+payment_affordability
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🚗 CAR DATA — FULL MARKET STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) FULL BRAND COVERAGE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Japanese:
+Toyota, Nissan, Honda, Mitsubishi, Mazda, Suzuki
+
+German:
+BMW, Mercedes-Benz, Audi, Volkswagen, Porsche
+
+Korean:
+Hyundai, Kia
+
+American:
+Ford, Chevrolet, Jeep, Tesla
+
+Chinese:
+BYD, Chery, Geely, MG, Haval
+
+Luxury:
+Bentley, Rolls-Royce, Ferrari, Lamborghini
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) MARKET SEGMENTATION
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- economy
+- mid-range
+- premium
+- luxury
+- commercial
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) USAGE TYPE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- personal
+- fleet
+- commercial transport
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) REAL BUYER QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+UI must answer:
+
+- is price fair?
+- is it reliable?
+- how much monthly?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🏢 REAL ESTATE — FULL MARKET STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) PROPERTY TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Residential:
+- apartment
+- villa
+- townhouse
+- duplex
+
+Commercial:
+- office
+- retail shop
+- warehouse
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) LOCATION SYSTEM (EGYPT REAL)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Cities:
+- Cairo
+- Giza
+- New Cairo
+- Sheikh Zayed
+- 6th October
+
+Areas:
+- Fifth Settlement
+- Nasr City
+- Maadi
+- Mohandessin
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) REAL BUYER DECISION DATA
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- price per meter
+- ROI
+- developer reputation
+- delivery time
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🏭 INDUSTRIAL — FULL B2B STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) MACHINE TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- CNC Machines
+- Injection Molding
+- Packaging Lines
+- Food Processing Lines
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) INDUSTRY TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- food
+- plastic
+- textile
+- metal
+- chemicals
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) DECISION DATA
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- output capacity
+- cost per unit
+- required materials
+- ROI
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🧱 RAW MATERIAL DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) TYPES
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- plastics (PP, PE, PVC)
+- metals (steel, aluminum)
+- chemicals
+- textiles
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) PRICE FACTORS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- USD rate
+- shipping cost
+- customs
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 💰 PAYMENT DECISION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) USER THINKING
+━━━━━━━━━━━━━━━━━━━━━━━
+
+user cares about:
+
+- monthly affordability
+- down payment
+- total cost
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) DISPLAY LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Card:
+
+- price
+- lowest monthly
+
+Detail:
+
+- full breakdown
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 🔗 CROSS-LINKING SYSTEM (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System must link:
+
+Car → Similar cars  
+Property → Same area  
+Machine → Required materials  
+Material → Used in machines  
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 📢 MARKET SIGNALS ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each listing can have:
+
+- trending
+- high demand
+- price drop
+- hot deal
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 📰 ECONOMIC IMPACT ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each news affects:
+
+- car prices
+- property prices
+- industrial costs
+
+UI must explain impact:
+
+“Steel price increased → machinery cost rising”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 💬 TRUST & SOCIAL DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Signals:
+
+- seller response rate
+- number of leads
+- reviews
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 📊 DATA VALIDATION FINAL RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject:
+
+- missing media
+- missing price
+- invalid category
+
+Flag:
+
+- duplicates
+- fake prices
+
+Boost:
+
+- verified seller
+- full attributes
+- good media
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13) ⚡ PERFORMANCE DATA RULES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+- lightweight media
+- lazy load
+- instant feed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL SYSTEM EQUATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GOOD DATA
+→ CLEAR DECISION
+→ FAST ACTION
+→ MORE LEADS
+→ MORE REVENUE
+
+BAD DATA
+→ CONFUSION
+→ NO TRUST
+→ NO SALES
+
+BANCO = MARKET INTELLIGENCE ENGINE
+NOT APP
+*/
+/**
+🚀 BANCO — BEHAVIORAL FEED ENGINE (FULL REAL-WORLD EXECUTION)
+
+ROLE:
+Act as a Behavioral UX Architect + Marketplace Growth Engineer.
+
+MISSION:
+Transform BANCO from:
+→ Data Platform
+TO:
+→ High-Conversion Behavioral Engine
+
+CRITICAL RULE:
+Feed MUST react to user behavior in real-time.
+
+NO static feed
+NO generic ordering
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 🧠 USER BEHAVIOR MODEL (FOUNDATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System must classify user LIVE into:
+
+1) Deal Hunter
+2) Installment Buyer
+3) Luxury Seeker
+4) Investor
+5) Industrial Buyer
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) DETECTION SIGNALS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Track:
+
+- what user clicks
+- how long user stays
+- scroll speed
+- repeated category visits
+- filters used
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) REAL-TIME SWITCHING
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Example:
+
+IF user clicks:
+- installment listings repeatedly
+
+THEN:
+→ push more installment-heavy feed
+→ prioritize low monthly listings
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🔥 FEED STRUCTURE (NOT LINEAR LIST)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed is composed dynamically:
+
+Layer 1 → Hook
+Layer 2 → Trust
+Layer 3 → Intent
+Layer 4 → Retarget
+
+User DOES NOT see separation
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) HOOK LAYER (ENTRY POINT)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Goal:
+Stop user from leaving
+
+Show:
+
+- cheapest deals
+- strong visuals
+- high urgency listings
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) TRUST LAYER
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Goal:
+Build confidence
+
+Show:
+
+- verified sellers
+- high-quality listings
+- strong media
+
+━━━━━━━━━━━━━━━━━━━━━━━
+C) INTENT LAYER
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Goal:
+Match user interest
+
+Show:
+
+- same category
+- same price range
+- similar listings
+
+━━━━━━━━━━━━━━━━━━━━━━━
+D) RETARGET LAYER
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Goal:
+Force conversion
+
+Show:
+
+- previously viewed listings
+- similar alternatives
+- price drops
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) ⚡ MICRO-TRIGGERS ENGINE (CONVERSION DRIVER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each listing can show:
+
+- “3 people contacted today”
+- “Seller replies in 10 min”
+- “Trending now”
+- “Price dropped”
+
+RULE:
+Must be REAL DATA (not fake)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 💰 PAYMENT-DRIVEN BEHAVIOR SHIFT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If user prefers:
+
+Installment:
+
+→ show:
+- lowest monthly first
+- Islamic plans first (if preference detected)
+
+Cash buyer:
+
+→ show:
+- discounted listings
+- urgency deals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 🧠 SCROLL PSYCHOLOGY (TEMU LEVEL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System must:
+
+- never show empty states
+- always preload next items
+- keep visual variation
+
+Patterns:
+
+- image → video → image
+- cheap → premium → cheap
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🔁 FEED REFRESH LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed must update when:
+
+- user pulls refresh
+- user changes category
+- user interacts heavily
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) SOFT REFRESH
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Add new listings on top
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) HARD REFRESH
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Rebuild full feed based on behavior
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 📊 RANKING ADJUSTMENT (LIVE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each listing score changes based on:
+
+- clicks
+- contact rate
+- save rate
+- watch time
+
+High conversion listings:
+→ pushed up automatically
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 📢 AD INJECTION (SMART)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rules:
+
+- every 6 items → 1 ad
+- MUST match user interest
+
+Example:
+
+User browsing cars:
+→ show car ad ONLY
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 🔗 CROSS CATEGORY INTELLIGENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If user views:
+
+- industrial machine
+
+System suggests:
+
+→ raw materials
+→ similar machines
+→ suppliers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 🚨 EXIT PREVENTION SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before user leaves:
+
+Show:
+
+- strong deal
+- best offer
+- “you might miss this”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 📈 CONVERSION LOOP (FINAL ENGINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Flow:
+
+View → Interest → Compare → Trust → Action
+
+System must push user forward ALWAYS
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) 🧠 FEED MEMORY SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+System remembers:
+
+- last category
+- last price range
+- last viewed listings
+
+Used to:
+
+→ rebuild personalized feed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed is NOT UI
+
+Feed is:
+
+- sales engine
+- behavior controller
+- decision accelerator
+
+If feed is weak:
+→ system dies
+
+If feed is strong:
+→ BANCO dominates
+*/
+/**
+🚀 BANCO — USER PROFILE + TRUST + IDENTITY SYSTEM (FULL PRODUCTION PROMPT)
+
+ROLE:
+Act as a Senior Product Designer + Trust Systems Architect.
+
+MISSION:
+Build a REAL trust system that answers in <2 seconds:
+
+→ هل البائع حقيقي؟
+→ هل آمن؟
+→ هل يستحق التواصل؟
+
+CRITICAL RULE:
+Trust is NOT visual
+Trust = decision trigger
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1) 👤 PROFILE ENTRY EXPERIENCE (FIRST IMPRESSION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User opens profile → must understand instantly:
+
+- who is this seller
+- what type (individual / dealer / company / factory / bank partner)
+- how strong is his credibility
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) PROFILE HEADER (CRITICAL BLOCK)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Must include:
+
+1) Profile Image / Logo
+2) Name / Company Name (bold)
+3) Role Badge:
+
+- Individual
+- Dealer
+- Company
+- Factory
+- Bank Partner
+
+4) Verification Badge:
+
+- Verified ✔
+- Gold Supplier ⭐
+- New Seller ⚠️
+
+5) Quick Stats (VISIBLE IMMEDIATELY):
+
+- Active Listings
+- Years Active
+- Response Time
+- Total Leads handled
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🧠 TRUST STACK (REAL DECISION ORDER)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User decides trust based on:
+
+1) Verification badge
+2) Activity level
+3) Listings count
+4) Response speed
+5) Social presence
+
+NOT description text
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 🔗 SOCIAL VALIDATION LAYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Purpose:
+NOT decoration
+
+Used to:
+
+→ prove seller exists outside app
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) REQUIRED LINKS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- WhatsApp (primary)
+- Phone
+- Instagram
+- LinkedIn
+- Website (optional)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+B) DISPLAY RULE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Icons must be:
+
+- visible
+- clickable
+- clean
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 📊 SELLER PERFORMANCE METRICS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Must show:
+
+- Response Rate (%)
+- Average Reply Time
+- Deals Completed (if available)
+- Listings Sold (optional)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) VISUAL STYLE
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Use:
+
+- progress bars
+- simple numbers
+
+NO complex charts
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 📦 MY LISTINGS (SELLER INVENTORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show:
+
+- all active listings
+- categorized (Cars / Real Estate / Industrial)
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) SORTING OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━
+
+- newest
+- most viewed
+- best deal
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 💾 SAVED LISTINGS (BUYER SIDE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User sees:
+
+- saved assets
+- can remove/save instantly
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 📈 ACTIVITY HISTORY (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show:
+
+- viewed listings
+- contacted sellers
+- RFQs submitted
+
+Purpose:
+
+→ remind user of intent
+→ push conversion
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 🤝 LEADS HISTORY (FOR SELLERS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show:
+
+- incoming leads
+- type (Call / WhatsApp / RFQ)
+- status:
+
+→ new
+→ contacted
+→ closed
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 🏷️ TRUST BADGES SYSTEM (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Types:
+
+- Verified ✔
+- Gold Supplier ⭐
+- Top Performer 🔥
+- Fast Responder ⚡
+
+━━━━━━━━━━━━━━━━━━━━━━━
+A) LOGIC (DISPLAY ONLY)
+━━━━━━━━━━━━━━━━━━━━━━━
+
+Badges must reflect:
+
+- real behavior
+- not manual assignment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) 🧠 PROFILE PSYCHOLOGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must feel:
+
+→ “this seller is safe”
+→ “this seller is active”
+→ “this seller is real”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 📢 CONTENT / POSTS (OPTIONAL BUT POWERFUL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seller can post:
+
+- offers
+- discounts
+- new arrivals
+
+Displayed as:
+
+simple feed inside profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) ⚡ QUICK ACTION BAR (PROFILE LEVEL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Always show:
+
+[Call]
+[WhatsApp]
+[View Listings]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13) 🚨 FRAUD SIGNALS (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show warnings if:
+
+- new seller with many listings
+- no social links
+- low response rate
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14) 🏭 INDUSTRIAL PROFILE DIFFERENCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Must include:
+
+- factory capacity
+- production type
+- export/import status
+- raw material sourcing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15) 💼 COMPANY PROFILE (ADVANCED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Must include:
+
+- company overview
+- services offered
+- industries served
+- certifications
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL TRUTH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Profile is NOT a page
+
+Profile is:
+
+- trust engine
+- conversion booster
+- risk reducer
+
+If profile weak:
+→ user won’t contact
+
+If profile strong:
+→ user acts instantly
+*/

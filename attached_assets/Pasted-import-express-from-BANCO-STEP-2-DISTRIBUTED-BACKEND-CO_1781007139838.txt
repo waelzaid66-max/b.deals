@@ -1,0 +1,567 @@
+import express from # 🚀 BANCO STEP 2: DISTRIBUTED BACKEND & CORE ENGINE ARCHITECTURE
+**ROLE:** Act as a Principal Backend Engineer, Database Architect, and Systems Designer.
+**ENVIRONMENT:** Replit (Node.js/TypeScript environment), PostgreSQL, Redis.
+**TARGET UI:** Lovable AI-generated frontend components.
+
+You are building the production-ready Backend Core for "BANCO" — an Enterprise-Grade Asset Marketplace & Institutional Multi-Tenant SaaS. 
+
+**🛑 CRITICAL DIRECTIVES:**
+* **No Mock Logic:** Write real, scalable algorithmic logic.
+* **Security & Integrity:** Implement strict transactional boundaries. If a listing fails to save its media, the entire transaction must roll back.
+* **Performance:** The API must respond in under 150ms. N+1 query problems are strictly forbidden.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 1. ADVANCED POSTGRESQL SCHEMA (MULTI-TENANT & HYBRID)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Design the schema using Prisma ORM or Drizzle ORM syntax (or raw SQL constraints). 
+
+**Mandatory Tables & Constraints:**
+1.  **`users` (Tenants):** `id` (UUID), `role` (ENUM: individual, dealer, corporate, funder), `verified` (Boolean), `company_details` (JSONB).
+2.  **`listings` (Core):** `id` (UUID), `seller_id` (FK), `title`, `category` (ENUM: car, real_estate, industrial), `base_price_cash` (Numeric), `status` (ENUM: active, pending, sold).
+    * *Index:* `CREATE INDEX idx_listings_created_status ON listings(created_at DESC, status);`
+3.  **`listing_attributes` (Dynamic Document):** `listing_id` (UNIQUE FK), `specs` (JSONB).
+    * *Validation Rules:* Backend MUST validate the JSONB payload before insert (e.g., Cars must have `mileage` and `import_status`, Industrial must have `capacity`).
+4.  **`listing_locations` (Geospatial):** Use PostGIS `GEOGRAPHY(Point, 4326)` to allow "Nearby Listings" radius searches.
+5.  **`listing_media`:** `id`, `listing_id`, `type` (image/video), `cdn_url`, `is_thumbnail` (Boolean).
+6.  **`payment_options`:** `id`, `listing_id`, `mode` (ENUM: cash, seller_installment, bank_finance), `down_payment` (Numeric), `monthly_installment` (Numeric), `duration_months` (Int), `is_islamic_compliant` (Boolean).
+7.  **`interactions` (Analytics & Leads):** `listing_id`, `views` (Int), `whatsapp_clicks` (Int), `call_clicks` (Int), `finance_requests` (Int). 
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 2. THE RANKING & FEED ALGORITHM (THE BRAIN)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Do NOT return `SELECT * FROM listings`. The `/api/feed` endpoint must execute a weighted ranking engine.
+
+**Algorithm Design:**
+`Final_Score = (Freshness_Weight * Time_Decay) + (Engagement_Weight * Total_Clicks) + (Media_Weight * Has_Video) + (Verified_Weight * Seller_Verified)`
+
+* **Ads Injection (`injectAds`):** Every 6th item in the paginated response MUST be a sponsored listing retrieved from an active ad campaign, seamlessly injected into the JSON response array.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 3. SMART PAYMENT NORMALIZATION LAYER (BFF)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The backend must process financial raw data into UI-ready payloads to keep the frontend lightweight.
+
+**Function: `normalizePaymentOptions(listing_id)`**
+1.  Scan all `payment_options` for the listing.
+2.  If only 'cash' exists -> return `{ has_installment: false, badge_text: null }`.
+3.  If installments exist -> mathematically find the object with the lowest `monthly_installment` OR lowest `down_payment` (based on user query params).
+4.  Return UI-ready payload: `{ has_installment: true, min_down_payment: X, best_monthly: Y, badge_text: "Starts from Y/month" }`.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 4. TRANSACTIONAL INTEGRITY (LISTING CREATION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+**Endpoint: `POST /api/listings/create`**
+Must be wrapped in a strict SQL `BEGIN ... COMMIT` block.
+* **Step 1:** Insert into `listings`.
+* **Step 2:** Validate and insert into `listing_attributes` (JSONB).
+* **Step 3:** Insert into `listing_locations` (Lat/Lng).
+* **Step 4:** Insert array of `listing_media`.
+* **Step 5:** Insert array of `payment_options`.
+* **Rollback condition:** If *any* step fails (e.g., missing mandatory media), throw error and `ROLLBACK`. No orphaned data is allowed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 5. LEAD GENERATION & MONETIZATION ENGINE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+**Endpoint: `POST /api/leads/track`**
+When a user taps "WhatsApp", "Call", or "Request Finance" on the UI:
+1.  Verify JWT Auth.
+2.  Increment the specific counter in the `interactions` table.
+3.  Log the lead in a `lead_history` table (buyer_id, seller_id, listing_id, action_type) to bill the dealer later (Cost Per Lead - CPL model).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 6. EXECUTION COMMAND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1.  Generate the full, strict PostgreSQL schema using Prisma ORM (`schema.prisma`).
+2.  Write the exact TypeScript implementation for the `POST /api/listings/create` endpoint demonstrating the transactional rollback logic.
+3.  Write the `normalizePaymentOptions()` helper function that calculates the "Starts from X/month" logic.
+4.  Ensure all code is deeply typed, modular, and ready to be deployed on Replit.
+
+91”}
+BANCO — BACKEND V5 (PRODUCTION-GRADE SYSTEM PROMPT)
+
+ROLE:
+Act as a Principal Backend Engineer + Distributed Systems Architect.
+
+You are building a REAL production-grade backend for BANCO.
+
+This is NOT a prototype.
+This system must handle real users, real listings, real traffic.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) CORE RULES (NON-NEGOTIABLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* No fake logic
+* No mock shortcuts
+* No UI assumptions
+* No data inconsistency
+
+Every function must be production-safe.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. DATABASE (STRICT DESIGN)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use PostgreSQL
+
+Add constraints:
+
+users:
+
+* id UUID PK
+* role ENUM
+* verified BOOLEAN DEFAULT false
+
+listings:
+
+* id UUID PK
+* user_id FK
+* price NUMERIC NOT NULL
+* status ENUM (active, pending, sold, archived)
+* created_at INDEXED
+
+listing_attributes:
+
+* listing_id UNIQUE FK
+* attributes JSONB
+* CHECK (jsonb_typeof(attributes) = ‘object’)
+
+listing_media:
+
+* listing_id FK
+* type ENUM (image, video)
+* url TEXT NOT NULL
+
+payment_options:
+
+* listing_id FK
+* type ENUM
+* monthly_payment NUMERIC NULL
+
+interactions:
+
+* listing_id FK
+* views INT DEFAULT 0
+* clicks INT DEFAULT 0
+
+❗ Add INDEXES:
+
+* listings(created_at DESC)
+* interactions(listing_id)
+* payment_options(listing_id)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) DATA VALIDATION LAYER (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Before inserting JSONB:
+
+validateAttributes(category, attributes):
+
+* enforce required keys per category
+* reject invalid schema
+* normalize values
+
+Example:
+
+Car MUST include:
+
+* mileage
+* condition
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) LISTING CREATION (TRANSACTIONAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+POST /listing/create
+
+Wrap in DB transaction:
+
+BEGIN
+
+* insert listing
+* insert attributes
+* insert media
+* insert payment options
+
+IF ANY FAIL → ROLLBACK
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) FEED PIPELINE (REAL ENGINE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Feed must NOT query raw DB every time.
+
+Create pipeline:
+
+STEP 1: fetch base listings (limit 50)
+STEP 2: join:
+
+* attributes
+* media
+* payment
+* interactions
+    STEP 3: compute ranking score
+    STEP 4: sort
+    STEP 5: inject ads
+    STEP 6: return
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) RANKING ENGINE (WEIGHTED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+score =
+
+(freshness_weight * time_decay)
++
+(engagement_weight * (views + clicks))
++
+(media_weight * has_video)
++
+(price_weight * price_score)
++
+(verified_weight * seller_verified)
+
+Use normalized values (0 → 1)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) CACHING STRATEGY (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Use Redis:
+
+* cache feed pages (TTL 30–60 sec)
+* cache listing details
+
+Cache key:
+
+feed:page:1
+listing:123
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) PAYMENT NORMALIZATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Create helper:
+
+normalizePaymentOptions(listing):
+
+Return unified structure:
+
+{
+has_installment: true,
+lowest_monthly: X,
+lowest_down_payment: Y
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) MEDIA HANDLING (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT store raw links only.
+
+Store:
+
+* optimized_url
+* thumbnail_url
+
+Assume CDN usage
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) ADS ENGINE (REAL INJECTION)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+injectAds(feed):
+
+* every 6 items
+* select active ads only
+* avoid repeating same ad
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) LEAD TRACKING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+POST /lead
+
+Also update:
+
+interactions.clicks += 1
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) ERROR HANDLING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* reject invalid JSONB
+* reject missing media
+* reject empty listings
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12) PERFORMANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* use SELECT specific columns only
+* avoid SELECT *
+* preload joins
+* paginate always
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT building endpoints.
+
+You are building:
+
+* a feed engine
+* a ranking system
+* a data pipeline
+* a scalable marketplace backend
+
+This must survive real-world traf"express";
+import { PrismaClient } from "@prisma/client";
+
+const app = express();
+const prisma = new PrismaClient();
+
+app.use(express.json());
+
+/**
+ * VALIDATION LAYER
+ */
+function validateAttributes(category: string, attrs: any) {
+  if (!attrs || typeof attrs !== "object") {
+    throw new Error("Invalid attributes");
+  }
+
+  if (category === "car") {
+    if (!attrs.mileage || !attrs.condition) {
+      throw new Error("Car must include mileage & condition");
+    }
+  }
+
+  if (category === "industrial") {
+    if (!attrs.capacity) {
+      throw new Error("Industrial asset must include capacity");
+    }
+  }
+
+  return true;
+}
+
+/**
+ * PAYMENT NORMALIZATION
+ */
+function normalizePaymentOptions(options: any[]) {
+  if (!options || options.length === 0) {
+    return { has_installment: false };
+  }
+
+  const installments = options.filter(
+    (o) => o.monthly_installment && o.monthly_installment > 0
+  );
+
+  if (installments.length === 0) {
+    return { has_installment: false };
+  }
+
+  const lowestMonthly = installments.reduce((min, curr) =>
+    curr.monthly_installment < min.monthly_installment ? curr : min
+  );
+
+  const lowestDown = installments.reduce((min, curr) =>
+    curr.down_payment < min.down_payment ? curr : min
+  );
+
+  return {
+    has_installment: true,
+    lowest_monthly: lowestMonthly.monthly_installment,
+    lowest_down_payment: lowestDown.down_payment,
+    badge_text: `Starts from ${lowestMonthly.monthly_installment}/month`,
+  };
+}
+
+/**
+ * RANKING ENGINE
+ */
+function rankListing(listing: any) {
+  const now = Date.now();
+  const created = new Date(listing.created_at).getTime();
+
+  const freshness = Math.max(0, 1 - (now - created) / (1000 * 60 * 60 * 24 * 30));
+
+  const engagement =
+    (listing.interactions?.views || 0) +
+    (listing.interactions?.clicks || 0);
+
+  const mediaScore = listing.has_video ? 1 : 0;
+
+  const verified = listing.seller?.verified ? 1 : 0;
+
+  const score =
+    freshness * 0.4 +
+    engagement * 0.3 +
+    mediaScore * 0.2 +
+    verified * 0.1;
+
+  return score;
+}
+
+/**
+ * CREATE LISTING (TRANSACTION)
+ */
+app.post("/api/listings/create", async (req, res) => {
+  const { listing, attributes, media, payments, location } = req.body;
+
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      validateAttributes(listing.category, attributes);
+
+      const newListing = await tx.listings.create({
+        data: {
+          user_id: listing.user_id,
+          title: listing.title,
+          category: listing.category,
+          price: listing.price,
+          location: listing.location,
+          status: "active",
+        },
+      });
+
+      await tx.listing_attributes.create({
+        data: {
+          listing_id: newListing.id,
+          attributes,
+        },
+      });
+
+      await tx.listing_locations.create({
+        data: {
+          listing_id: newListing.id,
+          lat: location.lat,
+          lng: location.lng,
+        },
+      });
+
+      if (!media || media.length === 0) {
+        throw new Error("Media required");
+      }
+
+      await tx.listing_media.createMany({
+        data: media.map((m: any) => ({
+          listing_id: newListing.id,
+          type: m.type,
+          url: m.url,
+          is_primary: m.is_primary || false,
+        })),
+      });
+
+      if (payments && payments.length > 0) {
+        await tx.payment_options.createMany({
+          data: payments.map((p: any) => ({
+            listing_id: newListing.id,
+            type: p.type,
+            down_payment: p.down_payment,
+            monthly_payment: p.monthly_payment,
+            duration: p.duration,
+          })),
+        });
+      }
+
+      return newListing;
+    });
+
+    res.json({ success: true, listing: result });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+/**
+ * FEED ENGINE
+ */
+app.get("/api/feed", async (req, res) => {
+  const page = Number(req.query.page || 1);
+  const limit = 20;
+  const offset = (page - 1) * limit;
+
+  try {
+    const listings = await prisma.listings.findMany({
+      skip: offset,
+      take: limit,
+      include: {
+        listing_attributes: true,
+        listing_media: true,
+        payment_options: true,
+        interactions: true,
+        user: true,
+      },
+    });
+
+    const enriched = listings.map((l: any) => {
+      const hasVideo = l.listing_media.some((m: any) => m.type === "video");
+
+      const normalizedPayment = normalizePaymentOptions(
+        l.payment_options
+      );
+
+      return {
+        ...l,
+        has_video: hasVideo,
+        payment_summary: normalizedPayment,
+        score: rankListing({
+          ...l,
+          has_video: hasVideo,
+          seller: l.user,
+        }),
+      };
+    });
+
+    const sorted = enriched.sort((a, b) => b.score - a.score);
+
+    // inject ads
+    const finalFeed = [];
+    for (let i = 0; i < sorted.length; i++) {
+      if (i > 0 && i % 6 === 0) {
+        finalFeed.push({ type: "ad", message: "Sponsored Listing" });
+      }
+      finalFeed.push(sorted[i]);
+    }
+
+    res.json(finalFeed);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * LEAD TRACKING
+ */
+app.post("/api/leads/track", async (req, res) => {
+  const { listing_id, user_id, action } = req.body;
+
+  try {
+    await prisma.leads.create({
+      data: {
+        listing_id,
+        user_id,
+        action,
+      },
+    });
+
+    await prisma.interactions.update({
+      where: { listing_id },
+      data: {
+        clicks: { increment: 1 },
+      },
+    });
+
+    res.json({ success: true });
+  } catch (error: any) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+app.listen(3000, () => {
+  console.log("BANCO backend running on port 3000");
+});

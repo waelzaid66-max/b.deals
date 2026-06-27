@@ -1,0 +1,425 @@
+“}
+ROLE:
+Act as a Senior UX Architect specialized in Financial Marketplace Interfaces.
+
+MISSION:
+Design the MOST ADVANCED Payment Display System for BANCO mobile app.
+
+CORE TRUTH:
+BANCO does NOT finance.
+All payment options come directly from:
+
+* Suppliers
+* Dealers
+* Manufacturers
+* Banks
+
+The system must display BOTH:
+
+* Islamic (Fixed / Murabaha-style)
+* Conventional (Interest-based)
+
+WITHOUT mixing them or confusing the user.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — VISUAL HIERARCHY (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+On ANY listing:
+
+1. CASH PRICE → Biggest element on screen
+2. INSTALLMENT → Immediately visible under it
+3. PAYMENT TYPE → Clearly labeled
+
+Example:
+
+1,250,000 EGP
+Starts from 12,500 / month
+Islamic Plan
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — ISLAMIC MODEL (STRICT DISPLAY RULES)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Definition:
+
+* Total price is fixed from the start
+* Monthly payment is fixed
+* No interest shown or implied
+
+UI MUST SHOW:
+
+* Total Installment Price (Full amount)
+* Monthly Payment
+* Duration (months)
+* Optional Down Payment
+
+UI MUST NOT SHOW:
+
+* Interest %
+* APR
+* Any financial calculation language
+
+LABELING:
+
+* “Islamic Plan”
+* “Sharia Compliant”
+* “Fixed Total Price”
+
+VISUAL STYLE:
+
+* Clean
+* Trust-focused
+* No financial complexity
+
+USER FEELING:
+
+“I know exactly what I will pay”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — CONVENTIONAL MODEL (BANK STYLE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Definition:
+
+* Based on interest
+* Monthly depends on rate + duration
+
+UI MUST SHOW:
+
+* Down Payment
+* Monthly Installment
+* Duration
+* Total Payable
+
+OPTIONAL:
+
+* Interest % (only if seller provides it)
+
+LABELING:
+
+* “Bank Installment”
+* “Flexible Plan”
+
+VISUAL STYLE:
+
+* Slightly more detailed
+* Still simple
+
+USER FEELING:
+
+“I understand my monthly commitment”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — MULTI-OFFER ENGINE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Listings can have:
+
+* Supplier plan
+* Dealer plan
+* Bank plan
+
+RULE:
+
+User MUST NOT feel confused.
+
+CARD LEVEL:
+
+Show ONLY:
+
+BEST OFFER
+
+Logic:
+
+* Lowest monthly
+    OR
+* Lowest total cost (if Islamic)
+
+DETAIL PAGE:
+
+Show ALL OFFERS
+
+FORMAT:
+
+[Best Offer]
+→ 8,500/month (Supplier - Islamic)
+
+Other Offers:
+
+→ 9,200/month (Bank A)
+→ 10,000/month (Dealer)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — COMPARISON UX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User can:
+
+* tap “Compare Plans”
+
+Then see:
+
+Table:
+
+Provider | Type | Monthly | Duration | Total
+
+Goal:
+
+Instant decision
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — TRUST LAYER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Each plan shows:
+
+* Provider Name
+* Badge:
+    * Verified
+    * Bank
+    * Dealer
+    * Supplier
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 7 — PSYCHOLOGY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must feel:
+
+* clarity
+* control
+* opportunity
+
+NOT:
+
+* confusion
+* calculation stress
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+If user needs calculator → system failed
+If user understands in <1 second → SUCCE
+“}
+ROLE:
+Act as a Conversion-Focused Mobile UX Designer.
+
+MISSION:
+Turn every listing into a SALES MACHINE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 1 — BUYING ENTRY POINTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must have 2 instant paths:
+
+1. BUY CASH
+2. BUY INSTALLMENT
+
+Both must be equally visible.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 2 — DECISION FLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User flow:
+
+See price → See monthly → Compare → Contact
+
+NO extra steps
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 3 — INSTALLMENT POWER
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Installment is NOT secondary.
+
+It is:
+
+PRIMARY conversion driver
+
+Show:
+
+* monthly
+* not total
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 4 — URGENCY TRIGGERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Show:
+
+* “Best Price Today”
+* “High Demand”
+* “Recently Added”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 5 — MULTI-SELLER COMPETITION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Same asset can have:
+
+* multiple sellers
+* multiple prices
+* multiple plans
+
+User must see:
+
+competition
+
+This increases conversion massively.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTION 6 — CONTACT CTA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Always visible:
+
+* Call
+* WhatsApp
+* Chat
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must feel:
+
+“I can buy this NO
+“}
+ROLE:
+Act as a Marketplace Product Architect.
+
+MISSION:
+Design BANCO as a FULL BUSINESS PLATFORM.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SECTORS (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Cars
+2. Real Estate
+3. Industrial Equipment
+4. Production Lines
+5. Factories
+6. Raw Materials
+7. Import & Export
+8. Suppliers
+9. Manufacturers
+10. Investment Opportunities
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+RELATION LOGIC
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Production Line:
+
+→ needs Raw Materials
+→ linked to Suppliers
+→ can be Imported
+
+Factory:
+
+→ contains Production Lines
+→ uses Materials
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SEARCH BEHAVIOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User can search:
+
+* BMW X5
+* مصنع بلاستيك
+* خط إنتاج مياه
+* خامات تعبئة
+
+System must understand all.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MAP INTEGRATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Everything must appear on map:
+
+* cars
+* properties
+* factories
+* suppliers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO = Business Ecosystem
+NOT simple marketpla
+“}
+ROLE:
+Act as a Monetization UX Designer.
+
+MISSION:
+Design how monetization appears to users WITHOUT hurting UX.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INDIVIDUAL USERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+* 3 listings free
+* then paid per listing
+
+UI:
+
+* show usage clearly
+* no surprise charges
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELLERS / COMPANIES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Plans:
+
+* Basic
+* Pro
+* Enterprise
+
+UI must show:
+
+* benefits
+* visibility boost
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ADS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Types:
+
+* boosted listing
+* featured
+
+MUST:
+
+* look native
+* not annoying
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CPL (LEADS)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Seller sees:
+
+* number of leads
+* source
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User must feel:
+
+value
+
+NOT:
+
+pressu

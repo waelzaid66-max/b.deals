@@ -1,0 +1,328 @@
+}
+BANCO — V23 FULL SYSTEM EXECUTION + USER SYSTEM + MARKET COMPLETION (FINAL)
+
+ROLE:
+Act as a Principal CTO + Lead System Architect + Product Owner.
+
+MISSION:
+You are fully responsible for transforming BANCO into a COMPLETE, production-ready marketplace.
+
+You are NOT just implementing code.
+
+You are responsible for:
+
+* validating all previous architecture (V1 → V22)
+* detecting missing parts
+* fixing broken logic
+* completing all systems
+* delivering a real, scalable product
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0) EXECUTION RULE (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DO NOT start coding immediately.
+
+STEP 1:
+Audit the entire system:
+
+* Database schema
+* APIs
+* BFF layer
+* Feed engine
+* Search engine
+* Billing system
+* Mobile app structure
+* Dealer system
+
+STEP 2:
+Return a REPORT:
+
+* missing features
+* weak UX areas
+* broken flows
+* inconsistencies
+
+STEP 3:
+Fix + Implement everything
+
+No partial execution allowed.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. CORE ENGINE (VALIDATE + COMPLETE)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ensure:
+
+✔ Nested Taxonomy fully implemented
+✔ JSONB validation working
+✔ ranking engine correct
+✔ search engine working (Arabic + English)
+✔ BFF returns mobile-ready data
+
+Fix any missing link immediately.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) DATA SYSTEM (REAL MARKET DATA)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rebuild data layer:
+
+* categories
+* subcategories
+* brands
+* models
+* attributes
+
+Seed:
+
+100–200 listings minimum
+
+Cars:
+BMW / Mercedes / Toyota / Hyundai / Nissan
+Models + years + mileage + condition
+
+Real Estate:
+New Cairo / Zayed / October / Capital
+Apartments / Villas / Offices
+
+Industrial:
+Factories / Machines / Production Lines
+
+Rules:
+
+✔ real Egyptian pricing
+✔ 3–5 images per listing
+✔ payment options included
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) USER SYSTEM (CRITICAL — MUST BE BUILT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Build FULL user layer:
+
+PROFILE:
+
+* avatar
+* name
+* role
+* verification badge
+* join date
+* listings count
+* leads count
+
+DASHBOARD:
+
+* my listings
+* edit/delete
+* boost
+* views/clicks/leads
+
+WALLET:
+
+* balance
+* transactions
+* CPL deductions
+
+POST SYSTEM:
+
+* user posts (inside profile only)
+* text + image
+
+ACTIVITY:
+
+* recently viewed
+* saved listings
+* recommendations
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) AUTHENTICATION (FULL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Implement:
+
+* Email OTP (primary)
+* Google login
+* Facebook login
+* Apple login
+* LinkedIn login
+
+Mobile:
+
+* fingerprint
+* face ID
+
+Security:
+
+* JWT
+* session validation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) MONETIZATION ENGINE (BUSINESS CORE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Implement:
+
+INDIVIDUAL:
+
+* 3 free listings/month
+* after that: 50 EGP per listing/day
+
+DEALERS / COMPANIES:
+
+* 500 / 1500 / 5000 EGP subscriptions
+
+BANKS:
+
+* starting 1000 EGP
+
+CPL SYSTEM:
+
+* 5–7 EGP per lead
+* deduct from wallet
+* disable listing if balance = 0
+
+BOOST SYSTEM:
+
+* paid visibility
+* affects ranking
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) SEARCH + FILTER SYSTEM (REAL UX)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Upgrade search:
+
+Support:
+
+* Arabic + English
+* slang detection
+* price extraction
+
+Examples:
+
+“bmw x5 قسط”
+“شقة 150 متر التجمع”
+
+Add:
+
+✔ autocomplete
+✔ trending searches
+✔ recent searches
+
+Filters:
+
+Cars:
+
+* brand / model / year / mileage
+
+Real Estate:
+
+* area / rooms / finishing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) MOBILE EXPERIENCE (CONVERSION-FIRST)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rules:
+
+✔ dark mode (#000000)
+✔ FlashList only
+✔ no UI logic
+
+Card:
+
+[image]
+[price BIG]
+[installment badge]
+[title]
+[location + verified]
+
+Detail:
+
+* gallery
+* price
+* installment
+* sticky CTA (Call / WhatsApp)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) UX + BRAND FIX (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Fix:
+
+* logo alignment
+* spacing
+* consistency
+
+Must appear in:
+
+* splash
+* header
+* profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) SUPPORT + SETTINGS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Add:
+
+* customer support screen
+* email support
+* complaint system
+* account deletion (Google policy)
+
+Settings:
+
+* edit profile
+* notification preferences
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) SYSTEM QUALITY CONTROL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Reject:
+
+* listings without images
+* missing attributes
+* invalid categories
+
+Boost:
+
+* verified sellers
+* complete listings
+* listings with video
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) FINAL PRODUCT EXPECTATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO must feel like:
+
+✔ OLX-level marketplace
+✔ PropertyFinder structure
+✔ fast mobile experience
+
+User must:
+
+* find listing < 3 seconds
+* understand price instantly
+* contact seller in 1 tap
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You are NOT writing code only.
+
+You are delivering:
+
+A COMPLETE MARKETPLACE PRODUCT.
+
+If anything is missing:
+→ detect it
+→ fix it
+→ implement it
+
+No shortcuts

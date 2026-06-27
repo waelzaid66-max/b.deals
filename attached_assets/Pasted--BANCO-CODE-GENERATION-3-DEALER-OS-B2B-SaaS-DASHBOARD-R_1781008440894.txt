@@ -1,0 +1,55 @@
+# 🚀 BANCO CODE GENERATION 3: DEALER OS (B2B SaaS DASHBOARD)
+**ROLE:** Act as a Principal SaaS Architect and Enterprise Frontend Engineer.
+**ENVIRONMENT:** Next.js (App Router), Tailwind CSS, Shadcn/UI, Recharts.
+
+**🛑 CRITICAL DIRECTIVE:**
+You are building the **BANCO B2B Dealer OS**. This is a data-dense, high-performance web dashboard. 
+Target users: Car Dealers, Real Estate Developers, and Industrial Asset Sellers.
+Design Rule: "SaaS Density". The user needs to see as much data as possible without clutter. Professional, clean, and highly functional.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 1. SAAS ARCHITECTURE REQUIREMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+* **Tenant Isolation:** Every request must be scoped to the `dealer_id` retrieved from the session. No dealer should ever see another dealer's data.
+* **Performance:** Use React Query (`tanstack-query`) to handle caching and server-state. Use `shadcn/ui` for high-quality table and form components.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 2. CORE COMPONENTS TO BUILD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+### A. The Dealer Dashboard (`/dealer/dashboard`)
+* **Metrics Row:** 4 Cards (Total Active Listings, Leads Today, Conversion Rate, Ad Campaign Spend).
+* **Lead Trend Chart:** A line chart using `Recharts` showing lead generation activity over the last 30 days.
+
+### B. Inventory Management Grid (`/dealer/listings`)
+* **The Data Table:** A comprehensive table using `tanstack-table` with:
+    * Columns: Thumbnail, Title, Price, Status (Active/Sold toggle), Views, Leads, Actions (Boost/Archive).
+    * **Bulk Actions:** Checkbox select → Bulk Archive / Bulk Boost.
+    * **Boost Modal:** Click "Boost" -> Show a modal to select ad duration (3, 7, 14 days) and Ad Type (Featured vs Native).
+
+### C. The Lead CRM Table (`/dealer/leads`)
+* **CRM Grid:** List all buyer interactions: `Buyer Name`, `Asset Name`, `Action Type` (WhatsApp/Call/Finance Request), `Status` (New/Followed-up).
+* **Funnel View:** A quick view of how many leads have been "Contacted" vs "New".
+
+### D. The Bulk Import Engine (`/dealer/import`)
+* **UI:** A "Drag & Drop" CSV area.
+* **Mapping:** A "Column Mapping" step where the user matches their CSV headers (e.g., "CarPrice") to BANCO system fields (`base_price_cash`).
+* **Feedback Loop:** A toast/report showing: "150 Listings Processed: 148 Success, 2 Failed (missing price)".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 3. PRODUCTION-READY API REQUIREMENTS (DEALER SCOPED)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Implement these API handlers in `app/api/dealer/...`:
+* `GET /dealer/stats`: Aggregates the 4 metrics + Chart data.
+* `GET /dealer/listings`: Query with `LIMIT` and `OFFSET` for pagination.
+* `POST /dealer/bulk-import`: This must handle the CSV stream, run the validation utility, and return the final report.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+## 4. EXECUTION COMMAND
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Build the **`DealerSidebarLayout`** (persistent navigation).
+2. Build the **`ListingsDataGrid`** component with sorting, filtering, and bulk selection.
+3. Build the **`BulkImportWizard`** (Drag & Drop -> Column Mapping -> Result).
+4. Implement the **`BoostAdModal`**.
+
+Styling: Keep it strictly "Enterprise-Ready" (SaaS Light/Dark mode). Use consistent Shadcn/UI table styles.

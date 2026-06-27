@@ -1,0 +1,258 @@
+🚀 BANCO — GOOGLE PLAY COMPLIANCE + MOBILE UX INTEGRATION PROMPT (FINAL)
+
+ROLE:
+Act as a Mobile Product Compliance Architect + UX System Designer.
+
+MISSION:
+Ensure BANCO mobile app is:
+✔ Fully compliant with Google Play policies
+✔ Clearly positioned as Marketplace (NOT financing provider)
+✔ Safe, transparent, and trusted for users
+
+⚠️ CRITICAL RULE:
+BANCO must NEVER appear as:
+
+* Bank
+* Lender
+* Loan provider
+
+BANCO ONLY:
+→ Displays payment options from sellers/partners
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. 🛑 CORE COMPLIANCE POSITIONING (APP IDENTITY)
+    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+APP DESCRIPTION MUST CLEARLY STATE:
+
+“BANCO is a marketplace that connects users with sellers, suppliers, and companies offering assets and payment options.”
+
+DO NOT SAY:
+❌ “We provide financing”
+❌ “We approve loans”
+
+ALWAYS SAY:
+✔ “Payment options provided by sellers”
+✔ “Installment plans offered by partners”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2) 🔐 ACCOUNT SYSTEM (MANDATORY FOR GOOGLE PLAY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MUST INCLUDE:
+
+A) Account Creation:
+
+* Email OTP
+* Google login
+* Apple login
+
+B) Account Deletion (CRITICAL POLICY):
+
+User must be able to:
+
+→ Delete account INSIDE app
+
+Flow:
+Profile → Settings → Delete Account
+
+Steps:
+
+1. Confirmation screen
+2. Warning message:
+    “This action is permanent”
+3. Final confirm
+
+Backend behavior (implicit):
+
+* Remove personal data
+* Keep anonymized logs only
+
+❗ Missing this = REJECTION
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3) 📜 PRIVACY POLICY (MANDATORY)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INSIDE APP:
+
+Settings → Privacy Policy
+
+MUST EXPLAIN:
+
+* What data is collected:
+    → name
+    → phone
+    → interactions
+* Why:
+    → connect buyers with sellers
+    → improve recommendations
+* Sharing:
+    → shared ONLY with sellers when user contacts
+
+❗ Must include external URL
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4) 🔑 PERMISSIONS (STRICT CONTROL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ONLY REQUEST WHEN NEEDED:
+
+Location:
+→ for “Near You”
+
+Phone:
+→ ONLY when user taps Call
+
+Storage/Media:
+→ for uploading listing images
+
+❌ DO NOT request permissions at app start
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5) 💰 PAYMENT & FINANCING CLARITY (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+UI MUST CLEARLY SHOW:
+
+“This payment plan is provided by the seller or partner”
+
+FOR EACH PLAN:
+
+ISLAMIC:
+
+* Label: “Islamic Plan”
+* Show:
+    → total price
+    → monthly
+* No interest mentioned
+
+CONVENTIONAL:
+
+* Label: “Installment Plan”
+* Show:
+    → down payment
+    → monthly
+    → duration
+
+❗ ADD DISCLAIMER:
+
+“BANCO does not provide financing. All terms are set by the seller or partner.”
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6) 🚫 MISLEADING CONTENT POLICY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO MUST NOT:
+
+* Show fake urgency
+* Show fake discounts
+* Show fake “people viewing”
+
+ALL MICRO-TRIGGERS MUST BE REAL DATA
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7) 📢 ADS POLICY (GOOGLE SAFE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RULES:
+
+* Ads MUST be labeled “Sponsored”
+* Must look like listing (native)
+* NO popups
+* NO forced redirection
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8) 👤 USER SAFETY & TRUST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROFILE MUST INCLUDE:
+
+* Verification badge
+* Company info
+* Contact method
+
+ADD:
+
+“Report Listing” button
+
+Options:
+
+* Scam
+* Wrong price
+* Duplicate
+* Fake seller
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9) 🧾 TERMS & CONDITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+INSIDE APP:
+
+Settings → Terms
+
+MUST STATE:
+
+* BANCO is intermediary platform
+* Users responsible for deals
+* Platform not liable for agreements
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10) ⭐ PLAY STORE LISTING (CRITICAL)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE:
+BANCO – Asset Marketplace & Deals
+
+DESCRIPTION:
+
+Focus on:
+
+* Cars
+* Real estate
+* Industrial assets
+* Installment options (NOT financing)
+
+SCREENSHOTS MUST SHOW:
+
+* Feed
+* Price clarity
+* Installment badge
+* Seller profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11) 🧠 UX INTEGRATION (IMPORTANT)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+COMPLIANCE MUST BE INVISIBLE BUT PRESENT:
+
+* Payment disclaimer → small but visible
+* Privacy → inside settings
+* Permissions → contextual only
+
+USER SHOULD NOT FEEL:
+“legal app”
+
+BUT SYSTEM MUST BE:
+100% compliant
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FINAL RULE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BANCO must feel like:
+
+✔ Marketplace (OLX simplicity)
+✔ Professional (LinkedIn trust)
+✔ Smart (Alibaba deals)
+
+NOT:
+
+❌ Bank
+❌ Loan app
+❌ Financial authority
+
+If Google thinks BANCO is lending app → REJECT
+
+END

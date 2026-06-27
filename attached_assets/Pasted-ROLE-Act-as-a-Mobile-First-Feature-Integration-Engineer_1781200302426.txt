@@ -1,0 +1,158 @@
+ROLE:
+Act as a Mobile-First Feature Integration Engineer for BANCO.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 CORE UNDERSTANDING
+
+There are multiple existing and pending plans (tasks/queues) including:
+
+* listings system
+* dealer system
+* payment system
+* leads system
+* RFQ system
+* billing system
+
+These are NOT to be ignored.
+
+BUT:
+
+❌ They must NOT be built separately
+❌ They must NOT remain in background
+❌ They must NOT stay invisible
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 NEW EXECUTION RULE
+
+ALL plans MUST be executed THROUGH the Mobile App UI.
+
+If a feature is completed but not visible in mobile → it is considered NOT DONE.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚫 HARD RULES
+
+* Do NOT execute any plan in isolation
+* Do NOT build backend-only features
+* Do NOT create hidden logic
+
+Instead:
+
+✔ Execute each plan
+✔ Immediately connect it to Mobile UI
+✔ Make it visible and usable
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 EXECUTION METHOD (CRITICAL)
+
+For EACH existing or pending task:
+
+1. Check if it is already built
+2. If built → CONNECT it to mobile UI
+3. If partially built → COMPLETE it through mobile flow
+4. If not built → build ONLY what is required for UI usage
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 REQUIRED MOBILE OUTPUT
+
+Every system must appear like this:
+
+* Listings → visible in Feed
+* Dealer → visible in seller section
+* Payment → visible in price/installment
+* Leads → triggered on contact buttons
+* RFQ → visible as “Request Offer” button
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 CORE FLOWS (MUST BE COMPLETE)
+
+1. Home Feed
+2. Listing Detail
+3. Contact Actions
+4. Payment Display
+5. Navigation (Home / Search / Create / Profile)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎬 SPLASH SCREEN
+
+* cinematic
+* black background
+* animated lines (cars / buildings / industrial)
+* logo animation
+* max 2 seconds
+* MUST NOT block loading
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 FINAL VALIDATION
+
+User must:
+
+→ open app
+→ see real listings
+→ click listing
+→ see full details
+→ press contact
+→ trigger lead
+
+NO missing steps
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚨 FINAL RULE
+
+Plans are NOT separate work.
+
+Plans = Features
+
+Features = Mobile UI
+
+If not visible → not implemented.
+
+برجاء مراجعة كل الخطط والمهام السابقة بالكامل وتنفيذها بشكل صحيح داخل تطبيق الموبايل، مع الالتزام بالنقاط التالية:
+
+1. عدم تنفيذ أي خطة أو Feature في الخلفية فقط، أي شيء يتم تنفيذه يجب أن يظهر فورًا داخل تطبيق الموبايل ويكون قابل للاستخدام.
+2. استكمال جميع الفيتشرز الناقصة داخل الموبايل، خصوصًا:
+
+* صفحة تفاصيل الـ Listing كاملة
+* عرض السعر والتقسيط بشكل واضح (إسلامي / بنكي)
+* بيانات البائع (Dealer / Company)
+* أزرار التواصل (اتصال / واتساب / طلب عرض)
+
+3. ربط كل الأنظمة التي تم بناؤها بالفعل:
+
+* نظام الـ Dealer يظهر داخل الـ Listings
+* نظام الدفع يظهر داخل السعر والتقسيط
+* نظام الـ Leads يعمل عند الضغط على أزرار التواصل
+* نظام RFQ يظهر كزر “طلب عرض”
+
+4. استبدال أي بيانات تجريبية (Mock Data) ببيانات حقيقية من النظام الموجود.
+5. استكمال الـ Navigation داخل التطبيق:
+
+* Home
+* Search
+* Create Listing
+* Profile
+    وكل صفحة تكون شغالة وليست فارغة.
+
+6. التأكد أن التطبيق يعمل بدون أخطاء من البداية للنهاية:
+
+* فتح التطبيق
+* تصفح الـ Listings
+* الدخول على التفاصيل
+* تنفيذ تواصل فعلي
+
+7. عدم إضافة أي Features جديدة قبل استكمال وربط كل ما تم بناؤه بالفعل.
+8. مراعاة تقليل التكلفة وعدم تكرار العمل، والاعتماد على الأنظمة الموجودة بدل إعادة بنائها.
+
+الهدف هو إكمال التطبيق بشكل فعلي وقابل للاستخدام، بحيث كل ما تم بناؤه يظهر داخل الموبايل ويعمل بشكل كامل
+
+
+
+ واكمل الخطة صح ارجوك راجع كل حرف وانفل الداتا صح بقي
