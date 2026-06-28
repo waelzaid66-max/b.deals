@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { SidebarLayout } from "@/components/layout/sidebar-layout";
-import { 
-  useGetDealerListings, getGetDealerListingsQueryKey, 
+import {
+  useGetDealerListings, getGetDealerListingsQueryKey,
   useDealerBulkAction, useBoostListing,
   useGetPromoAdSummary, getGetPromoAdSummaryQueryKey
 } from "@workspace/api-client-react";
 import { useClerk } from "@clerk/react";
 import { useQueryClient } from "@tanstack/react-query";
-import { 
-  flexRender, getCoreRowModel, useReactTable, 
-  getSortedRowModel, getPaginationRowModel, ColumnDef 
+import {
+  flexRender, getCoreRowModel, useReactTable,
+  getSortedRowModel, getPaginationRowModel, ColumnDef
 } from "@tanstack/react-table";
-import { 
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow 
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import type { DealerListing } from "@workspace/api-client-react";
 import { ListingFormSheet } from "@/components/listing-form-sheet";
+import { useI18n } from "@/i18n/LanguageContext";
 
 const CATEGORY_ICONS: Record<string, any> = {
   car: Car,
@@ -38,7 +39,15 @@ export default function ListingsPage() {
   const { user } = useClerk();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  
+  const { t } = useI18n();
+
+  // Translate a status enum for display; fall back to the raw value if unmapped.
+  const statusLabel = (s: string) => {
+    const key = `listings.status.${s}`;
+    const tr = t(key);
+    return tr === key ? s : tr;
+  };
+
   const [rowSelection, setRowSelection] = useState({});
   const [boostModalOpen, setBoostModalOpen] = useState(false);
   const [boostListingId, setBoostListingId] = useState<string | null>(null);
@@ -76,14 +85,20 @@ export default function ListingsPage() {
     const selectedIds = Object.keys(rowSelection).map(idx => listingsData?.data?.[parseInt(idx)]?.id).filter(Boolean) as string[];
     if (!selectedIds.length) return;
 
+    const toastKey = action === "activate"
+      ? "listings.toast.bulkActivated"
+      : action === "archive"
+        ? "listings.toast.bulkArchived"
+        : "listings.toast.bulkDeleted";
+
     bulkActionMutation.mutate({ data: { listing_ids: selectedIds, action } }, {
       onSuccess: () => {
-        toast({ title: `Successfully ${action}d ${selectedIds.length} listings` });
+        toast({ title: t(toastKey, { count: selectedIds.length }) });
         setRowSelection({});
         queryClient.invalidateQueries({ queryKey: getGetDealerListingsQueryKey({ limit: 100 }) });
       },
       onError: () => {
-        toast({ title: "Action failed", variant: "destructive" });
+        toast({ title: t("listings.toast.actionFailed"), variant: "destructive" });
       }
     });
   };
@@ -101,7 +116,9 @@ export default function ListingsPage() {
           onSuccess: () => {
             completed++;
             if (completed + failed === total) {
-              toast({ title: `Boosted ${completed} listing${completed !== 1 ? "s" : ""}${failed ? `, ${failed} failed` : ""}` });
+              toast({ title: failed
+                ? t("listings.toast.boostedNfailed", { count: completed, failed })
+                : t("listings.toast.boostedN", { count: completed }) });
               setBulkBoostOpen(false);
               setRowSelection({});
               refreshPromo();
@@ -110,7 +127,7 @@ export default function ListingsPage() {
           onError: () => {
             failed++;
             if (completed + failed === total) {
-              toast({ title: `Boosted ${completed}, ${failed} failed`, variant: failed === total ? "destructive" : "default" });
+              toast({ title: t("listings.toast.boostedNfailed", { count: completed, failed }), variant: failed === total ? "destructive" : "default" });
               setBulkBoostOpen(false);
               refreshPromo();
             }
@@ -124,7 +141,7 @@ export default function ListingsPage() {
     const action = currentStatus === "active" ? "archive" : "activate";
     bulkActionMutation.mutate({ data: { listing_ids: [id], action } }, {
       onSuccess: () => {
-        toast({ title: `Listing ${action}d` });
+        toast({ title: action === "activate" ? t("listings.toast.activated") : t("listings.toast.archived") });
         queryClient.invalidateQueries({ queryKey: getGetDealerListingsQueryKey({ limit: 100 }) });
       }
     });
@@ -140,16 +157,16 @@ export default function ListingsPage() {
         const walletCharged = Number(res?.data?.wallet_charged ?? "0");
         const description =
           promoUsed > 0 && walletCharged <= 0
-            ? `Paid with ${promoUsed.toLocaleString()} EGP free ad credit.`
+            ? t("listings.toast.paidPromoOnly", { amount: promoUsed.toLocaleString() })
             : promoUsed > 0
-              ? `Used ${promoUsed.toLocaleString()} EGP free credit + ${walletCharged.toLocaleString()} EGP wallet.`
+              ? t("listings.toast.paidPromoWallet", { promo: promoUsed.toLocaleString(), wallet: walletCharged.toLocaleString() })
               : undefined;
-        toast({ title: "Listing boosted successfully!", description });
+        toast({ title: t("listings.toast.boostSuccess"), description });
         setBoostModalOpen(false);
         refreshPromo();
       },
       onError: () => {
-        toast({ title: "Failed to boost listing", variant: "destructive" });
+        toast({ title: t("listings.toast.boostFailed"), variant: "destructive" });
       }
     });
   };
@@ -161,7 +178,7 @@ export default function ListingsPage() {
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
+          aria-label={t("listings.selectAll")}
           className="border-white/20"
         />
       ),
@@ -169,7 +186,7 @@ export default function ListingsPage() {
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
+          aria-label={t("listings.selectRow")}
           className="border-white/20"
         />
       ),
@@ -178,7 +195,7 @@ export default function ListingsPage() {
     },
     {
       accessorKey: "title",
-      header: "Listing",
+      header: t("listings.colListing"),
       cell: ({ row }) => {
         const cat = row.original.category || "car";
         const Icon = CATEGORY_ICONS[cat] || Car;
@@ -197,37 +214,37 @@ export default function ListingsPage() {
     },
     {
       accessorKey: "price_display",
-      header: "Price",
+      header: t("listings.colPrice"),
       cell: ({ row }) => <span className="text-sm">{row.original.price_display}</span>,
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: t("listings.colStatus"),
       cell: ({ row }) => {
         const status = row.original.status;
         return (
-          <Badge 
-            variant="outline" 
+          <Badge
+            variant="outline"
             className={status === "active" ? "border-green-500 text-green-500" : "border-muted-foreground text-muted-foreground"}
           >
-            {status}
+            {statusLabel(status || "archived")}
           </Badge>
         );
       },
     },
     {
       accessorKey: "views",
-      header: "Views",
+      header: t("listings.colViews"),
       cell: ({ row }) => <span className="text-sm">{row.original.views || 0}</span>,
     },
     {
       accessorKey: "leads",
-      header: "Leads",
+      header: t("listings.colLeads"),
       cell: ({ row }) => <span className="text-sm font-medium">{row.original.leads || 0}</span>,
     },
     {
       id: "actions",
-      header: "Actions",
+      header: t("listings.colActions"),
       cell: ({ row }) => {
         const isActive = row.original.status === "active";
         return (
@@ -240,20 +257,20 @@ export default function ListingsPage() {
               data-testid={`btn-edit-${row.original.id}`}
             >
               <Pencil className="w-4 h-4 mr-2" />
-              Edit
+              {t("listings.edit")}
             </Button>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               className="h-8 border-white/10"
               onClick={() => handleStatusToggle(row.original.id!, row.original.status || "archived")}
               data-testid={`btn-toggle-${row.original.id}`}
             >
               {isActive ? <Archive className="w-4 h-4 mr-2" /> : <CheckCircle className="w-4 h-4 mr-2" />}
-              {isActive ? "Archive" : "Activate"}
+              {isActive ? t("listings.archive") : t("listings.activate")}
             </Button>
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               className="h-8 bg-primary hover:bg-primary/90 text-white"
               onClick={() => {
                 setBoostListingId(row.original.id!);
@@ -262,7 +279,7 @@ export default function ListingsPage() {
               data-testid={`btn-boost-${row.original.id}`}
             >
               <ArrowUpRight className="w-4 h-4 mr-1" />
-              Boost
+              {t("listings.boost")}
             </Button>
           </div>
         );
@@ -289,21 +306,21 @@ export default function ListingsPage() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">Listings</h1>
-            <p className="text-muted-foreground mt-2">Manage your inventory and promotions.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("listings.title")}</h1>
+            <p className="text-muted-foreground mt-2">{t("listings.subtitle")}</p>
           </div>
           <Button className="bg-primary hover:bg-primary/90 text-white" onClick={openCreate} data-testid="btn-new-listing">
             <Plus className="w-4 h-4 mr-2" />
-            New Listing
+            {t("listings.newListing")}
           </Button>
         </div>
 
         {selectedCount > 0 && (
           <div className="bg-muted p-3 rounded-lg border border-border flex items-center justify-between">
-            <span className="text-sm font-medium">{selectedCount} listing(s) selected</span>
+            <span className="text-sm font-medium">{t("listings.selected", { count: selectedCount })}</span>
             <div className="flex gap-2">
-              <Button size="sm" variant="secondary" onClick={() => handleBulkAction("archive")} data-testid="btn-bulk-archive">Bulk Archive</Button>
-              <Button size="sm" variant="default" onClick={() => handleBulkAction("activate")} data-testid="btn-bulk-activate">Bulk Activate</Button>
+              <Button size="sm" variant="secondary" onClick={() => handleBulkAction("archive")} data-testid="btn-bulk-archive">{t("listings.bulkArchive")}</Button>
+              <Button size="sm" variant="default" onClick={() => handleBulkAction("activate")} data-testid="btn-bulk-activate">{t("listings.bulkActivate")}</Button>
               <Button
                 size="sm"
                 className="bg-primary hover:bg-primary/90 text-white"
@@ -311,7 +328,7 @@ export default function ListingsPage() {
                 data-testid="btn-bulk-boost"
               >
                 <ArrowUpRight className="w-4 h-4 mr-1" />
-                Bulk Boost
+                {t("listings.bulkBoost")}
               </Button>
             </div>
           </div>
@@ -350,7 +367,7 @@ export default function ListingsPage() {
               ) : (
                 <TableRow>
                   <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
-                    No listings found.
+                    {t("listings.noListings")}
                   </TableCell>
                 </TableRow>
               )}
@@ -366,7 +383,7 @@ export default function ListingsPage() {
             disabled={!table.getCanPreviousPage()}
             className="border-border"
           >
-            Previous
+            {t("listings.previous")}
           </Button>
           <Button
             variant="outline"
@@ -375,7 +392,7 @@ export default function ListingsPage() {
             disabled={!table.getCanNextPage()}
             className="border-border"
           >
-            Next
+            {t("listings.next")}
           </Button>
         </div>
       </div>
@@ -383,9 +400,9 @@ export default function ListingsPage() {
       <Dialog open={boostModalOpen} onOpenChange={setBoostModalOpen}>
         <DialogContent className="bg-card border-border sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Boost Listing</DialogTitle>
+            <DialogTitle>{t("listings.boostDialog.title")}</DialogTitle>
             <DialogDescription>
-              Increase visibility by boosting your listing across the platform.
+              {t("listings.boostDialog.desc")}
             </DialogDescription>
           </DialogHeader>
           {hasPromo ? (
@@ -393,12 +410,12 @@ export default function ListingsPage() {
               <Gift className="w-4 h-4 text-primary mt-0.5 shrink-0" />
               <div className="text-sm">
                 <p className="font-medium text-primary">
-                  {promoBalance.toLocaleString()} EGP free ad credit available
+                  {t("listings.boostDialog.creditAvailable", { amount: promoBalance.toLocaleString() })}
                 </p>
                 <p className="text-muted-foreground text-xs mt-0.5">
-                  Applied automatically before your wallet on this boost.
+                  {t("listings.boostDialog.creditApplied")}
                   {promo?.expires_at
-                    ? ` Expires ${new Date(promo.expires_at).toLocaleDateString()}.`
+                    ? ` ${t("listings.boostDialog.expires", { date: new Date(promo.expires_at).toLocaleDateString() })}`
                     : ""}
                 </p>
               </div>
@@ -406,41 +423,41 @@ export default function ListingsPage() {
           ) : null}
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Ad Type</label>
+              <label className="text-sm font-medium">{t("listings.boostDialog.adType")}</label>
               <Select value={boostType} onValueChange={(v: any) => setBoostType(v)}>
                 <SelectTrigger className="border-border bg-input">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder={t("listings.boostDialog.adType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="featured">Featured Listing</SelectItem>
-                  <SelectItem value="native_feed">Native Feed</SelectItem>
-                  <SelectItem value="top_search">Top Search Result</SelectItem>
+                  <SelectItem value="featured">{t("listings.boostDialog.featured")}</SelectItem>
+                  <SelectItem value="native_feed">{t("listings.boostDialog.nativeFeed")}</SelectItem>
+                  <SelectItem value="top_search">{t("listings.boostDialog.topSearch")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Duration</label>
+              <label className="text-sm font-medium">{t("listings.boostDialog.duration")}</label>
               <Select value={boostDuration} onValueChange={setBoostDuration}>
                 <SelectTrigger className="border-border bg-input">
-                  <SelectValue placeholder="Select duration" />
+                  <SelectValue placeholder={t("listings.boostDialog.duration")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="3">3 Days</SelectItem>
-                  <SelectItem value="7">7 Days</SelectItem>
-                  <SelectItem value="14">14 Days</SelectItem>
+                  <SelectItem value="3">{t("listings.boostDialog.days3")}</SelectItem>
+                  <SelectItem value="7">{t("listings.boostDialog.days7")}</SelectItem>
+                  <SelectItem value="14">{t("listings.boostDialog.days14")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" className="border-border" onClick={() => setBoostModalOpen(false)}>Cancel</Button>
-            <Button 
-              className="bg-primary hover:bg-primary/90 text-white" 
-              onClick={handleBoostSubmit} 
+            <Button variant="outline" className="border-border" onClick={() => setBoostModalOpen(false)}>{t("listings.boostDialog.cancel")}</Button>
+            <Button
+              className="bg-primary hover:bg-primary/90 text-white"
+              onClick={handleBoostSubmit}
               disabled={boostMutation.isPending}
             >
               {boostMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Confirm Boost
+              {t("listings.boostDialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -450,41 +467,41 @@ export default function ListingsPage() {
       <Dialog open={bulkBoostOpen} onOpenChange={setBulkBoostOpen}>
         <DialogContent className="bg-card border-border sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Bulk Boost {selectedCount} Listing{selectedCount !== 1 ? "s" : ""}</DialogTitle>
+            <DialogTitle>{t("listings.bulkBoostDialog.title", { count: selectedCount })}</DialogTitle>
             <DialogDescription>
-              Apply the same promotion to all selected listings.
+              {t("listings.bulkBoostDialog.desc")}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Ad Type</label>
+              <label className="text-sm font-medium">{t("listings.boostDialog.adType")}</label>
               <Select value={bulkBoostType} onValueChange={(v: any) => setBulkBoostType(v)}>
                 <SelectTrigger className="border-border bg-input" data-testid="bulk-boost-type">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="featured">Featured Listing</SelectItem>
-                  <SelectItem value="native_feed">Native Feed</SelectItem>
-                  <SelectItem value="top_search">Top Search Result</SelectItem>
+                  <SelectItem value="featured">{t("listings.boostDialog.featured")}</SelectItem>
+                  <SelectItem value="native_feed">{t("listings.boostDialog.nativeFeed")}</SelectItem>
+                  <SelectItem value="top_search">{t("listings.boostDialog.topSearch")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium">Duration</label>
+              <label className="text-sm font-medium">{t("listings.boostDialog.duration")}</label>
               <Select value={bulkBoostDuration} onValueChange={setBulkBoostDuration}>
                 <SelectTrigger className="border-border bg-input" data-testid="bulk-boost-duration">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="3">3 Days</SelectItem>
-                  <SelectItem value="7">7 Days</SelectItem>
-                  <SelectItem value="14">14 Days</SelectItem>
+                  <SelectItem value="3">{t("listings.boostDialog.days3")}</SelectItem>
+                  <SelectItem value="7">{t("listings.boostDialog.days7")}</SelectItem>
+                  <SelectItem value="14">{t("listings.boostDialog.days14")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" className="border-border" onClick={() => setBulkBoostOpen(false)}>Cancel</Button>
+            <Button variant="outline" className="border-border" onClick={() => setBulkBoostOpen(false)}>{t("listings.boostDialog.cancel")}</Button>
             <Button
               className="bg-primary hover:bg-primary/90 text-white"
               onClick={handleBulkBoost}
@@ -492,7 +509,7 @@ export default function ListingsPage() {
               data-testid="btn-confirm-bulk-boost"
             >
               {boostMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Boost {selectedCount} Listing{selectedCount !== 1 ? "s" : ""}
+              {t("listings.bulkBoostDialog.confirm", { count: selectedCount })}
             </Button>
           </DialogFooter>
         </DialogContent>
