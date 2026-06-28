@@ -18,21 +18,28 @@ import {
 } from "@/components/ui/select";
 import { Loader2, ArrowUpRight, Zap, Star, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useI18n } from "@/i18n/LanguageContext";
 
-const AD_TYPE_META = {
-  featured: { label: "Featured Listing", desc: "Highlighted placement in search results", icon: Star },
-  native_feed: { label: "Native Feed", desc: "Blended placement in buyer discovery feed", icon: Zap },
-  top_search: { label: "Top Search Result", desc: "Pinned at the top of relevant searches", icon: Search },
+type AdType = "featured" | "native_feed" | "top_search";
+const AD_TYPES: AdType[] = ["featured", "native_feed", "top_search"];
+const AD_TYPE_ICONS: Record<AdType, any> = {
+  featured: Star,
+  native_feed: Zap,
+  top_search: Search,
 };
 
 export default function AdsPage() {
   const { user } = useClerk();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { t } = useI18n();
+
+  const adTypeLabel = (key: AdType) => t(`ads.types.${key}.label`);
+  const adTypeDesc = (key: AdType) => t(`ads.types.${key}.desc`);
 
   const [boostOpen, setBoostOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [adType, setAdType] = useState<"featured" | "native_feed" | "top_search">("featured");
+  const [adType, setAdType] = useState<AdType>("featured");
   const [duration, setDuration] = useState("7");
 
   const { data: listingsData, isLoading } = useGetDealerListings(
@@ -62,12 +69,15 @@ export default function AdsPage() {
       { data: { listing_id: selectedId, ad_type: adType, duration_days: parseInt(duration) } },
       {
         onSuccess: () => {
-          toast({ title: "Listing boosted", description: `${AD_TYPE_META[adType].label} for ${duration} days` });
+          toast({
+            title: t("ads.toast.boosted"),
+            description: t("ads.toast.boostedDesc", { label: adTypeLabel(adType), count: duration }),
+          });
           setBoostOpen(false);
           queryClient.invalidateQueries({ queryKey: getGetDealerListingsQueryKey() });
         },
         onError: () => {
-          toast({ title: "Boost failed", variant: "destructive" });
+          toast({ title: t("ads.toast.failed"), variant: "destructive" });
         },
       }
     );
@@ -79,21 +89,21 @@ export default function AdsPage() {
     <SidebarLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">Ads</h1>
-          <p className="text-muted-foreground mt-2">Promote your active listings to reach more buyers.</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t("ads.title")}</h1>
+          <p className="text-muted-foreground mt-2">{t("ads.subtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {Object.entries(AD_TYPE_META).map(([key, meta]) => {
-            const Icon = meta.icon;
+          {AD_TYPES.map((key) => {
+            const Icon = AD_TYPE_ICONS[key];
             return (
               <Card key={key} className="bg-card border-border">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center gap-2 text-base">
                     <Icon className="w-4 h-4 text-primary" />
-                    {meta.label}
+                    {adTypeLabel(key)}
                   </CardTitle>
-                  <CardDescription>{meta.desc}</CardDescription>
+                  <CardDescription>{adTypeDesc(key)}</CardDescription>
                 </CardHeader>
               </Card>
             );
@@ -102,8 +112,8 @@ export default function AdsPage() {
 
         <Card className="bg-card border-border">
           <CardHeader>
-            <CardTitle className="text-lg">Active Listings — Ready to Boost</CardTitle>
-            <CardDescription>Select any active listing to promote it across the platform.</CardDescription>
+            <CardTitle className="text-lg">{t("ads.readyToBoost")}</CardTitle>
+            <CardDescription>{t("ads.readyToBoostDesc")}</CardDescription>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -124,7 +134,7 @@ export default function AdsPage() {
                         <span className="text-xs text-muted-foreground">{listing.location}</span>
                         <span className="text-xs text-muted-foreground">{listing.price_display}</span>
                         <Badge variant="outline" className="text-xs border-border">
-                          {listing.views ?? 0} views
+                          {t("ads.views", { count: listing.views ?? 0 })}
                         </Badge>
                       </div>
                     </div>
@@ -135,14 +145,14 @@ export default function AdsPage() {
                       data-testid={`btn-boost-ad-${listing.id}`}
                     >
                       <ArrowUpRight className="w-4 h-4 mr-1" />
-                      Boost
+                      {t("ads.boost")}
                     </Button>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="h-32 flex items-center justify-center text-muted-foreground text-sm">
-                No active listings to boost.
+                {t("ads.noListings")}
               </div>
             )}
           </CardContent>
@@ -152,43 +162,43 @@ export default function AdsPage() {
       <Dialog open={boostOpen} onOpenChange={setBoostOpen}>
         <DialogContent className="bg-card border-border sm:max-w-[460px]">
           <DialogHeader>
-            <DialogTitle>Boost Listing</DialogTitle>
+            <DialogTitle>{t("ads.dialogTitle")}</DialogTitle>
             <DialogDescription>
-              {selectedListing?.title ?? "Selected listing"} — choose your promotion type and duration.
+              {t("ads.dialogDesc", { title: selectedListing?.title ?? "" })}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-foreground">Ad Type</label>
+              <label className="text-sm font-medium text-foreground">{t("ads.adType")}</label>
               <Select value={adType} onValueChange={(v: any) => setAdType(v)}>
                 <SelectTrigger className="border-border bg-input" data-testid="select-ad-type">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="featured">Featured Listing</SelectItem>
-                  <SelectItem value="native_feed">Native Feed</SelectItem>
-                  <SelectItem value="top_search">Top Search Result</SelectItem>
+                  <SelectItem value="featured">{adTypeLabel("featured")}</SelectItem>
+                  <SelectItem value="native_feed">{adTypeLabel("native_feed")}</SelectItem>
+                  <SelectItem value="top_search">{adTypeLabel("top_search")}</SelectItem>
                 </SelectContent>
               </Select>
-              <p className="text-xs text-muted-foreground">{AD_TYPE_META[adType].desc}</p>
+              <p className="text-xs text-muted-foreground">{adTypeDesc(adType)}</p>
             </div>
             <div className="grid gap-2">
-              <label className="text-sm font-medium text-foreground">Duration</label>
+              <label className="text-sm font-medium text-foreground">{t("ads.duration")}</label>
               <Select value={duration} onValueChange={setDuration}>
                 <SelectTrigger className="border-border bg-input" data-testid="select-duration">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="3">3 Days</SelectItem>
-                  <SelectItem value="7">7 Days</SelectItem>
-                  <SelectItem value="14">14 Days</SelectItem>
+                  <SelectItem value="3">{t("ads.days3")}</SelectItem>
+                  <SelectItem value="7">{t("ads.days7")}</SelectItem>
+                  <SelectItem value="14">{t("ads.days14")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <DialogFooter>
             <Button variant="outline" className="border-border" onClick={() => setBoostOpen(false)}>
-              Cancel
+              {t("ads.cancel")}
             </Button>
             <Button
               className="bg-primary hover:bg-primary/90 text-white"
@@ -197,7 +207,7 @@ export default function AdsPage() {
               data-testid="btn-confirm-boost"
             >
               {boostMutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              Confirm Boost
+              {t("ads.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>
