@@ -23,6 +23,8 @@ import type {
   AcceptRfqOffer200,
   AdImpression200,
   AdImpressionBody,
+  AdminPlanCreate,
+  AdminPlanUpdate,
   AiAssistantBody,
   AskBancoAssistant200,
   BoostListing200,
@@ -35,6 +37,7 @@ import type {
   ConfirmTopup200,
   ContactLead200,
   ContactLeadBody,
+  CreateAdminPlan200,
   CreateConversation200,
   CreateConversationBody,
   CreateFinancingIntermediary200,
@@ -80,6 +83,7 @@ import type {
   GetAdminListingsParams,
   GetAdminMonitoring200,
   GetAdminOverview200,
+  GetAdminPlans200,
   GetAdminReports200,
   GetAdminReportsParams,
   GetAdminRevenue200,
@@ -221,6 +225,7 @@ import type {
   UnfollowCompany200,
   UnregisterPushToken200,
   UnregisterPushTokenBody,
+  UpdateAdminPlan200,
   UpdateEmailConfig200,
   UpdateFinancingIntermediary200,
   UpdateFinancingIntermediaryBody,
@@ -8513,6 +8518,225 @@ export const useRenewPromoCampaign = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getRenewPromoCampaignMutationOptions(options));
+    }
+
+export const getGetAdminPlansUrl = () => {
+
+
+
+
+  return `/api/v1/admin/plans`
+}
+
+/**
+ * Every plan across all audiences and statuses — the platform's economic levers (pricing, quotas, cost-per-lead, boost, ranking, features).
+ * @summary List all subscription plans (admin)
+ */
+export const getAdminPlans = async ( options?: RequestInit): Promise<GetAdminPlans200> => {
+
+  return customFetch<GetAdminPlans200>(getGetAdminPlansUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetAdminPlansQueryKey = () => {
+    return [
+    `/api/v1/admin/plans`
+    ] as const;
+    }
+
+
+export const getGetAdminPlansQueryOptions = <TData = Awaited<ReturnType<typeof getAdminPlans>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAdminPlans>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetAdminPlansQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getAdminPlans>>> = ({ signal }) => getAdminPlans({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getAdminPlans>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetAdminPlansQueryResult = NonNullable<Awaited<ReturnType<typeof getAdminPlans>>>
+export type GetAdminPlansQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all subscription plans (admin)
+ */
+
+export function useGetAdminPlans<TData = Awaited<ReturnType<typeof getAdminPlans>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getAdminPlans>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetAdminPlansQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getCreateAdminPlanUrl = () => {
+
+
+
+
+  return `/api/v1/admin/plans`
+}
+
+/**
+ * @summary Create a subscription plan
+ */
+export const createAdminPlan = async (adminPlanCreate: AdminPlanCreate, options?: RequestInit): Promise<CreateAdminPlan200> => {
+
+  return customFetch<CreateAdminPlan200>(getCreateAdminPlanUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(adminPlanCreate)
+  }
+);}
+
+
+
+
+export const getCreateAdminPlanMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdminPlan>>, TError,{data: BodyType<AdminPlanCreate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof createAdminPlan>>, TError,{data: BodyType<AdminPlanCreate>}, TContext> => {
+
+const mutationKey = ['createAdminPlan'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createAdminPlan>>, {data: BodyType<AdminPlanCreate>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createAdminPlan(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateAdminPlanMutationResult = NonNullable<Awaited<ReturnType<typeof createAdminPlan>>>
+    export type CreateAdminPlanMutationBody = BodyType<AdminPlanCreate>
+    export type CreateAdminPlanMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create a subscription plan
+ */
+export const useCreateAdminPlan = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createAdminPlan>>, TError,{data: BodyType<AdminPlanCreate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof createAdminPlan>>,
+        TError,
+        {data: BodyType<AdminPlanCreate>},
+        TContext
+      > => {
+      return useMutation(getCreateAdminPlanMutationOptions(options));
+    }
+
+export const getUpdateAdminPlanUrl = (id: string,) => {
+
+
+
+
+  return `/api/v1/admin/plans/${id}`
+}
+
+/**
+ * @summary Update a subscription plan
+ */
+export const updateAdminPlan = async (id: string,
+    adminPlanUpdate: AdminPlanUpdate, options?: RequestInit): Promise<UpdateAdminPlan200> => {
+
+  return customFetch<UpdateAdminPlan200>(getUpdateAdminPlanUrl(id),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(adminPlanUpdate)
+  }
+);}
+
+
+
+
+export const getUpdateAdminPlanMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdminPlan>>, TError,{id: string;data: BodyType<AdminPlanUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateAdminPlan>>, TError,{id: string;data: BodyType<AdminPlanUpdate>}, TContext> => {
+
+const mutationKey = ['updateAdminPlan'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateAdminPlan>>, {id: string;data: BodyType<AdminPlanUpdate>}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateAdminPlan(id,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateAdminPlanMutationResult = NonNullable<Awaited<ReturnType<typeof updateAdminPlan>>>
+    export type UpdateAdminPlanMutationBody = BodyType<AdminPlanUpdate>
+    export type UpdateAdminPlanMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Update a subscription plan
+ */
+export const useUpdateAdminPlan = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateAdminPlan>>, TError,{id: string;data: BodyType<AdminPlanUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateAdminPlan>>,
+        TError,
+        {id: string;data: BodyType<AdminPlanUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateAdminPlanMutationOptions(options));
     }
 
 export const getCreateListingLinkUrl = (id: string,) => {

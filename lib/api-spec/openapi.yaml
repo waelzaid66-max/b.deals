@@ -1979,6 +1979,127 @@ components:
           type: string
           enum: [db, env, none]
 
+    AdminPlan:
+      type: object
+      description: >
+        A subscription plan — the platform's economic levers (pricing, listing
+        quota, cost-per-lead, boost price, ranking weight, feature flags).
+      required:
+        - id
+        - slug
+        - name
+        - name_ar
+        - audience
+        - is_baseline
+        - monthly_price
+        - listing_quota
+        - active_listing_cap
+        - boost_price
+        - cpl_whatsapp
+        - cpl_call
+        - cpl_chat
+        - cpl_finance_request
+        - ranking_weight
+        - features
+        - is_active
+        - sort_order
+      properties:
+        id:
+          type: string
+        slug:
+          type: string
+        name:
+          type: string
+        name_ar:
+          type: string
+          nullable: true
+        audience:
+          type: string
+        is_baseline:
+          type: boolean
+        monthly_price:
+          type: number
+        listing_quota:
+          type: integer
+          nullable: true
+        active_listing_cap:
+          type: integer
+          nullable: true
+        boost_price:
+          type: number
+        cpl_whatsapp:
+          type: number
+        cpl_call:
+          type: number
+        cpl_chat:
+          type: number
+        cpl_finance_request:
+          type: number
+        ranking_weight:
+          type: number
+        features:
+          type: object
+          additionalProperties: true
+          nullable: true
+        is_active:
+          type: boolean
+        sort_order:
+          type: integer
+
+    AdminPlanUpdate:
+      type: object
+      description: Partial update — only the provided fields change.
+      properties:
+        name:
+          type: string
+        name_ar:
+          type: string
+          nullable: true
+        audience:
+          type: string
+          enum: [individual, dealer, company, enterprise]
+        is_baseline:
+          type: boolean
+        monthly_price:
+          type: number
+        listing_quota:
+          type: integer
+          nullable: true
+        active_listing_cap:
+          type: integer
+          nullable: true
+        boost_price:
+          type: number
+        cpl_whatsapp:
+          type: number
+        cpl_call:
+          type: number
+        cpl_chat:
+          type: number
+        cpl_finance_request:
+          type: number
+        ranking_weight:
+          type: number
+        features:
+          type: object
+          additionalProperties: true
+          nullable: true
+        is_active:
+          type: boolean
+        sort_order:
+          type: integer
+
+    AdminPlanCreate:
+      allOf:
+        - $ref: "#/components/schemas/AdminPlanUpdate"
+        - type: object
+          required:
+            - slug
+            - name
+          properties:
+            slug:
+              type: string
+
     PromoCampaignView:
       type: object
       description: >
@@ -7042,6 +7163,92 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PromoCampaignView"
+                  error:
+                    $ref: "#/components/schemas/ApiError"
+                    nullable: true
+
+  /v1/admin/plans:
+    get:
+      operationId: getAdminPlans
+      summary: List all subscription plans (admin)
+      description: >
+        Every plan across all audiences and statuses — the platform's economic
+        levers (pricing, quotas, cost-per-lead, boost, ranking, features).
+      tags: [admin]
+      security:
+        - ClerkAuth: []
+      responses:
+        "200":
+          description: Plans
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AdminPlan"
+                  error:
+                    $ref: "#/components/schemas/ApiError"
+                    nullable: true
+                  meta:
+                    $ref: "#/components/schemas/Meta"
+    post:
+      operationId: createAdminPlan
+      summary: Create a subscription plan
+      tags: [admin]
+      security:
+        - ClerkAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminPlanCreate"
+      responses:
+        "200":
+          description: Created plan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AdminPlan"
+                  error:
+                    $ref: "#/components/schemas/ApiError"
+                    nullable: true
+
+  /v1/admin/plans/{id}:
+    patch:
+      operationId: updateAdminPlan
+      summary: Update a subscription plan
+      tags: [admin]
+      security:
+        - ClerkAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminPlanUpdate"
+      responses:
+        "200":
+          description: Updated plan
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AdminPlan"
                   error:
                     $ref: "#/components/schemas/ApiError"
                     nullable: true

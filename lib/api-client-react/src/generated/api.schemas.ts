@@ -1435,6 +1435,70 @@ export interface EmailConfigTestResult {
   source: EmailConfigTestResultSource;
 }
 
+export type AdminPlanFeatures = { [key: string]: unknown } | null;
+
+/**
+ * A subscription plan — the platform's economic levers (pricing, listing quota, cost-per-lead, boost price, ranking weight, feature flags).
+ */
+export interface AdminPlan {
+  id: string;
+  slug: string;
+  name: string;
+  name_ar: string | null;
+  audience: string;
+  is_baseline: boolean;
+  monthly_price: number;
+  listing_quota: number | null;
+  active_listing_cap: number | null;
+  boost_price: number;
+  cpl_whatsapp: number;
+  cpl_call: number;
+  cpl_chat: number;
+  cpl_finance_request: number;
+  ranking_weight: number;
+  features: AdminPlanFeatures;
+  is_active: boolean;
+  sort_order: number;
+}
+
+export type AdminPlanUpdateAudience = typeof AdminPlanUpdateAudience[keyof typeof AdminPlanUpdateAudience];
+
+
+export const AdminPlanUpdateAudience = {
+  individual: 'individual',
+  dealer: 'dealer',
+  company: 'company',
+  enterprise: 'enterprise',
+} as const;
+
+export type AdminPlanUpdateFeatures = { [key: string]: unknown } | null;
+
+/**
+ * Partial update — only the provided fields change.
+ */
+export interface AdminPlanUpdate {
+  name?: string;
+  name_ar?: string | null;
+  audience?: AdminPlanUpdateAudience;
+  is_baseline?: boolean;
+  monthly_price?: number;
+  listing_quota?: number | null;
+  active_listing_cap?: number | null;
+  boost_price?: number;
+  cpl_whatsapp?: number;
+  cpl_call?: number;
+  cpl_chat?: number;
+  cpl_finance_request?: number;
+  ranking_weight?: number;
+  features?: AdminPlanUpdateFeatures;
+  is_active?: boolean;
+  sort_order?: number;
+}
+
+export type AdminPlanCreate = AdminPlanUpdate & {
+  slug: string;
+};
+
 export type PromoCampaignViewStatus = typeof PromoCampaignViewStatus[keyof typeof PromoCampaignViewStatus];
 
 
@@ -3947,6 +4011,22 @@ export type UpdatePromoCampaign200 = {
 
 export type RenewPromoCampaign200 = {
   data?: PromoCampaignView;
+  error?: ApiError | null;
+};
+
+export type GetAdminPlans200 = {
+  data?: AdminPlan[];
+  error?: ApiError | null;
+  meta?: Meta;
+};
+
+export type CreateAdminPlan200 = {
+  data?: AdminPlan;
+  error?: ApiError | null;
+};
+
+export type UpdateAdminPlan200 = {
+  data?: AdminPlan;
   error?: ApiError | null;
 };
 

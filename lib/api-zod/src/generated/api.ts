@@ -3641,6 +3641,149 @@ export const RenewPromoCampaignResponse = zod.object({
 
 
 /**
+ * Every plan across all audiences and statuses — the platform's economic levers (pricing, quotas, cost-per-lead, boost, ranking, features).
+ * @summary List all subscription plans (admin)
+ */
+export const GetAdminPlansResponse = zod.object({
+  "data": zod.array(zod.object({
+  "id": zod.string(),
+  "slug": zod.string(),
+  "name": zod.string(),
+  "name_ar": zod.string().nullable(),
+  "audience": zod.string(),
+  "is_baseline": zod.boolean(),
+  "monthly_price": zod.number(),
+  "listing_quota": zod.number().nullable(),
+  "active_listing_cap": zod.number().nullable(),
+  "boost_price": zod.number(),
+  "cpl_whatsapp": zod.number(),
+  "cpl_call": zod.number(),
+  "cpl_chat": zod.number(),
+  "cpl_finance_request": zod.number(),
+  "ranking_weight": zod.number(),
+  "features": zod.record(zod.string(), zod.unknown()).nullable(),
+  "is_active": zod.boolean(),
+  "sort_order": zod.number()
+}).describe('A subscription plan — the platform\'s economic levers (pricing, listing quota, cost-per-lead, boost price, ranking weight, feature flags).\n')).optional(),
+  "error": zod.object({
+  "code": zod.enum(['INVALID_DATA', 'NOT_FOUND', 'UNAUTHORIZED', 'INTERNAL_ERROR', 'FORBIDDEN', 'RATE_LIMITED']),
+  "message": zod.string()
+}).nullish(),
+  "meta": zod.object({
+  "cursor": zod.string().optional(),
+  "has_next": zod.boolean().optional(),
+  "total": zod.number().optional()
+}).optional()
+})
+
+
+/**
+ * @summary Create a subscription plan
+ */
+export const CreateAdminPlanBody = zod.object({
+  "name": zod.string(),
+  "name_ar": zod.string().nullish(),
+  "audience": zod.enum(['individual', 'dealer', 'company', 'enterprise']).optional(),
+  "is_baseline": zod.boolean().optional(),
+  "monthly_price": zod.number().optional(),
+  "listing_quota": zod.number().nullish(),
+  "active_listing_cap": zod.number().nullish(),
+  "boost_price": zod.number().optional(),
+  "cpl_whatsapp": zod.number().optional(),
+  "cpl_call": zod.number().optional(),
+  "cpl_chat": zod.number().optional(),
+  "cpl_finance_request": zod.number().optional(),
+  "ranking_weight": zod.number().optional(),
+  "features": zod.record(zod.string(), zod.unknown()).nullish(),
+  "is_active": zod.boolean().optional(),
+  "sort_order": zod.number().optional()
+}).describe('Partial update — only the provided fields change.').and(zod.object({
+  "slug": zod.string()
+}))
+
+export const CreateAdminPlanResponse = zod.object({
+  "data": zod.object({
+  "id": zod.string(),
+  "slug": zod.string(),
+  "name": zod.string(),
+  "name_ar": zod.string().nullable(),
+  "audience": zod.string(),
+  "is_baseline": zod.boolean(),
+  "monthly_price": zod.number(),
+  "listing_quota": zod.number().nullable(),
+  "active_listing_cap": zod.number().nullable(),
+  "boost_price": zod.number(),
+  "cpl_whatsapp": zod.number(),
+  "cpl_call": zod.number(),
+  "cpl_chat": zod.number(),
+  "cpl_finance_request": zod.number(),
+  "ranking_weight": zod.number(),
+  "features": zod.record(zod.string(), zod.unknown()).nullable(),
+  "is_active": zod.boolean(),
+  "sort_order": zod.number()
+}).optional().describe('A subscription plan — the platform\'s economic levers (pricing, listing quota, cost-per-lead, boost price, ranking weight, feature flags).\n'),
+  "error": zod.object({
+  "code": zod.enum(['INVALID_DATA', 'NOT_FOUND', 'UNAUTHORIZED', 'INTERNAL_ERROR', 'FORBIDDEN', 'RATE_LIMITED']),
+  "message": zod.string()
+}).nullish()
+})
+
+
+/**
+ * @summary Update a subscription plan
+ */
+export const UpdateAdminPlanParams = zod.object({
+  "id": zod.coerce.string()
+})
+
+export const UpdateAdminPlanBody = zod.object({
+  "name": zod.string().optional(),
+  "name_ar": zod.string().nullish(),
+  "audience": zod.enum(['individual', 'dealer', 'company', 'enterprise']).optional(),
+  "is_baseline": zod.boolean().optional(),
+  "monthly_price": zod.number().optional(),
+  "listing_quota": zod.number().nullish(),
+  "active_listing_cap": zod.number().nullish(),
+  "boost_price": zod.number().optional(),
+  "cpl_whatsapp": zod.number().optional(),
+  "cpl_call": zod.number().optional(),
+  "cpl_chat": zod.number().optional(),
+  "cpl_finance_request": zod.number().optional(),
+  "ranking_weight": zod.number().optional(),
+  "features": zod.record(zod.string(), zod.unknown()).nullish(),
+  "is_active": zod.boolean().optional(),
+  "sort_order": zod.number().optional()
+}).describe('Partial update — only the provided fields change.')
+
+export const UpdateAdminPlanResponse = zod.object({
+  "data": zod.object({
+  "id": zod.string(),
+  "slug": zod.string(),
+  "name": zod.string(),
+  "name_ar": zod.string().nullable(),
+  "audience": zod.string(),
+  "is_baseline": zod.boolean(),
+  "monthly_price": zod.number(),
+  "listing_quota": zod.number().nullable(),
+  "active_listing_cap": zod.number().nullable(),
+  "boost_price": zod.number(),
+  "cpl_whatsapp": zod.number(),
+  "cpl_call": zod.number(),
+  "cpl_chat": zod.number(),
+  "cpl_finance_request": zod.number(),
+  "ranking_weight": zod.number(),
+  "features": zod.record(zod.string(), zod.unknown()).nullable(),
+  "is_active": zod.boolean(),
+  "sort_order": zod.number()
+}).optional().describe('A subscription plan — the platform\'s economic levers (pricing, listing quota, cost-per-lead, boost price, ranking weight, feature flags).\n'),
+  "error": zod.object({
+  "code": zod.enum(['INVALID_DATA', 'NOT_FOUND', 'UNAUTHORIZED', 'INTERNAL_ERROR', 'FORBIDDEN', 'RATE_LIMITED']),
+  "message": zod.string()
+}).nullish()
+})
+
+
+/**
  * @summary Create a supply-chain link from a listing you own (Task
  */
 export const CreateListingLinkParams = zod.object({
