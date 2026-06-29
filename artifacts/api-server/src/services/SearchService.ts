@@ -1,6 +1,6 @@
 import { db } from "@workspace/db";
 import { listings, listingAttributes, listingMedia, paymentOptions, interactions, users, locations, industrialTypeEnum } from "@workspace/db/schema";
-import { and, eq, lte, gte, ilike, desc, asc, sql, count, inArray } from "drizzle-orm";
+import { and, or, eq, lte, gte, ilike, desc, asc, sql, count, inArray } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import { normalizePaymentOptions, computeOffers } from "./PaymentService";
 import { transformFeedItems } from "./BffService";
@@ -311,7 +311,20 @@ export async function searchListings(
   if (parsed.min_price) conditions.push(gte(listings.basePriceCash, String(parsed.min_price)));
   if (parsed.location) conditions.push(ilike(listings.location, `%${parsed.location}%`));
   if (parsed.search_term) {
-    conditions.push(ilike(listings.title, `%${parsed.search_term}%`));
+    // Philosophy principle 10 — find a listing by ANY of its data: the title, the
+    // description, OR any structured/custom spec VALUE (jsonb VALUES only, never the
+    // keys, so a generic key name like "fuel_type" can't false-match everything).
+    // This is what makes unlimited custom specs (Phase A) actually discoverable —
+    // e.g. a laser cutter found by "Raycus" even when it's only in a custom spec.
+    // ILIKE for now; a GIN/tsvector index is the planned scale-up for big catalogs.
+    const term = `%${parsed.search_term}%`;
+    conditions.push(
+      or(
+        ilike(listings.title, term),
+        ilike(listings.description, term),
+        sql`(jsonb_typeof(${listingAttributes.specs}) = 'object' AND EXISTS (SELECT 1 FROM jsonb_each_text(${listingAttributes.specs}) AS kv WHERE kv.value ILIKE ${term}))`
+      )!
+    );
   }
   // The recency keyset predicate only applies to the default/newest ordering.
   // It keys off the EFFECTIVE (bump-aware) recency timestamp so recycled
