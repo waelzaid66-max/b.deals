@@ -42,7 +42,7 @@ afterAll(async () => {
 describe("CandidateAttributeService — market-driven learning", () => {
   it("tracks a custom spec as a candidate (usage + distinct user + sample)", async () => {
     const u = await mkUser();
-    const key = uniq("powercap").toLowerCase();
+    const key = uniq("powercap").toLowerCase().replace(/[^a-z0-9]/g, "");
     keys.push(key);
 
     await trackCandidateAttributes({ category: "industrial", userId: u, specs: { [key]: "3 MW" } });
@@ -57,7 +57,7 @@ describe("CandidateAttributeService — market-driven learning", () => {
 
   it("counts DISTINCT users — the same user twice is 1 user, 2 usages", async () => {
     const u = await mkUser();
-    const key = uniq("workers").toLowerCase();
+    const key = uniq("workers").toLowerCase().replace(/[^a-z0-9]/g, "");
     keys.push(key);
 
     await trackCandidateAttributes({ category: "industrial", userId: u, specs: { [key]: "150" } });
@@ -66,6 +66,24 @@ describe("CandidateAttributeService — market-driven learning", () => {
     const [c] = await byKey(key);
     expect(c.usage_count).toBe(2);
     expect(c.user_count).toBe(1);
+  });
+
+  it("collapses key variants (underscore / spacing / case) into ONE candidate", async () => {
+    const u1 = await mkUser();
+    const u2 = await mkUser();
+    const base = uniq("powr").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const canonical = `${base} cap`; // normalized form (lower-case, single space)
+    keys.push(canonical);
+
+    // Same attribute written three ways across two users.
+    await trackCandidateAttributes({ category: "industrial", userId: u1, specs: { [`${base} cap`]: "1" } });
+    await trackCandidateAttributes({ category: "industrial", userId: u2, specs: { [`${base}_cap`]: "2" } });
+    await trackCandidateAttributes({ category: "industrial", userId: u1, specs: { [`${base.toUpperCase()}   CAP`]: "3" } });
+
+    const rows = await byKey(canonical);
+    expect(rows.length).toBe(1); // one merged candidate, not three
+    expect(rows[0].usage_count).toBe(3);
+    expect(rows[0].user_count).toBe(2); // u1 (twice) + u2
   });
 
   it("never tracks official/structured keys", async () => {
@@ -81,7 +99,7 @@ describe("CandidateAttributeService — market-driven learning", () => {
   });
 
   it("graduates a key once it reaches enough usage across enough distinct users", async () => {
-    const key = uniq("license").toLowerCase();
+    const key = uniq("license").toLowerCase().replace(/[^a-z0-9]/g, "");
     keys.push(key);
 
     const users: string[] = [];

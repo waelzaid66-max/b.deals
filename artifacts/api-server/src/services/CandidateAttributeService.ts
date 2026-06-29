@@ -30,8 +30,13 @@ const STRUCTURED_KEYS = new Set([
 export const GRADUATE_MIN_USAGE = 5;
 export const GRADUATE_MIN_USERS = 3;
 
+// Canonicalize a custom key so variants collapse to ONE candidate instead of
+// fragmenting the learning data into chaos: lower-case + unify underscores AND
+// any whitespace run into a single space. So "Power_Capacity", "power  capacity"
+// and "power capacity" are all the same attribute. (Synonyms/units/translation
+// are a later knowledge-layer concern — see banco-philosophy follow-ups.)
 function normalizeKey(k: string): string {
-  return k.trim().toLowerCase().replace(/\s+/g, " ");
+  return k.trim().toLowerCase().replace(/[_\s]+/g, " ");
 }
 
 function isStructured(normalizedKey: string): boolean {
