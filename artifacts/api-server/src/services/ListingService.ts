@@ -14,6 +14,7 @@ import { normalizeListing, detectDuplicate, computeTrustScore, validateMedia } f
 import { checkListingRate, auditListingFlag } from "./AbuseService";
 import { notifyNewMatch, notifyPriceDrop } from "./AlertService";
 import { recomputeDealerQuality } from "./QualityService";
+import { trackCandidateAttributes } from "./CandidateAttributeService";
 import { checkListingQuota, type UserRole } from "./PlanService";
 import { getLinksForListing } from "./ListingLinkService";
 import { mintContactToken } from "./LeadService";
@@ -400,6 +401,11 @@ export async function createListing(
       objectStorageService.promoteServingUrlToPublic(m.url, userId)
     )
   );
+
+  // Adaptive learning (best-effort, fire-and-forget): track free-form custom spec
+  // keys so ones repeated across enough distinct sellers graduate into official
+  // filters. Never blocks/affects the publish that already committed.
+  void trackCandidateAttributes({ category: input.category, userId: user.id, specs: input.specs });
 
   // Listing quality contributes to the dealer quality score.
   recomputeDealerQuality(user.id);

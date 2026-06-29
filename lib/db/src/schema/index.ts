@@ -617,6 +617,51 @@ export const listingAttributes = pgTable(
   ]
 );
 
+/* ── CANDIDATE ATTRIBUTES (adaptive learning — Market is the Source of Truth) ──
+ * Free-form custom spec keys sellers add (Phase A) are tracked here per category.
+ * A key used across enough listings BY ENOUGH DISTINCT USERS graduates from
+ * "candidate" → "graduated" (a future official filter). Purely additive +
+ * best-effort: nothing here ever blocks publishing. */
+export const candidateAttributes = pgTable(
+  "candidate_attributes",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    category: listingCategoryEnum("category").notNull(),
+    // Normalized (lower-cased, trimmed) custom spec key, e.g. "power capacity".
+    attrKey: text("attr_key").notNull(),
+    // A representative value, for human review of what this attribute holds.
+    sampleValue: text("sample_value"),
+    // Total listings that used this key; distinct users who used it.
+    usageCount: integer("usage_count").notNull().default(0),
+    userCount: integer("user_count").notNull().default(0),
+    // "candidate" → tracked/searchable; "graduated" → promoted to official.
+    status: text("status").notNull().default("candidate"),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("uniq_candidate_attr").on(table.category, table.attrKey),
+    index("idx_candidate_attr_status").on(table.status),
+  ]
+);
+
+// One row per (candidate, user) — lets userCount reflect DISTINCT users so a
+// single seller can't inflate a key into graduation on their own.
+export const candidateAttributeSeen = pgTable(
+  "candidate_attribute_seen",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    candidateId: uuid("candidate_id")
+      .references(() => candidateAttributes.id, { onDelete: "cascade" })
+      .notNull(),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => [uniqueIndex("uniq_candidate_seen").on(table.candidateId, table.userId)]
+);
+
 /* ── LISTING MEDIA ─────────────────────────────────────── */
 
 export const listingMedia = pgTable(
