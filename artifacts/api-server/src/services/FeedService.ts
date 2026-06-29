@@ -152,6 +152,7 @@ export async function getFeed(options: {
   finishingType?: string;
   compound?: boolean;
   furnished?: boolean;
+  offerType?: string;
   fuelType?: string;
   transmission?: string;
   brand?: string;
@@ -189,6 +190,7 @@ export async function getFeed(options: {
       finishing_type: options.finishingType,
       compound: options.compound,
       furnished: options.furnished,
+      offer_type: options.offerType,
       fuel_type: options.fuelType,
       transmission: options.transmission,
       brand: options.brand,

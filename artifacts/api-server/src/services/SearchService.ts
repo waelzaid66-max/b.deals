@@ -37,6 +37,8 @@ export interface ParsedSearchQuery {
   finishing_type?: string;
   compound?: boolean;
   furnished?: boolean;
+  // Real-estate offer type — "sale" (تمليك) vs "rent" (إيجار). Stored in specs.
+  offer_type?: string;
   fuel_type?: string;
   transmission?: string;
   brand?: string;
@@ -170,6 +172,7 @@ export function buildAttributeConditions(f: {
   finishing_type?: string;
   compound?: boolean;
   furnished?: boolean;
+  offer_type?: string;
   fuel_type?: string;
   transmission?: string;
   brand?: string;
@@ -205,6 +208,10 @@ export function buildAttributeConditions(f: {
   }
   if (f.furnished !== undefined) {
     conditions.push(sql`(${listingAttributes.specs}->>'furnished')::boolean = ${f.furnished}`);
+  }
+  // offer_type (sale/rent) lives only in specs JSON — the primary real-estate split.
+  if (f.offer_type) {
+    conditions.push(sql`${listingAttributes.specs}->>'offer_type' = ${f.offer_type}`);
   }
 
   // Car enum filters — same COALESCE(column, specs) completeness rule.
@@ -529,6 +536,7 @@ export async function getFacets(
     transmission,
     property_type,
     finishing_type,
+    offer_type,
     industrial_type,
     industry,
     origin_type,
@@ -548,6 +556,8 @@ export async function getFacets(
     groupMap(coalesce(sql`${listingAttributes.transmission}::text`, "transmission"), scoped),
     groupMap(coalesce(sql`${listingAttributes.propertyType}::text`, "property_type"), scoped),
     groupMap(coalesce(sql`${listingAttributes.finishingType}::text`, "finishing"), scoped),
+    // offer_type (sale/rent) is specs-only — no dedicated column to COALESCE.
+    groupMap(sql`${listingAttributes.specs}->>'offer_type'`, scoped),
     groupMap(sql`${listingAttributes.industrialType}::text`, scoped),
     groupMap(coalesce(sql`${listingAttributes.industry}::text`, "industry"), scoped),
     groupMap(coalesce(sql`${listingAttributes.originType}::text`, "origin_type"), scoped),
@@ -574,6 +584,7 @@ export async function getFacets(
     payment_plan,
     property_type,
     finishing_type,
+    offer_type,
     industrial_type,
     industry,
     origin_type,

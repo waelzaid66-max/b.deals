@@ -78,6 +78,7 @@ components:
         - payment_plan
         - property_type
         - finishing_type
+        - offer_type
         - industrial_type
         - industry
         - origin_type
@@ -112,6 +113,10 @@ components:
           additionalProperties:
             type: integer
         finishing_type:
+          type: object
+          additionalProperties:
+            type: integer
+        offer_type:
           type: object
           additionalProperties:
             type: integer
@@ -3103,6 +3108,12 @@ paths:
           schema:
             type: boolean
         - in: query
+          name: offer_type
+          description: Real-estate offer type — sale (تمليك) or rent (إيجار), from specs.offer_type.
+          schema:
+            type: string
+            enum: [sale, rent]
+        - in: query
           name: fuel_type
           description: Filter cars by fuel type (listing_attributes.fuel_type or specs).
           schema:
@@ -3755,6 +3766,12 @@ paths:
           description: Furnished real-estate (specs.furnished).
           schema:
             type: boolean
+        - in: query
+          name: offer_type
+          description: Real-estate offer type — sale (تمليك) or rent (إيجار), from specs.offer_type.
+          schema:
+            type: string
+            enum: [sale, rent]
         - in: query
           name: fuel_type
           description: Filter cars by fuel type (listing_attributes.fuel_type or specs).

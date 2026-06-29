@@ -803,6 +803,9 @@ const engineFilterFields = {
   finishing_type: z.string().trim().max(40).optional(),
   compound: boolParam.optional(),
   furnished: boolParam.optional(),
+  // Real-estate offer type: sale (تمليك / ownership) vs rent (إيجار). Stored in
+  // specs.offer_type; the primary real-estate split in the EG/Gulf markets.
+  offer_type: z.enum(["sale", "rent"]).optional(),
   // Car engine filters. fuel_type / transmission are real enum columns (with a
   // specs JSON fallback); brand / model match the English listing title (titles
   // are canonical "<Brand> <Model> <Year>") so `q` stays free for NLP text;
@@ -922,6 +925,7 @@ export const FacetCountsSchema = z.object({
   payment_plan: FacetMap,
   property_type: FacetMap,
   finishing_type: FacetMap,
+  offer_type: FacetMap,
   industrial_type: FacetMap,
   industry: FacetMap,
   origin_type: FacetMap,

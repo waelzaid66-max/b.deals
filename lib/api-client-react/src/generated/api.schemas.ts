@@ -54,6 +54,8 @@ export type FacetCountsPropertyType = {[key: string]: number};
 
 export type FacetCountsFinishingType = {[key: string]: number};
 
+export type FacetCountsOfferType = {[key: string]: number};
+
 export type FacetCountsIndustrialType = {[key: string]: number};
 
 export type FacetCountsIndustry = {[key: string]: number};
@@ -72,6 +74,7 @@ export interface FacetCounts {
   payment_plan: FacetCountsPaymentPlan;
   property_type: FacetCountsPropertyType;
   finishing_type: FacetCountsFinishingType;
+  offer_type: FacetCountsOfferType;
   industrial_type: FacetCountsIndustrialType;
   industry: FacetCountsIndustry;
   origin_type: FacetCountsOriginType;
@@ -2142,6 +2145,10 @@ compound?: boolean;
  */
 furnished?: boolean;
 /**
+ * Real-estate offer type — sale (تمليك) or rent (إيجار), from specs.offer_type.
+ */
+offer_type?: GetFeedOfferType;
+/**
  * Filter cars by fuel type (listing_attributes.fuel_type or specs).
  */
 fuel_type?: GetFeedFuelType;
@@ -2201,6 +2208,14 @@ export const GetFeedPaymentPlan = {
   bank: 'bank',
   direct: 'direct',
   islamic: 'islamic',
+} as const;
+
+export type GetFeedOfferType = typeof GetFeedOfferType[keyof typeof GetFeedOfferType];
+
+
+export const GetFeedOfferType = {
+  sale: 'sale',
+  rent: 'rent',
 } as const;
 
 export type GetFeedFuelType = typeof GetFeedFuelType[keyof typeof GetFeedFuelType];
@@ -2575,6 +2590,10 @@ compound?: boolean;
  */
 furnished?: boolean;
 /**
+ * Real-estate offer type — sale (تمليك) or rent (إيجار), from specs.offer_type.
+ */
+offer_type?: SearchListingsOfferType;
+/**
  * Filter cars by fuel type (listing_attributes.fuel_type or specs).
  */
 fuel_type?: SearchListingsFuelType;
@@ -2639,6 +2658,14 @@ export const SearchListingsPaymentPlan = {
   bank: 'bank',
   direct: 'direct',
   islamic: 'islamic',
+} as const;
+
+export type SearchListingsOfferType = typeof SearchListingsOfferType[keyof typeof SearchListingsOfferType];
+
+
+export const SearchListingsOfferType = {
+  sale: 'sale',
+  rent: 'rent',
 } as const;
 
 export type SearchListingsFuelType = typeof SearchListingsFuelType[keyof typeof SearchListingsFuelType];
