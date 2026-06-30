@@ -2,7 +2,7 @@ import { describe, it, expect, afterAll } from "vitest";
 import { eq } from "drizzle-orm";
 import { mapClusters, type ParsedSearchQuery } from "./SearchService";
 import { db, createUser, deleteUsers, uniq, randomUUID } from "../__tests__/helpers";
-import { listings, listingMedia } from "@workspace/db/schema";
+import { listings, listingMedia, listingAttributes } from "@workspace/db/schema";
 
 /**
  * #4 / Addition A5 — server-side map clustering. Proven on a real DB:
@@ -36,6 +36,44 @@ async function mkAt(sellerId: string, token: string, lat: number, lng: number): 
     thumbnailUrl: `https://example.test/${id}-thumb.jpg`,
     isThumbnail: true,
     sortOrder: 0,
+  });
+  ids.push(id);
+  return id;
+}
+
+async function mkReAt(
+  sellerId: string,
+  token: string,
+  offerType: "sale" | "rent",
+  lat: number,
+  lng: number,
+): Promise<string> {
+  const id = randomUUID();
+  await db.insert(listings).values({
+    id,
+    userId: sellerId,
+    title: `${token} ${offerType} apt`,
+    category: "real_estate",
+    status: "active",
+    basePriceCash: "3000000",
+    location: "Cairo",
+    latitude: String(lat),
+    longitude: String(lng),
+  });
+  await db.insert(listingMedia).values({
+    id: randomUUID(),
+    listingId: id,
+    type: "image",
+    url: `https://example.test/${id}.jpg`,
+    thumbnailUrl: `https://example.test/${id}-thumb.jpg`,
+    isThumbnail: true,
+    sortOrder: 0,
+  });
+  await db.insert(listingAttributes).values({
+    id: randomUUID(),
+    listingId: id,
+    specs: { offer_type: offerType, property_type: "apartment" },
+    propertyType: "apartment",
   });
   ids.push(id);
   return id;
@@ -83,5 +121,30 @@ describe("SearchService — server-side map clustering", () => {
     // brings it in → the bbox is the gate (additive, nothing else changed).
     const wide = await mapClusters(base, { min_lat: 25, max_lat: 45, min_lng: 25, max_lng: 45 }, 1);
     expect(wide.reduce((s, c) => s + c.count, 0)).toBe(5);
+  });
+
+  it("powers a Booking-style rental map — offer_type=rent clusters only rentals", async () => {
+    const seller = await createUser();
+    uids.push(seller);
+    const token = uniq("rentmap");
+
+    // A rental and a sale property, both inside the viewport.
+    await mkReAt(seller, token, "rent", 30.0, 31.0);
+    await mkReAt(seller, token, "sale", 30.01, 31.0);
+
+    const bbox = { min_lat: 29.5, max_lat: 31.0, min_lng: 30.5, max_lng: 32.0 };
+    const base: ParsedSearchQuery = { category: "real_estate", search_term: token };
+
+    // No offer_type → both properties counted.
+    const both = await mapClusters(base, bbox, 1);
+    expect(both.reduce((s, c) => s + c.count, 0)).toBe(2);
+
+    // offer_type=rent → ONLY the rental (the Booking "rentals on a map" view).
+    const rentOnly = await mapClusters({ ...base, offer_type: "rent" }, bbox, 1);
+    expect(rentOnly.reduce((s, c) => s + c.count, 0)).toBe(1);
+
+    // offer_type=sale → ONLY the sale (rent excluded — a real filter, not cosmetic).
+    const saleOnly = await mapClusters({ ...base, offer_type: "sale" }, bbox, 1);
+    expect(saleOnly.reduce((s, c) => s + c.count, 0)).toBe(1);
   });
 });
