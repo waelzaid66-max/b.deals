@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "BANCO",
-    "slug": "banco-mobile",
+    "name": "BANCO OOM",
+    "slug": "bancooom",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/banco-splash.png",
-    "scheme": "banco-mobile",
+    "icon": "./assets/images/icon.png",
+    "scheme": "bancooom",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
@@ -15,13 +15,13 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "it.banco.mobile",
+      "bundleIdentifier": "com.bancooom.app",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "BANCO accesses your photos and videos only when you choose them to add to a listing, a chat message, your profile picture, or your business verification documents and identity photo."
       }
     },
     "android": {
-      "package": "it.banco.mobile",
+      "package": "com.bancooom.app",
       "versionCode": 1,
       "permissions": [
         "android.permission.CAMERA"
