@@ -12,15 +12,19 @@ import OpenAI from "openai";
  * with a clear error, instead of crashing the whole process.
  */
 function resolveOpenAIConfig(): { apiKey: string; baseURL?: string } {
+  // An explicitly-provided OPENAI_API_KEY takes precedence. It is a deliberate
+  // operator choice and talks directly to api.openai.com, so it works even when
+  // Replit's managed AI sidecar (AI_INTEGRATIONS_*) is present but not yet
+  // activated by the platform. Remove OPENAI_API_KEY to fall back to managed AI.
+  const ownApiKey = process.env.OPENAI_API_KEY;
+  if (ownApiKey) {
+    return { apiKey: ownApiKey };
+  }
+
   const integrationBaseUrl = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL;
   const integrationApiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
   if (integrationBaseUrl && integrationApiKey) {
     return { apiKey: integrationApiKey, baseURL: integrationBaseUrl };
-  }
-
-  const ownApiKey = process.env.OPENAI_API_KEY;
-  if (ownApiKey) {
-    return { apiKey: ownApiKey };
   }
 
   throw new Error(
