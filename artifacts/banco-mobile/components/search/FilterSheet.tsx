@@ -26,7 +26,7 @@ import {
 } from "@/components/CategoryTabs";
 import { brandLabel, type CarBrand } from "@/constants/cars";
 import type { EngineDef } from "@/constants/engines";
-import { INDUSTRY_TYPES } from "@/constants/listingCreateTaxonomy";
+import { INDUSTRY_TYPES, RENTAL_TERMS } from "@/constants/listingCreateTaxonomy";
 import { useI18n } from "@/context/LanguageContext";
 import { useColors } from "@/hooks/useColors";
 import type {
@@ -147,6 +147,7 @@ export function FilterSheet({
   };
 
   const isCar = criteria.category === "car";
+  const isRealEstate = criteria.category === "real_estate";
   const isIndustrial = apiCategoryFor(criteria.category) === "industrial";
   const showEngines = engines.length > 1;
 
@@ -419,6 +420,26 @@ export function FilterSheet({
                   rowDir={rowDir}
                   colors={colors}
                   testPrefix="filter-transmission"
+                />
+              </>
+            )}
+
+            {/* Rental system (real estate) — furnished-daily / new-law / old-law /
+                annual contract, per the market's actual rental regimes. */}
+            {isRealEstate && (
+              <>
+                <SectionLabel text={t("create.fields.rentalTerm")} align={textAlign} colors={colors} />
+                <ToggleChipRow
+                  options={RENTAL_TERMS.map((r) => r.value)}
+                  selected={criteria.rentalTerm}
+                  labelFor={(v) => {
+                    const def = RENTAL_TERMS.find((r) => r.value === v);
+                    return def ? (isRTL ? def.ar : def.en) : v;
+                  }}
+                  onToggle={(v) => onUpdate({ rentalTerm: v })}
+                  rowDir={rowDir}
+                  colors={colors}
+                  testPrefix="filter-rental-term"
                 />
               </>
             )}

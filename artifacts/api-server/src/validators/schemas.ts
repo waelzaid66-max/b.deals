@@ -806,6 +806,10 @@ const engineFilterFields = {
   // Real-estate offer type: sale (تمليك / ownership) vs rent (إيجار). Stored in
   // specs.offer_type; the primary real-estate split in the EG/Gulf markets.
   offer_type: z.enum(["sale", "rent"]).optional(),
+  // Rental system within rent — the country's legal/duration regime (EG:
+  // furnished_daily / new_law / old_law; Gulf: annual_contract). Free string on
+  // purpose: the catalog is client-side and grows per country (adaptive data).
+  rental_term: z.string().max(40).optional(),
   // Car engine filters. fuel_type / transmission are real enum columns (with a
   // specs JSON fallback); brand / model match the English listing title (titles
   // are canonical "<Brand> <Model> <Year>") so `q` stays free for NLP text;

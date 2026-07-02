@@ -151,6 +151,56 @@ export const ORIGIN_COUNTRIES: { value: string; en: string; ar: string }[] = [
 ];
 
 /**
+ * Rental systems (نظام الإيجار) for real-estate rentals — each value encodes a
+ * real legal/duration regime, so renters see EXACTLY what contract they're
+ * getting (clarity that cuts scams and broker games):
+ *  - furnished_daily: furnished, bookable from a single day upward.
+ *  - new_law:  Egypt's new rental law — free contract, up to 5 years.
+ *  - old_law:  Egypt's old (rent-control) law — up to 59 years.
+ *  - annual_contract: the Gulf standard yearly tenancy (Ejar-style in KSA).
+ * Values are plain specs (adaptive-data philosophy): the server filters
+ * specs->>'rental_term' verbatim, so adding a country/term here is config-only.
+ */
+export const RENTAL_TERMS: { value: string; en: string; ar: string }[] = [
+  { value: "furnished_daily", en: "Furnished — from 1 day", ar: "مفروش — من يوم واحد" },
+  { value: "new_law", en: "New-law lease — up to 5 years", ar: "إيجار قانون جديد — حتى 5 سنوات" },
+  { value: "old_law", en: "Old-law lease — up to 59 years", ar: "إيجار قانون قديم — حتى 59 سنة" },
+  { value: "annual_contract", en: "Annual contract", ar: "عقد إيجار سنوي" },
+];
+
+/**
+ * Markets the platform serves (launch region + expansion wave), each mapped to
+ * the rental systems its law actually offers. Growing to a new country = one
+ * line here — search/feed/map need no changes (rental_term is a free spec).
+ */
+export const MARKET_COUNTRIES: {
+  value: string;
+  en: string;
+  ar: string;
+  rentalTerms: string[];
+}[] = [
+  { value: "EG", en: "Egypt", ar: "مصر", rentalTerms: ["furnished_daily", "new_law", "old_law"] },
+  { value: "SA", en: "Saudi Arabia", ar: "السعودية", rentalTerms: ["furnished_daily", "annual_contract"] },
+  { value: "AE", en: "UAE", ar: "الإمارات", rentalTerms: ["furnished_daily", "annual_contract"] },
+  { value: "KW", en: "Kuwait", ar: "الكويت", rentalTerms: ["furnished_daily", "annual_contract"] },
+  { value: "QA", en: "Qatar", ar: "قطر", rentalTerms: ["furnished_daily", "annual_contract"] },
+  { value: "JO", en: "Jordan", ar: "الأردن", rentalTerms: ["furnished_daily", "annual_contract"] },
+  { value: "OM", en: "Oman", ar: "عُمان", rentalTerms: ["furnished_daily", "annual_contract"] },
+  { value: "LY", en: "Libya", ar: "ليبيا", rentalTerms: ["furnished_daily", "annual_contract"] },
+];
+
+export const DEFAULT_MARKET_COUNTRY = "EG";
+
+/** The rental-term catalogue rows available in a given market country. */
+export function rentalTermsForCountry(
+  country: string = DEFAULT_MARKET_COUNTRY,
+): { value: string; en: string; ar: string }[] {
+  const market = MARKET_COUNTRIES.find((c) => c.value === country);
+  const allowed = new Set(market?.rentalTerms ?? MARKET_COUNTRIES[0].rentalTerms);
+  return RENTAL_TERMS.filter((t) => allowed.has(t.value));
+}
+
+/**
  * Category-specific structured fields. Free-text is reserved for genuinely
  * open values (color, capacity output, brand text); every taxonomy/core field
  * is a controlled select. Cars also use the dedicated CarPicker (brand/model)
@@ -179,6 +229,15 @@ export const SPEC_FIELDS_BY_UI: Record<UiListingCategory, SpecField[]> = {
         { value: "sale", labelKey: "create.opts.sale" },
         { value: "rent", labelKey: "create.opts.rent" },
       ],
+    },
+    // Rental system — shown ONLY when offer_type=rent (see visibleSpecFieldsFor).
+    // Launch market is Egypt, so the default-country terms render; per-country
+    // terms switch automatically once multi-country locations land.
+    {
+      key: "rental_term",
+      labelKey: "create.fields.rentalTerm",
+      type: "select",
+      options: enumOptions(rentalTermsForCountry(DEFAULT_MARKET_COUNTRY)),
     },
     { key: "property_type", labelKey: "create.fields.propertyType", type: "select", required: true, options: enumOptions(PROPERTY_TYPES) },
     { key: "area", labelKey: "create.fields.area", placeholderKey: "create.fields.areaPh", type: "number", required: true },
@@ -287,8 +346,12 @@ export function visibleSpecFieldsFor(
   ui: UiListingCategory,
   specs: Record<string, string | undefined>
 ): SpecField[] {
-  const fields = SPEC_FIELDS_BY_UI[ui];
+  let fields = SPEC_FIELDS_BY_UI[ui];
   if (ui === "real_estate") {
+    // rental_term only makes sense for rentals — hidden until offer_type=rent.
+    if (specs.offer_type !== "rent") {
+      fields = fields.filter((f) => f.key !== "rental_term");
+    }
     const pt = specs.property_type ?? "";
     if ((REAL_ESTATE_NO_ROOMS_TYPES as readonly string[]).includes(pt)) {
       return fields.filter((f) => !RE_HIDDEN_FOR_NO_ROOMS.has(f.key));

@@ -2223,6 +2223,10 @@ furnished?: boolean;
  */
 offer_type?: GetFeedOfferType;
 /**
+ * Rental system within rent — the country's legal/duration regime (Egypt: furnished_daily from 1 day, new_law up to 5 years, old_law up to 59 years; Gulf: annual_contract). Free string; the catalog is client-side and grows per country.
+ */
+rental_term?: string;
+/**
  * Filter cars by fuel type (listing_attributes.fuel_type or specs).
  */
 fuel_type?: GetFeedFuelType;
@@ -2668,6 +2672,10 @@ furnished?: boolean;
  */
 offer_type?: SearchListingsOfferType;
 /**
+ * Rental system within rent — the country's legal/duration regime (Egypt: furnished_daily from 1 day, new_law up to 5 years, old_law up to 59 years; Gulf: annual_contract). Free string; the catalog is client-side and grows per country.
+ */
+rental_term?: string;
+/**
  * Filter cars by fuel type (listing_attributes.fuel_type or specs).
  */
 fuel_type?: SearchListingsFuelType;
@@ -2828,6 +2836,10 @@ furnished?: boolean;
  * sale (تمليك) or rent (إيجار).
  */
 offer_type?: GetMapClustersOfferType;
+/**
+ * Rental regime (furnished_daily / new_law / old_law / annual_contract).
+ */
+rental_term?: string;
 fuel_type?: GetMapClustersFuelType;
 transmission?: GetMapClustersTransmission;
 brand?: string;

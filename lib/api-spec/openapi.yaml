@@ -3257,6 +3257,15 @@ paths:
             type: string
             enum: [sale, rent]
         - in: query
+          name: rental_term
+          description: >-
+            Rental system within rent — the country's legal/duration regime
+            (Egypt: furnished_daily from 1 day, new_law up to 5 years, old_law up
+            to 59 years; Gulf: annual_contract). Free string; the catalog is
+            client-side and grows per country.
+          schema:
+            type: string
+        - in: query
           name: fuel_type
           description: Filter cars by fuel type (listing_attributes.fuel_type or specs).
           schema:
@@ -3916,6 +3925,15 @@ paths:
             type: string
             enum: [sale, rent]
         - in: query
+          name: rental_term
+          description: >-
+            Rental system within rent — the country's legal/duration regime
+            (Egypt: furnished_daily from 1 day, new_law up to 5 years, old_law up
+            to 59 years; Gulf: annual_contract). Free string; the catalog is
+            client-side and grows per country.
+          schema:
+            type: string
+        - in: query
           name: fuel_type
           description: Filter cars by fuel type (listing_attributes.fuel_type or specs).
           schema:
@@ -4078,6 +4096,10 @@ paths:
           name: offer_type
           description: sale (تمليك) or rent (إيجار).
           schema: { type: string, enum: [sale, rent] }
+        - in: query
+          name: rental_term
+          description: Rental regime (furnished_daily / new_law / old_law / annual_contract).
+          schema: { type: string }
         - in: query
           name: fuel_type
           schema: { type: string, enum: [petrol, diesel, hybrid, electric, natural_gas] }

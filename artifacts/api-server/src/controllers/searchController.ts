@@ -30,6 +30,7 @@ function parsedFromSearchQuery(query: z.infer<typeof SearchQuerySchema>) {
   if (query.compound !== undefined) parsed.compound = query.compound;
   if (query.furnished !== undefined) parsed.furnished = query.furnished;
   if (query.offer_type) parsed.offer_type = query.offer_type;
+  if (query.rental_term) parsed.rental_term = query.rental_term;
   if (query.fuel_type) parsed.fuel_type = query.fuel_type;
   if (query.transmission) parsed.transmission = query.transmission;
   if (query.brand) parsed.brand = query.brand;

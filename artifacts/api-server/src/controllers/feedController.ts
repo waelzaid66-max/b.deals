@@ -18,6 +18,7 @@ export async function feedHandler(req: Request, res: Response) {
       compound: query.compound,
       furnished: query.furnished,
       offerType: query.offer_type,
+      rentalTerm: query.rental_term,
       fuelType: query.fuel_type,
       transmission: query.transmission,
       brand: query.brand,

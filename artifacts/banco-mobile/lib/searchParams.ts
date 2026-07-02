@@ -42,6 +42,9 @@ export interface SearchCriteria {
   maxPrice: string;
   location: string;
   paymentType: PaymentType;
+  /** Real-estate rental system (specs.rental_term) — furnished_daily / new_law /
+   *  old_law / annual_contract; null = any. */
+  rentalTerm: string | null;
   /** Car brand/model — matched against the English listing title server-side. */
   brand: string | null;
   model: string | null;
@@ -64,6 +67,7 @@ export const DEFAULT_CRITERIA: SearchCriteria = {
   maxPrice: "",
   location: "",
   paymentType: "any",
+  rentalTerm: null,
   brand: null,
   model: null,
   fuelType: null,
@@ -89,6 +93,7 @@ export function hasActiveCriteria(c: SearchCriteria): boolean {
     !!c.maxPrice ||
     !!c.location ||
     c.paymentType !== "any" ||
+    !!c.rentalTerm ||
     !!c.brand ||
     !!c.model ||
     !!c.fuelType ||
@@ -115,6 +120,7 @@ export function criteriaKey(c: SearchCriteria): string {
     c.maxPrice,
     c.location.trim(),
     c.paymentType,
+    c.rentalTerm,
     c.brand,
     c.model,
     c.fuelType,
@@ -165,6 +171,7 @@ export function buildSearchParams(
 
   if (c.location.trim()) sp.location = c.location.trim();
   if (c.paymentType === "installment") sp.has_installment = true;
+  if (c.rentalTerm) sp.rental_term = c.rentalTerm;
 
   if (c.brand) sp.brand = c.brand;
   if (c.model) sp.model = c.model;

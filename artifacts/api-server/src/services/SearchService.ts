@@ -39,6 +39,10 @@ export interface ParsedSearchQuery {
   furnished?: boolean;
   // Real-estate offer type — "sale" (تمليك) vs "rent" (إيجار). Stored in specs.
   offer_type?: string;
+  // Rental system for rent listings — the country's legal/duration regime
+  // (EG: furnished_daily / new_law ≤5y / old_law ≤59y; Gulf: annual_contract).
+  // Free string in specs, per the adaptive-data philosophy (catalog lives client-side).
+  rental_term?: string;
   fuel_type?: string;
   transmission?: string;
   brand?: string;
@@ -173,6 +177,7 @@ export function buildAttributeConditions(f: {
   compound?: boolean;
   furnished?: boolean;
   offer_type?: string;
+  rental_term?: string;
   fuel_type?: string;
   transmission?: string;
   brand?: string;
@@ -212,6 +217,10 @@ export function buildAttributeConditions(f: {
   // offer_type (sale/rent) lives only in specs JSON — the primary real-estate split.
   if (f.offer_type) {
     conditions.push(sql`${listingAttributes.specs}->>'offer_type' = ${f.offer_type}`);
+  }
+  // rental_term — the rental regime within offer_type=rent (specs-only, like offer_type).
+  if (f.rental_term) {
+    conditions.push(sql`${listingAttributes.specs}->>'rental_term' = ${f.rental_term}`);
   }
 
   // Car enum filters — same COALESCE(column, specs) completeness rule.
