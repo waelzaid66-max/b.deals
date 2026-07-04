@@ -115,23 +115,23 @@ const CAR_ENGINES: EngineDef[] = [
 ];
 
 // Real estate: the primary EG/Gulf split is offer type (تمليك sale / إيجار rent)
-// — surfaced first, right after "all" (sale before rent). These are new taxonomy
-// (specs.offer_type), so they fail CLOSED via requiresFacet: a chip only appears
-// once real rent/sale inventory exists, never yielding an empty results page.
-// Then property types + compound/furnished + the financing modes present in data.
+// — surfaced first, right after "all" (sale before rent). This is the FUNDAMENTAL
+// real-estate axis (like Booking's buy/rent), so it is ALWAYS visible — not
+// fail-closed — even before inventory exists: a buyer must always see that rent
+// and ownership are supported, and an empty "no rentals yet" page is expected +
+// honest at launch (and nudges supply). The FINE facets below (furnished, laws,
+// payment plans) stay data-gated so they never offer an empty refinement.
 const REAL_ESTATE_ENGINES: EngineDef[] = [
   ALL_ENGINE,
   {
     key: "sale",
     i18nKey: "home.engines.sale",
     params: { offer_type: "sale" },
-    requiresFacet: true,
   },
   {
     key: "rent",
     i18nKey: "home.engines.rent",
     params: { offer_type: "rent" },
-    requiresFacet: true,
   },
   {
     key: "villa",
