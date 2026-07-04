@@ -33,6 +33,22 @@ function resolveOpenAIConfig(): { apiKey: string; baseURL?: string } {
   );
 }
 
+/**
+ * The default chat model, chosen to match whichever backend {@link resolveOpenAIConfig}
+ * will use — so the assistant works out of the box with nothing but a key:
+ *
+ *  - A direct `OPENAI_API_KEY` talks to api.openai.com, where the Replit-managed
+ *    catalog name (`gpt-5.4`) does NOT exist. Default to a model that always does.
+ *  - Otherwise the Replit managed AI integration is active; use its catalog default.
+ *
+ * An explicit `OPENAI_MODEL` always overrides this at the call site, so operators
+ * can pin any model their account actually has without a code change.
+ */
+export function defaultChatModel(): string {
+  if (process.env.OPENAI_API_KEY) return "gpt-4o-mini";
+  return "gpt-5.4";
+}
+
 let cached: OpenAI | null = null;
 
 function getOpenAIClient(): OpenAI {

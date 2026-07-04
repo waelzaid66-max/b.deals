@@ -4,6 +4,12 @@ export default defineConfig({
   test: {
     environment: "node",
     include: ["src/**/*.test.ts"],
+    // Production and CI run in UTC. Pin the test process to UTC too so the
+    // recency keyset (a `timestamp without time zone` column round-tripped
+    // through node-postgres) compares identically on any developer machine —
+    // a non-UTC local timezone otherwise breaks tie-boundary equality and
+    // makes newest-sort pagination assertions fail locally only.
+    env: { TZ: "UTC" },
     // DB-integration suites share the same Postgres tables and module-level
     // durable counters; never interleave them across files.
     fileParallelism: false,

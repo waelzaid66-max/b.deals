@@ -1,1 +1,1 @@
-export { openai } from "./_client";
+export { openai, defaultChatModel } from "./_client";
