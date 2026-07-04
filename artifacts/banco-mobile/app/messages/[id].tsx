@@ -32,6 +32,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppText } from "@/components/AppText";
+import { AppTextInput } from "@/components/AppTextInput";
 import { useI18n } from "@/context/LanguageContext";
 import { useColors } from "@/hooks/useColors";
 import { uploadImageAsset } from "@/lib/upload";
@@ -793,7 +794,7 @@ export default function ThreadScreen() {
               <Feather name="image" size={20} color={colors.mutedForeground} />
             )}
           </Pressable>
-          <TextInput
+          <AppTextInput
             value={draft}
             onChangeText={setDraft}
             placeholder={t("messages.inputPlaceholder")}
