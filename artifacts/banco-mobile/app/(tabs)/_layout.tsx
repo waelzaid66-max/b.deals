@@ -254,7 +254,10 @@ function CapsuleTabBar({ state, navigation }: TabBarProps) {
                   // static and crisp (never animated in the tab bar). Focus is
                   // communicated by opacity so the metallic texture stays intact.
                   <View style={{ opacity: focused ? 1 : 0.45 }}>
-                    <BGlyph height={22} />
+                    {/* height 30 (not 22): the B letter fills only part of the
+                        cropped wordmark, so a larger box makes the VISIBLE B
+                        match the 22px sibling tab icons. Logo pixels untouched. */}
+                    <BGlyph height={30} />
                   </View>
                 ) : (
                   <TabBarIcon name={cfg.icon} color={tint} focused={focused} />
