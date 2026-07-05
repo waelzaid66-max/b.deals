@@ -51,6 +51,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppText } from "@/components/AppText";
 import { DealRatingChip } from "@/components/DealRatingChip";
+import { BookingCard } from "@/components/BookingCard";
 import { LinkedListings } from "@/components/LinkedListings";
 import { ListingComments } from "@/components/ListingComments";
 import { MediaGallery } from "@/components/MediaGallery";
@@ -693,6 +694,16 @@ export default function ListingDetailScreen() {
   const isOwner = !!meId && meId === listing.seller?.id;
   const isSold = listing.status === "sold";
 
+  // Role separation, made visible: only furnished/daily real-estate is bookable
+  // (the hotel mode). Long-term rent and sale keep the plain contact-owner flow.
+  // Owners and sold listings never show the guest booking widget.
+  const isBookable =
+    listing.category === "real_estate" &&
+    (listing.specs as Record<string, unknown> | undefined)?.rental_term ===
+      "furnished_daily" &&
+    !isOwner &&
+    !isSold;
+
   // Distinct real monthly amounts from the listing's plans — the buyer picks a
   // target budget; we never fabricate figures.
   const monthlyOptions = Array.from(
@@ -1027,6 +1038,10 @@ export default function ListingDetailScreen() {
               </Pressable>
             ) : null}
           </View>
+
+          {isBookable ? (
+            <BookingCard listingId={listing.id} pricePerNight={listing.price_cash} />
+          ) : null}
 
           {listing.seller?.id ? (
             <SellerRatingBar sellerId={listing.seller.id} />

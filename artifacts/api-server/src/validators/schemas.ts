@@ -276,6 +276,8 @@ export const ListingDetailSchema = z
     description: z.string().nullable(),
     category: z.enum(["car", "real_estate", "industrial"]),
     price_display: z.string(),
+    // Additive: raw numeric cash price (per-night rate for furnished/daily rent).
+    price_cash: z.number().nullable().optional(),
     location: z.string(),
     status: z.enum(["active", "sold", "archived"]),
     created_at: z.string(),

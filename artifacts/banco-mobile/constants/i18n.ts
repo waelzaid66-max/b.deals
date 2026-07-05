@@ -1686,6 +1686,21 @@ const en = {
     fair: "Fair price",
     above: "Above market",
   },
+  booking: {
+    title: "Book your stay",
+    night: "night",
+    currency: "EGP",
+    pickHint: "Pick your check-in and check-out dates",
+    dates: "Dates",
+    nights: "Nights",
+    guests: "Guests",
+    estTotal: "Estimated total",
+    reserve: "Reserve",
+    requestNote: "You send a booking request — the host confirms. No charge now.",
+    errorTaken: "Those dates were just taken. Please pick again.",
+    confirmedTitle: "Booking requested",
+    confirmedBody: "The host will confirm your stay shortly. You can chat with them from this listing.",
+  },
 };
 
 const ar: typeof en = {
@@ -3368,6 +3383,21 @@ const ar: typeof en = {
     good: "سعر جيد",
     fair: "سعر عادل",
     above: "أعلى من السوق",
+  },
+  booking: {
+    title: "احجز إقامتك",
+    night: "ليلة",
+    currency: "ج.م",
+    pickHint: "اختر تاريخ الوصول والمغادرة",
+    dates: "التواريخ",
+    nights: "الليالي",
+    guests: "الضيوف",
+    estTotal: "الإجمالي التقديري",
+    reserve: "احجز الآن",
+    requestNote: "ترسل طلب حجز والمالك يؤكده. لا خصم الآن.",
+    errorTaken: "هذه التواريخ حُجزت للتو. برجاء الاختيار من جديد.",
+    confirmedTitle: "تم إرسال الحجز",
+    confirmedBody: "سيؤكد المالك إقامتك قريبًا. يمكنك مراسلته من هذا الإعلان.",
   },
 };
 

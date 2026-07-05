@@ -399,6 +399,14 @@ components:
           enum: [car, real_estate, industrial]
         price_display:
           type: string
+        price_cash:
+          type: number
+          nullable: true
+          description: >-
+            Additive. Raw numeric cash price. For furnished/daily rentals this is
+            the per-night rate the booking widget multiplies by the night count
+            for a pre-booking estimate; the server stays authoritative on the
+            real total. Null when unknown.
         location:
           type: string
         status:

@@ -379,6 +379,7 @@ export const GetListingResponse = zod.object({
   "description": zod.string().nullish(),
   "category": zod.enum(['car', 'real_estate', 'industrial']),
   "price_display": zod.string(),
+  "price_cash": zod.number().nullish().describe('Additive. Raw numeric cash price. For furnished\/daily rentals this is the per-night rate the booking widget multiplies by the night count for a pre-booking estimate; the server stays authoritative on the real total. Null when unknown.'),
   "location": zod.string(),
   "status": zod.enum(['active', 'sold', 'archived']),
   "created_at": zod.coerce.date(),

@@ -364,6 +364,8 @@ export interface ListingDetail {
   description?: string | null;
   category: ListingDetailCategory;
   price_display: string;
+  /** Additive. Raw numeric cash price. For furnished/daily rentals this is the per-night rate the booking widget multiplies by the night count for a pre-booking estimate; the server stays authoritative on the real total. Null when unknown. */
+  price_cash?: number | null;
   location: string;
   status: ListingDetailStatus;
   created_at: string;

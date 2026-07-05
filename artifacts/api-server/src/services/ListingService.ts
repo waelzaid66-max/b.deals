@@ -620,6 +620,11 @@ export async function getListingDetail(listingId: string, viewerClerkId?: string
     description: listing.description,
     category: listing.category,
     price_display: formatEGP(listing.base_price_cash),
+    // Additive: the raw numeric cash price. For furnished/daily rentals it is the
+    // per-night rate the booking widget multiplies by the night count for a
+    // pre-booking estimate (the server stays authoritative on the real total).
+    price_cash:
+      typeof listing.base_price_cash === "number" ? listing.base_price_cash : null,
     location: listing.location,
     status: listing.status,
     created_at: listing.created_at?.toISOString() ?? new Date().toISOString(),
