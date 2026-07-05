@@ -14,7 +14,9 @@ export type NotificationType =
   | "review"
   // Additive (Task #40): B2B investment interest + global-supply response.
   | "investment"
-  | "global_supply";
+  | "global_supply"
+  // Additive: new short-stay booking request on a furnished/daily listing.
+  | "booking";
 
 export interface NotificationDTO {
   id: string;

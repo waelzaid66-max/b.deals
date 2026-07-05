@@ -89,7 +89,7 @@ const REPORT_REASON_MAP: Record<
 
 
 export default function ListingDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id, focus } = useLocalSearchParams<{ id: string; focus?: string }>();
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const { t, isRTL } = useI18n();
@@ -127,6 +127,34 @@ export default function ListingDetailScreen() {
   const [openingChat, setOpeningChat] = useState(false);
   const [marking, setMarking] = useState(false);
   const hasSignaled = useRef(false);
+
+  // Deep-link focus (from the real-estate map pin or a booking notification):
+  // `?focus=booking` lands the guest directly on the BookingCard. Best-effort and
+  // fully guarded — if the card isn't present (not a furnished/daily rental) or
+  // the platform can't measure (web), it simply no-ops and never affects the page.
+  const scrollRef = useRef<ScrollView>(null);
+  const bookingWrapRef = useRef<View>(null);
+  const didFocusBooking = useRef(false);
+  useEffect(() => {
+    if (focus !== "booking" || !listing || didFocusBooking.current) return;
+    const timer = setTimeout(() => {
+      const scroll = scrollRef.current;
+      const wrap = bookingWrapRef.current;
+      if (!scroll || !wrap) return;
+      const node = (
+        scroll as unknown as { getInnerViewNode?: () => number }
+      ).getInnerViewNode?.();
+      if (node == null || typeof wrap.measureLayout !== "function") return;
+      didFocusBooking.current = true;
+      wrap.measureLayout(
+        node,
+        (_x: number, y: number) =>
+          scroll.scrollTo({ y: Math.max(0, y - 16), animated: true }),
+        () => {},
+      );
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [focus, listing]);
 
   // Cache-first: if this listing was just seen in a feed/saved rail we already
   // hold a lightweight FeedItem for it. We paint its image, price and title
@@ -909,6 +937,7 @@ export default function ListingDetailScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView
+        ref={scrollRef}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: bottomBarHeight + 20 }}
       >
@@ -1040,7 +1069,9 @@ export default function ListingDetailScreen() {
           </View>
 
           {isBookable ? (
-            <BookingCard listingId={listing.id} pricePerNight={listing.price_cash} />
+            <View ref={bookingWrapRef} collapsable={false}>
+              <BookingCard listingId={listing.id} pricePerNight={listing.price_cash} />
+            </View>
           ) : null}
 
           {listing.seller?.id ? (

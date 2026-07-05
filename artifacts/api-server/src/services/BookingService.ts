@@ -11,6 +11,7 @@
 import { db } from "@workspace/db";
 import { bookings, listings, listingAttributes, users } from "@workspace/db/schema";
 import { and, eq, inArray, lt, gt, desc } from "drizzle-orm";
+import { createNotification } from "./NotificationService";
 
 function codedError(code: string, message: string): Error {
   return Object.assign(new Error(message), { code });
@@ -94,6 +95,7 @@ export async function createBooking(
       category: listings.category,
       status: listings.status,
       ownerId: listings.userId,
+      title: listings.title,
       specs: listingAttributes.specs,
     })
     .from(listings)
@@ -157,6 +159,19 @@ export async function createBooking(
       status: "requested",
     })
     .returning();
+
+  // Notify the host that a stay was requested — makes the inbox live. Best-effort
+  // and deferred so it never blocks or fails the booking (createNotification also
+  // swallows its own errors and respects the host's per-category mute).
+  setImmediate(() => {
+    void createNotification({
+      userId: row.ownerId as string,
+      type: "booking",
+      title: "New booking request",
+      body: `${nights} night${nights === 1 ? "" : "s"} · ${checkIn} → ${checkOut} for "${row.title}"`,
+      data: { listing_id: listingId, booking_id: b.id },
+    });
+  });
 
   return toDTO(b);
 }

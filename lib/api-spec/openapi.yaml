@@ -640,7 +640,7 @@ components:
           type: string
         type:
           type: string
-          enum: [message, lead, system, rfq, new_match, price_drop, comment, review]
+          enum: [message, lead, system, rfq, new_match, price_drop, comment, review, investment, global_supply, booking]
         title:
           type: string
         body:
@@ -787,7 +787,7 @@ components:
       properties:
         type:
           type: string
-          enum: [message, lead, system, rfq, new_match, price_drop, comment, review]
+          enum: [message, lead, system, rfq, new_match, price_drop, comment, review, investment, global_supply, booking]
         in_app:
           type: boolean
         email:

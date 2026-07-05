@@ -780,7 +780,15 @@ export default function SearchScreen() {
             items={mappableItems}
             criteria={criteria}
             onOpenListing={handleCardPress}
-            onOpenListingId={(id) => router.push(`/listing/${id}`)}
+            onOpenListingId={(id) =>
+              router.push(
+                // From a real-estate map, land the guest on the booking widget if
+                // the listing is a furnished/daily rental (harmless no-op otherwise).
+                criteria.category === "real_estate"
+                  ? `/listing/${id}?focus=booking`
+                  : `/listing/${id}`,
+              )
+            }
             onSave={toggleSave}
             isSaved={isSaved}
           />

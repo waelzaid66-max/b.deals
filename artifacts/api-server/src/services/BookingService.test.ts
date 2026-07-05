@@ -1,7 +1,7 @@
 import { describe, it, expect, afterAll } from "vitest";
-import { inArray } from "drizzle-orm";
+import { inArray, eq } from "drizzle-orm";
 import { db, randomUUID, uniq, deleteUsers } from "../__tests__/helpers";
-import { users, listings, listingAttributes } from "@workspace/db/schema";
+import { users, listings, listingAttributes, notifications } from "@workspace/db/schema";
 import {
   createBooking,
   getListingAvailability,
@@ -50,8 +50,9 @@ async function seedListing(
 }
 
 afterAll(async () => {
-  // listings cascade → bookings + attributes; then users.
+  // listings cascade → bookings + attributes; drop host notifications, then users.
   if (lids.length) await db.delete(listings).where(inArray(listings.id, lids));
+  if (uids.length) await db.delete(notifications).where(inArray(notifications.userId, uids));
   await deleteUsers(...uids);
 });
 
@@ -153,6 +154,30 @@ describe("BookingService — furnished/daily hotel model", () => {
       check_out: "2030-06-03",
     });
     expect(ok.nights).toBe(1);
+  });
+
+  it("notifies the host when a stay is requested (booking notification)", async () => {
+    const owner = await seedUser();
+    const guest = await seedUser();
+    const lid = await seedListing(owner.id, "furnished_daily", "real_estate", "500");
+    const b = await createBooking(guest.clerk, lid, {
+      check_in: "2030-08-10",
+      check_out: "2030-08-12",
+    });
+
+    // The notification fires on setImmediate (best-effort, off the response path),
+    // so poll briefly for the host's row rather than racing a single tick.
+    let note: { type: string; data: unknown } | undefined;
+    for (let i = 0; i < 20 && !note; i++) {
+      await new Promise((r) => setTimeout(r, 50));
+      const rows = await db
+        .select({ type: notifications.type, data: notifications.data })
+        .from(notifications)
+        .where(eq(notifications.userId, owner.id));
+      note = rows.find((r) => r.type === "booking");
+    }
+    expect(note).toBeTruthy();
+    expect((note!.data as { booking_id?: string }).booking_id).toBe(b.id);
   });
 
   it("enforces role separation on transitions (guest can't confirm, host can't cancel)", async () => {

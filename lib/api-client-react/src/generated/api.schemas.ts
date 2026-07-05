@@ -517,6 +517,9 @@ export const NotificationType = {
   price_drop: 'price_drop',
   comment: 'comment',
   review: 'review',
+  investment: 'investment',
+  global_supply: 'global_supply',
+  booking: 'booking',
 } as const;
 
 export type NotificationData = { [key: string]: unknown } | null;
@@ -647,6 +650,9 @@ export const NotificationPreferenceType = {
   price_drop: 'price_drop',
   comment: 'comment',
   review: 'review',
+  investment: 'investment',
+  global_supply: 'global_supply',
+  booking: 'booking',
 } as const;
 
 /**

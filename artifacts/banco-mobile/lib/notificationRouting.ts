@@ -40,6 +40,12 @@ export function routeForNotification(
     };
   }
 
+  // A new booking request → the host's booking inbox (not the listing), so the
+  // host lands right where they confirm/reject.
+  if (type === "booking") {
+    return "/bookings";
+  }
+
   // comment, price_drop, new_match, lead, review, system → listing when present.
   if (typeof d.listing_id === "string") {
     return { pathname: "/listing/[id]", params: { id: d.listing_id } };
