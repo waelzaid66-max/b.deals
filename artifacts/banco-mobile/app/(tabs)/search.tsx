@@ -171,6 +171,7 @@ export default function SearchScreen() {
     saveSearch,
     isSearchSaved,
     cacheFeedItem,
+    recordQuery,
   } = useSession();
   const { requireAuth } = useAuthGate();
   const topPad = Platform.OS === "web" ? 67 : insets.top;
@@ -326,6 +327,10 @@ export default function SearchScreen() {
   const commitQueryNow = (q: string) => {
     if (commitTimer.current) clearTimeout(commitTimer.current);
     setShowSuggestions(false);
+    // Deliberate searches only (submit / suggestion tap) feed the "recent
+    // searches" chips — the debounced while-typing commits would record
+    // half-typed words.
+    recordQuery(q);
     update({ q, brand: null, model: null });
   };
 
@@ -526,6 +531,10 @@ export default function SearchScreen() {
         onOpenListing={handleCardPress}
         onBrowseSection={browseSection}
         onExploreMap={exploreOnMap}
+        onSearchQuery={(q) => {
+          setDraftQuery(q);
+          commitQueryNow(q);
+        }}
       />
     );
   } else if (viewState === "loading") {
@@ -705,6 +714,22 @@ export default function SearchScreen() {
         />
       )}
 
+      {/* Orientation line: how many results the current criteria produced.
+          "24+" while more pages exist, exact once the tail is loaded. */}
+      {viewState === "results" && items.length > 0 && (
+        <AppText
+          style={[
+            styles.resultsCount,
+            { color: colors.mutedForeground, textAlign },
+          ]}
+          testID="results-count"
+        >
+          {t("search.resultsCount", {
+            count: `${items.length}${hasNext ? "+" : ""}`,
+          })}
+        </AppText>
+      )}
+
       <FilterSheet
         visible={showFilters}
         onClose={() => setShowFilters(false)}
@@ -819,7 +844,9 @@ export default function SearchScreen() {
                 color={colors.background}
               />
               <AppText style={[styles.mapToggleText, { color: colors.background }]}>
-                {mapMode ? t("search.viewList") : t("search.viewMap")}
+                {mapMode
+                  ? t("search.viewList")
+                  : `${t("search.viewMap")} (${mappableItems.length})`}
               </AppText>
             </Pressable>
           </View>
@@ -879,6 +906,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
   },
   mapToggleText: { fontSize: 14, fontWeight: "700" },
+  resultsCount: { fontSize: 12.5, paddingHorizontal: 16, paddingTop: 8 },
   header: {
     paddingHorizontal: 16,
     paddingBottom: 12,

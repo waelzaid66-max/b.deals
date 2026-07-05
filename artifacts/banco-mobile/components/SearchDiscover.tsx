@@ -78,6 +78,8 @@ interface Props {
    * this never lands the user on an empty map.
    */
   onExploreMap: () => void;
+  /** Re-run a recent text search (fills the input + commits immediately). */
+  onSearchQuery: (q: string) => void;
 }
 
 function CompactCard({
@@ -143,10 +145,11 @@ export function SearchDiscover({
   onOpenListing,
   onBrowseSection,
   onExploreMap,
+  onSearchQuery,
 }: Props) {
   const colors = useColors();
   const { t, isRTL } = useI18n();
-  const { recentlyViewed, savedSearches } = useSession();
+  const { recentlyViewed, savedSearches, recentQueries } = useSession();
   const rowDir = isRTL ? "row-reverse" : "row";
   const textAlign = isRTL ? "right" : "left";
 
@@ -338,6 +341,43 @@ export function SearchDiscover({
 
       {/* Companies & developers with live inventory (hidden when none). */}
       <CompanyOffers />
+
+      {/* Recent text searches — the fastest re-entry for a returning user.
+          Local-only history (SessionContext), hidden entirely when empty. */}
+      {recentQueries.length > 0 && (
+        <>
+          <SectionHeader label={t("search.discover.recent")} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.chipRow, { flexDirection: rowDir }]}
+          >
+            {recentQueries.map((q) => (
+              <Pressable
+                key={q}
+                onPress={() => onSearchQuery(q)}
+                style={[
+                  styles.savedChip,
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    flexDirection: rowDir,
+                  },
+                ]}
+                testID={`recent-query-${q}`}
+              >
+                <Feather name="clock" size={13} color={colors.mutedForeground} />
+                <AppText
+                  numberOfLines={1}
+                  style={[styles.savedChipText, { color: colors.foreground }]}
+                >
+                  {q}
+                </AppText>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </>
+      )}
 
       {/* Popular brands */}
       <SectionHeader label={t("search.discover.popularBrands")} />

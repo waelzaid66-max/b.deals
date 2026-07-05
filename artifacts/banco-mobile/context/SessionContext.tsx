@@ -22,6 +22,8 @@ const SESSION_ID =
 const SAVES_KEY = "banco_saved_v1";
 const SEARCHES_KEY = "banco_saved_searches_v1";
 const RECENT_KEY = "banco_recently_viewed_v1";
+const RECENT_QUERIES_KEY = "banco_recent_queries_v1";
+const RECENT_QUERIES_MAX = 8;
 const RECENT_MAX = 20;
 
 export type SavedItem = FeedItem & { savedAt: number };
@@ -85,6 +87,10 @@ interface SessionContextValue {
   removeSearch: (id: string) => void;
   recentlyViewed: FeedItem[];
   recordView: (detail: ListingDetailData) => void;
+  /** Last few committed text searches (newest first) — powers the "بحثت مؤخراً" chips. */
+  recentQueries: string[];
+  /** Record a committed text search (deduped, capped, persisted locally). */
+  recordQuery: (query: string) => void;
   /**
    * Cache-first lookup of a FeedItem already known to this session (saved or
    * recently viewed). Lets the listing detail screen paint the above-fold
@@ -118,6 +124,7 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [savedSearches, setSavedSearches] = useState<SavedSearch[]>([]);
   const [recentlyViewed, setRecentlyViewed] = useState<FeedItem[]>([]);
+  const [recentQueries, setRecentQueries] = useState<string[]>([]);
   // Bumped on publish so the home feed + profile grid refetch (see type docs).
   const [listingsVersion, setListingsVersion] = useState(0);
   const bumpListings = useCallback(() => setListingsVersion((v) => v + 1), []);
@@ -167,6 +174,26 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         if (raw) setRecentlyViewed(JSON.parse(raw) as FeedItem[]);
       })
       .catch(() => {});
+    AsyncStorage.getItem(RECENT_QUERIES_KEY)
+      .then((raw) => {
+        if (raw) setRecentQueries(JSON.parse(raw) as string[]);
+      })
+      .catch(() => {});
+  }, []);
+
+  // Committed text searches, newest first. Deduped case-insensitively so
+  // re-searching "BMW" just moves it to the front instead of duplicating it.
+  const recordQuery = useCallback((query: string) => {
+    const q = query.trim();
+    if (q.length < 2) return;
+    setRecentQueries((prev) => {
+      const next = [q, ...prev.filter((p) => p.toLowerCase() !== q.toLowerCase())].slice(
+        0,
+        RECENT_QUERIES_MAX,
+      );
+      AsyncStorage.setItem(RECENT_QUERIES_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
   }, []);
 
   // When signed in, reconcile the local cache with the server-side saves.
@@ -342,6 +369,8 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         removeSearch,
         recentlyViewed,
         recordView,
+        recentQueries,
+        recordQuery,
         getCachedItem,
         cacheFeedItem,
         listingsVersion,
