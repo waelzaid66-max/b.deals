@@ -284,7 +284,7 @@ export function buildMapHtml(markers: MapMarker[], theme: MapTheme): string {
     }
     map.on("moveend", function () {
       if (vpTimer) clearTimeout(vpTimer);
-      vpTimer = setTimeout(postViewport, 300);
+      vpTimer = setTimeout(postViewport, 450);
     });
 
     // Frame the loaded page, then hand off to server clustering for the viewport.

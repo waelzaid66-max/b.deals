@@ -93,6 +93,8 @@ interface FilterSheetProps {
   onUpdate: (partial: Partial<SearchCriteria>) => void;
   onOpenLocationPicker: () => void;
   onClearLocation: () => void;
+  onToggleNearMe: () => void;
+  nearMeLoading?: boolean;
   onClearAll: () => void;
 }
 
@@ -121,6 +123,8 @@ export function FilterSheet({
   onUpdate,
   onOpenLocationPicker,
   onClearLocation,
+  onToggleNearMe,
+  nearMeLoading = false,
   onClearAll,
 }: FilterSheetProps) {
   const colors = useColors();
@@ -552,6 +556,44 @@ export function FilterSheet({
               )}
             </Pressable>
 
+            <Pressable
+              onPress={onToggleNearMe}
+              disabled={nearMeLoading}
+              style={[
+                styles.nearMeChip,
+                {
+                  backgroundColor: criteria.nearMeEnabled
+                    ? colors.primary
+                    : colors.secondary,
+                  borderColor: criteria.nearMeEnabled
+                    ? colors.primary
+                    : colors.border,
+                  flexDirection: rowDir,
+                  opacity: nearMeLoading ? 0.6 : 1,
+                },
+              ]}
+              testID="filter-near-me"
+            >
+              <Ionicons
+                name="navigate-outline"
+                size={16}
+                color={
+                  criteria.nearMeEnabled
+                    ? colors.primaryForeground
+                    : colors.mutedForeground
+                }
+              />
+              <AppText
+                style={{
+                  color: criteria.nearMeEnabled
+                    ? colors.primaryForeground
+                    : colors.foreground,
+                }}
+              >
+                {nearMeLoading ? "…" : t("search.nearMe")}
+              </AppText>
+            </Pressable>
+
             {/* Price */}
             <SectionLabel text={t("search.price")} align={textAlign} colors={colors} />
             <View style={[styles.rangeRow, { flexDirection: rowDir }]}>
@@ -809,6 +851,16 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontFamily: "Inter_400Regular",
+  },
+  nearMeChip: {
+    alignItems: "center",
+    gap: 8,
+    marginTop: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignSelf: "flex-start",
   },
   footer: {
     paddingHorizontal: 16,

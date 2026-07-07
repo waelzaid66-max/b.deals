@@ -413,6 +413,7 @@ const en = {
     yearTo: "To",
     marketCountry: "Market",
     nearMe: "Near me",
+    nearMeDenied: "Location permission is needed to search near you.",
     allEgypt: "All Egypt",
     discover: {
       categories: "Browse categories",
@@ -2146,6 +2147,7 @@ const ar: typeof en = {
     yearTo: "إلى",
     marketCountry: "السوق",
     nearMe: "قريب مني",
+    nearMeDenied: "محتاج إذن الموقع عشان نبحث قريب منك.",
     allEgypt: "كل مصر",
     discover: {
       categories: "تصفّح الأقسام",

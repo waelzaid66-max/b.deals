@@ -2921,6 +2921,24 @@ industry?: SearchListingsIndustry;
  */
 origin_type?: SearchListingsOriginType;
 /**
+ * Near-me anchor latitude (WGS84). Must be sent together with near_lng and radius_km. Filters to listings whose effective coordinate (own override or area centroid) lies within the radius.
+ * @minimum -90
+ * @maximum 90
+ */
+near_lat?: number;
+/**
+ * Near-me anchor longitude (WGS84). See near_lat.
+ * @minimum -180
+ * @maximum 180
+ */
+near_lng?: number;
+/**
+ * Search radius in kilometres (0.1–500). See near_lat.
+ * @minimum 0.1
+ * @maximum 500
+ */
+radius_km?: number;
+/**
  * Result ordering. recommended (default) and newest use the created_at keyset cursor; price_asc, price_desc and popular switch to offset pagination (their cursor is an opaque numeric offset). popular ranks by lifetime interactions (views + clicks).
  */
 sort?: SearchListingsSort;
@@ -3061,6 +3079,24 @@ min_year?: number;
 max_year?: number;
 industry?: GetMapClustersIndustry;
 origin_type?: GetMapClustersOriginType;
+/**
+ * Near-me anchor latitude — same semantics as GET /v1/search.
+ * @minimum -90
+ * @maximum 90
+ */
+near_lat?: number;
+/**
+ * Near-me anchor longitude — same semantics as GET /v1/search.
+ * @minimum -180
+ * @maximum 180
+ */
+near_lng?: number;
+/**
+ * Search radius in km (0.1–500) — same semantics as GET /v1/search.
+ * @minimum 0.1
+ * @maximum 500
+ */
+radius_km?: number;
 };
 
 export type GetMapClustersCategory = typeof GetMapClustersCategory[keyof typeof GetMapClustersCategory];

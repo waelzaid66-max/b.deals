@@ -15,6 +15,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Alert,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, {
@@ -73,6 +74,10 @@ import {
   type PaymentType,
   type SearchSort,
 } from "@/lib/searchParams";
+import {
+  DEFAULT_NEAR_RADIUS_KM,
+  requestNearMeCoords,
+} from "@/lib/nearMe";
 
 type FilterCategory = Category;
 
@@ -115,6 +120,10 @@ const CLEAR_FILTERS: Partial<SearchCriteria> = {
   maxPrice: "",
   location: "",
   paymentType: "any",
+  nearMeEnabled: false,
+  nearLat: null,
+  nearLng: null,
+  radiusKm: DEFAULT_NEAR_RADIUS_KM,
 };
 
 // Valid sort keys arriving via navigation (e.g. the Home "Sort" launcher). Any
@@ -316,6 +325,7 @@ export default function SearchScreen() {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [nearMeLoading, setNearMeLoading] = useState(false);
   const [brandValue, setBrandValue] = useState<string | null>(null);
   const [carPickerOpen, setCarPickerOpen] = useState(false);
 
@@ -565,6 +575,26 @@ export default function SearchScreen() {
     update({ ...CLEAR_ATTRS, ...CLEAR_FILTERS });
   }, [update]);
 
+  const handleToggleNearMe = useCallback(async () => {
+    if (criteria.nearMeEnabled) {
+      update({ nearMeEnabled: false, nearLat: null, nearLng: null });
+      return;
+    }
+    setNearMeLoading(true);
+    const coords = await requestNearMeCoords();
+    setNearMeLoading(false);
+    if (coords) {
+      update({
+        nearMeEnabled: true,
+        nearLat: coords.lat,
+        nearLng: coords.lng,
+        radiusKm: DEFAULT_NEAR_RADIUS_KM,
+      });
+    } else {
+      Alert.alert(t("common.error"), t("search.nearMeDenied"));
+    }
+  }, [criteria.nearMeEnabled, update, t]);
+
   const handleSaveSearch = () => {
     saveSearch({
       q: draftQuery.trim(),
@@ -580,6 +610,7 @@ export default function SearchScreen() {
     criteria.category !== "all",
     !!criteria.minPrice || !!criteria.maxPrice,
     !!criteria.location,
+    criteria.nearMeEnabled,
     criteria.paymentType !== "any",
   ].filter(Boolean).length;
 
@@ -952,6 +983,8 @@ export default function SearchScreen() {
         onUpdate={update}
         onOpenLocationPicker={() => setLocationPickerOpen(true)}
         onClearLocation={() => update({ location: "" })}
+        onToggleNearMe={() => void handleToggleNearMe()}
+        nearMeLoading={nearMeLoading}
         onClearAll={clearAllFilters}
       />
 

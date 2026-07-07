@@ -15,6 +15,7 @@ import {
   industrialGroupForCategory,
 } from "@/components/CategoryTabs";
 import { DEFAULT_MARKET_COUNTRY } from "@/constants/listingCreateTaxonomy";
+import { DEFAULT_NEAR_RADIUS_KM } from "@/lib/nearMe";
 import { engineByKey } from "@/constants/engines";
 
 /** Result ordering — mirrors the backend SearchListingsSort enum 1:1. */
@@ -62,6 +63,11 @@ export interface SearchCriteria {
   originType: SearchListingsOriginType | null;
   /** Facilities/materials sub-type within the industrial group ("all" = whole group). */
   industrialType: IndustrialType;
+  /** Geo radius filter — active only when enabled and coords are set. */
+  nearMeEnabled: boolean;
+  nearLat: number | null;
+  nearLng: number | null;
+  radiusKm: number;
 }
 
 export const DEFAULT_CRITERIA: SearchCriteria = {
@@ -84,6 +90,10 @@ export const DEFAULT_CRITERIA: SearchCriteria = {
   industry: null,
   originType: null,
   industrialType: "all",
+  nearMeEnabled: false,
+  nearLat: null,
+  nearLng: null,
+  radiusKm: DEFAULT_NEAR_RADIUS_KM,
 };
 
 /**
@@ -110,7 +120,8 @@ export function hasActiveCriteria(c: SearchCriteria): boolean {
     !!c.maxYear ||
     !!c.industry ||
     !!c.originType ||
-    c.industrialType !== "all"
+    c.industrialType !== "all" ||
+    (c.nearMeEnabled && c.nearLat != null && c.nearLng != null)
   );
 }
 
@@ -140,6 +151,10 @@ export function criteriaKey(c: SearchCriteria): string {
     c.industry,
     c.originType,
     c.industrialType,
+    c.nearMeEnabled,
+    c.nearLat,
+    c.nearLng,
+    c.radiusKm,
   ]);
 }
 
@@ -199,6 +214,12 @@ export function buildSearchParams(
 
   if (c.industry) sp.industry = c.industry;
   if (c.originType) sp.origin_type = c.originType;
+
+  if (c.nearMeEnabled && c.nearLat != null && c.nearLng != null) {
+    sp.near_lat = c.nearLat;
+    sp.near_lng = c.nearLng;
+    sp.radius_km = c.radiusKm;
+  }
 
   if (cursor) sp.cursor = cursor;
   return sp;

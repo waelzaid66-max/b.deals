@@ -87,6 +87,11 @@ export function SearchResultsMap({
   // Previous mapped-set signature, to tell a pure filter change (map not reloaded)
   // apart from a result change (WebView re-keyed, which re-posts its viewport).
   const prevSigRef = useRef(sig);
+  const clusterCacheRef = useRef<{
+    key: string;
+    clusters: MapClusterMarker[];
+    total: number;
+  } | null>(null);
 
   // The WebView is keyed by `sig`, so a changed mapped-set reloads it — but this
   // component does not remount, so reset load/selection/count ourselves and
@@ -95,11 +100,31 @@ export function SearchResultsMap({
     setReady(false);
     setSelectedId(null);
     setServerTotal(null);
+    clusterCacheRef.current = null;
     vpSeqRef.current++;
   }, [sig]);
 
+  const injectClusters = useCallback((enriched: MapClusterMarker[], total: number) => {
+    setServerTotal(total);
+    webRef.current?.injectJavaScript(
+      `window.BANCO_MAP && window.BANCO_MAP.setClusters(${JSON.stringify(
+        enriched,
+      )}); true;`,
+    );
+  }, []);
+
+  const viewportCacheKey = (viewport: MapViewport) =>
+    `${criteriaSig}:${viewport.min_lat.toFixed(4)}:${viewport.max_lat.toFixed(4)}:${viewport.min_lng.toFixed(4)}:${viewport.max_lng.toFixed(4)}:${viewport.zoom}`;
+
   const fetchClusters = useCallback(
     async (viewport: MapViewport) => {
+      const cacheKey = viewportCacheKey(viewport);
+      const cached = clusterCacheRef.current;
+      if (cached?.key === cacheKey) {
+        injectClusters(cached.clusters, cached.total);
+        return;
+      }
+
       const seq = ++vpSeqRef.current;
       try {
         const res = await getMapClusters(buildMapClusterParams(criteria, viewport));
@@ -123,17 +148,14 @@ export function SearchResultsMap({
           bookable:
             c.count === 1 && c.listing_id ? bookableById.has(c.listing_id) : false,
         }));
-        setServerTotal(clusters.reduce((sum, c) => sum + c.count, 0));
-        webRef.current?.injectJavaScript(
-          `window.BANCO_MAP && window.BANCO_MAP.setClusters(${JSON.stringify(
-            enriched,
-          )}); true;`,
-        );
+        const total = clusters.reduce((sum, c) => sum + c.count, 0);
+        clusterCacheRef.current = { key: cacheKey, clusters: enriched, total };
+        injectClusters(enriched, total);
       } catch {
         // Leave the current markers in place; the map degrades to the loaded page.
       }
     },
-    [criteria],
+    [criteria, criteriaSig, injectClusters],
   );
 
   // A pure filter change (values differ but the mapped set is byte-identical, so
@@ -146,6 +168,7 @@ export function SearchResultsMap({
     if (sigChanged) return;
     if (lastViewportRef.current) {
       setServerTotal(null);
+      clusterCacheRef.current = null;
       void fetchClusters(lastViewportRef.current);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

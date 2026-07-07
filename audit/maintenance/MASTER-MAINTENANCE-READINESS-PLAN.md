@@ -1,8 +1,8 @@
 # خطة الصيانة والجاهزية الشاملة — BANCO OOM
 
 **آخر تحديث:** 2026-07-07  
-**الفرع المحلي:** `main` @ `cdf90b9` (+ تقارير RC-1 في commit لاحق)  
-**الفرع على GitHub:** `maintenance/wave-1-3-upload-search-eas` (يحتوي موجات 1–3)  
+**الفرع المحلي:** `maintenance/wave-4-search-taxonomy` (موجات 4–5 + جرد الفوترة)  
+**الفرع على GitHub:** `maintenance/wave-4-search-taxonomy`  
 **قرار الإصدار:** **GO WITH FIXES** (انظر `audit/rc1/BANCO-STORE-RELEASE-CANDIDATE-REPORT.md`)
 
 > **مبدأ العمل:** نُضيف ونُصلح دون هدم — لا حذف لمسارات أو فروع أو دول مدعومة. العقارات والأقسام متعددة الدول تبقى في التصنيف والإنشاء؛ الصيانة طبّقت **طبقة بحث إضافية** فوق ما هو موجود.
@@ -20,7 +20,8 @@
 | بحث عقارات (إيجار/تمليك، أنواع، نظام إيجار) | ✅ موجة 3 — **إضافة فقط** |
 | EAS (بناء متجر دون إرسال) | ✅ metadata + توثيق |
 | تقارير RC-1 + موجات الصيانة | ✅ في `audit/` و `release/` و `reports/` |
-| دمج على `origin/main` | ⏳ يحتاج PR أو دفع مباشر لـ `main` |
+| جرد المحفظة والفوترة (B0) | ✅ `WALLET-BILLING-FINANCE-AUDIT.md` |
+| دمج موجات 4–5 على `origin/main` | ⏳ بعد commit + push |
 | نشر AWS / GCP / المتاجر | ❌ **متعمّد — خارج النطاق حتى الجاهزية** |
 
 ---
@@ -123,7 +124,7 @@ health smoke (محلي)    → PASS بعد موجة 1 (قبل Clerk)
 | # | المهمة | لماذا مؤجّل |
 |---|--------|-------------|
 | 5 | شاشة **تعديل إعلان** كاملة على الموبايل | نطاق منتج — حالياً status فقط |
-| 6 | **بالقرب مني** `near_lat` / `radius_km` على الموبايل | API جاهز؛ يحتاج OpenAPI + UX |
+| 6 | **بالقرب مني** `near_lat` / `radius_km` على الموبايل | ✅ موجة 5 | OpenAPI + FilterSheet + map parity |
 | 7 | فلترة نظام الإيجار **حسب دولة السوق** على البحث | ✅ موجة 4 | `lib/searchTaxonomy.ts` |
 | 8 | المزيد من `property_type` في المحركات | facet-gated فقط عند وجود مخزون |
 
@@ -136,10 +137,33 @@ health smoke (محلي)    → PASS بعد موجة 1 (قبل Clerk)
 | 11 | ESLint monorepo |
 | 12 | اختبارات offline / crash / أداء آلية |
 
-### P3 — موجة 4 (منفّذة) + موجة 5 مقترحة
+### P3 — بحث (موجات 4–5)
 
 - ✅ موجة 4: محاذاة بحث العقارات مع `MARKET_COUNTRIES` + sync محركات السيارات — `WAVE-4-SEARCH-TAXONOMY.md`
-- موجة 5: لمس خفيف haptic/sound؛ near-me؛ لا refactor واسع.
+- ✅ موجة 5: near-me على الموبايل + تطابق خريطة/قائمة + OpenAPI — `WAVE-5-SEARCH-GEO-MAPS.md`
+
+### P4 — محفظة وفوترة (جرد B0 + خطة B1–B5)
+
+**مبدأ:** الماكينة المالية **موجودة ومربوطة**؛ المنصة **مجانية تشغيلياً** (baseline 50/50، Paymob معطّل من الأدمن). لا تفعيل مدفوع حتى موجة B5 بقرار إداري.
+
+| موجة | المحتوى | خطر على المجاني |
+|------|---------|------------------|
+| **B0** | جرد كامل — `WALLET-BILLING-FINANCE-AUDIT.md` | صفر |
+| **B1** | فواتير UI (قراءة)، إيراد أدمن من ledger، OpenAPI payments | صفر |
+| **B2** | مركز مالي Hub + فلاتر معاملات + سجل promo | صفر |
+| **B3** | إشعارات وإيميل فوترة | منخفض |
+| **B4** | PDF فواتير/كشوف | منخفض |
+| **B5** | تفعيل Paymob + خطط مدفوعة | **قرار إداري فقط** |
+
+**خارج v1:** محفظة بين مستخدمين، سحب أرباح، تقسيط، نقاط، كوبونات خصم.
+
+### P2+ — مقترح لاحقاً (ملايين مستخدمين)
+
+| # | المهمة |
+|---|--------|
+| 13 | فهرس geo / geohash على الإحداثيات الفعّالة |
+| 14 | `sort=nearest` (ترتيب بالمسافة) |
+| 15 | لمس خفيف haptic/sound |
 
 ---
 
@@ -151,13 +175,16 @@ audit/
 │   ├── MASTER-MAINTENANCE-READINESS-PLAN.md   ← هذا الملف
 │   ├── WAVE-1-UPLOAD-CI-EAS.md
 │   ├── WAVE-2-SEARCH-INDUSTRIAL.md
-│   └── WAVE-3-SEARCH-RE-EAS.md
+│   ├── WAVE-3-SEARCH-RE-EAS.md
+│   ├── WAVE-4-SEARCH-TAXONOMY.md
+│   ├── WAVE-5-SEARCH-GEO-MAPS.md
+│   └── WALLET-BILLING-FINANCE-AUDIT.md
 ├── rc1/
 │   ├── BANCO-STORE-RELEASE-CANDIDATE-REPORT.md
 │   └── *.log (مخرجات التحقق)
 ├── fixes/ C-01, C-02, C-03, H-03
 release/   EAS_BUILD, STORE_PUBLISHING, USER_JOURNEY, …
-reports/   مقارنات repos أخرى
+reports/   مقارنات repos + WALLET-BILLING-AUDIT-2026-07-07.md
 scripts/rc1-validation.ps1
 .agents/memory/  قرارات معمارية (taxonomy, rent-engine, icons, …)
 ```

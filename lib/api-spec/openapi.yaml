@@ -4445,6 +4445,30 @@ paths:
             type: string
             enum: [local, imported]
         - in: query
+          name: near_lat
+          description: >-
+            Near-me anchor latitude (WGS84). Must be sent together with near_lng
+            and radius_km. Filters to listings whose effective coordinate (own
+            override or area centroid) lies within the radius.
+          schema:
+            type: number
+            minimum: -90
+            maximum: 90
+        - in: query
+          name: near_lng
+          description: Near-me anchor longitude (WGS84). See near_lat.
+          schema:
+            type: number
+            minimum: -180
+            maximum: 180
+        - in: query
+          name: radius_km
+          description: Search radius in kilometres (0.1–500). See near_lat.
+          schema:
+            type: number
+            minimum: 0.1
+            maximum: 500
+        - in: query
           name: sort
           description: >-
             Result ordering. recommended (default) and newest use the created_at
@@ -4589,6 +4613,18 @@ paths:
         - in: query
           name: origin_type
           schema: { type: string, enum: [local, imported] }
+        - in: query
+          name: near_lat
+          description: Near-me anchor latitude — same semantics as GET /v1/search.
+          schema: { type: number, minimum: -90, maximum: 90 }
+        - in: query
+          name: near_lng
+          description: Near-me anchor longitude — same semantics as GET /v1/search.
+          schema: { type: number, minimum: -180, maximum: 180 }
+        - in: query
+          name: radius_km
+          description: Search radius in km (0.1–500) — same semantics as GET /v1/search.
+          schema: { type: number, minimum: 0.1, maximum: 500 }
       responses:
         "200":
           description: Map clusters
