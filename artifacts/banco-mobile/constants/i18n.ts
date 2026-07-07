@@ -411,6 +411,7 @@ const en = {
     year: "Year",
     yearFrom: "From",
     yearTo: "To",
+    marketCountry: "Market",
     nearMe: "Near me",
     allEgypt: "All Egypt",
     discover: {
@@ -2143,6 +2144,7 @@ const ar: typeof en = {
     year: "سنة الصنع",
     yearFrom: "من",
     yearTo: "إلى",
+    marketCountry: "السوق",
     nearMe: "قريب مني",
     allEgypt: "كل مصر",
     discover: {

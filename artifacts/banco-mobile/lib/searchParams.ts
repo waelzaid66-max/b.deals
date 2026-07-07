@@ -14,6 +14,7 @@ import {
   apiCategoryFor,
   industrialGroupForCategory,
 } from "@/components/CategoryTabs";
+import { DEFAULT_MARKET_COUNTRY } from "@/constants/listingCreateTaxonomy";
 import { engineByKey } from "@/constants/engines";
 
 /** Result ordering — mirrors the backend SearchListingsSort enum 1:1. */
@@ -46,6 +47,8 @@ export interface SearchCriteria {
   /** Real-estate rental system (specs.rental_term) — furnished_daily / new_law /
    *  old_law / annual_contract; null = any. */
   rentalTerm: string | null;
+  /** UI-only market for rental-term chips (EG/SA/AE/…); not sent to API. */
+  marketCountry: string;
   /** Car brand/model — matched against the English listing title server-side. */
   brand: string | null;
   model: string | null;
@@ -71,6 +74,7 @@ export const DEFAULT_CRITERIA: SearchCriteria = {
   location: "",
   paymentType: "any",
   rentalTerm: null,
+  marketCountry: DEFAULT_MARKET_COUNTRY,
   brand: null,
   model: null,
   fuelType: null,
@@ -126,6 +130,7 @@ export function criteriaKey(c: SearchCriteria): string {
     c.location.trim(),
     c.paymentType,
     c.rentalTerm,
+    c.marketCountry,
     c.brand,
     c.model,
     c.fuelType,

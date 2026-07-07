@@ -26,9 +26,15 @@ import {
 } from "@/components/CategoryTabs";
 import { brandLabel, type CarBrand } from "@/constants/cars";
 import { engineByKey, type EngineDef } from "@/constants/engines";
-import { INDUSTRY_TYPES, RENTAL_TERMS } from "@/constants/listingCreateTaxonomy";
+import { INDUSTRY_TYPES } from "@/constants/listingCreateTaxonomy";
 import { useI18n } from "@/context/LanguageContext";
 import { useColors } from "@/hooks/useColors";
+import {
+  MARKET_COUNTRIES,
+  marketCountryLabel,
+  rentalTermsForSearch,
+  sanitizeRentalTermForMarket,
+} from "@/lib/searchTaxonomy";
 import type {
   PaymentType,
   SearchCriteria,
@@ -155,6 +161,7 @@ export function FilterSheet({
   const selectedEngine = engineByKey(criteria.category, criteria.engineKey);
   const showRentalTerms =
     isRealEstate && selectedEngine?.params.offer_type !== "sale";
+  const rentalTermOptions = rentalTermsForSearch(criteria.marketCountry);
 
   return (
     <Modal
@@ -434,12 +441,29 @@ export function FilterSheet({
                 while the sale (تمليك) engine chip is active (rent-only content). */}
             {showRentalTerms && (
               <>
+                <SectionLabel text={t("search.marketCountry")} align={textAlign} colors={colors} />
+                <ToggleChipRow
+                  options={MARKET_COUNTRIES.map((m) => m.value)}
+                  selected={criteria.marketCountry}
+                  labelFor={(v) => marketCountryLabel(v, isRTL)}
+                  onToggle={(v) => {
+                    if (!v) return;
+                    const rentalTerm = sanitizeRentalTermForMarket(
+                      criteria.rentalTerm,
+                      v,
+                    );
+                    onUpdate({ marketCountry: v, rentalTerm });
+                  }}
+                  rowDir={rowDir}
+                  colors={colors}
+                  testPrefix="filter-market"
+                />
                 <SectionLabel text={t("create.fields.rentalTerm")} align={textAlign} colors={colors} />
                 <ToggleChipRow
-                  options={RENTAL_TERMS.map((r) => r.value)}
+                  options={rentalTermOptions.map((r) => r.value)}
                   selected={criteria.rentalTerm}
                   labelFor={(v) => {
-                    const def = RENTAL_TERMS.find((r) => r.value === v);
+                    const def = rentalTermOptions.find((r) => r.value === v);
                     return def ? (isRTL ? def.ar : def.en) : v;
                   }}
                   onToggle={(v) => onUpdate({ rentalTerm: v })}

@@ -113,8 +113,8 @@ health smoke (محلي)    → PASS بعد موجة 1 (قبل Clerk)
 
 | # | المهمة | الحالة | ملاحظة |
 |---|--------|--------|--------|
-| 1 | دمج موجات 1–3 على `origin/main` | ⏳ | PR من `maintenance/wave-1-3-upload-search-eas` |
-| 2 | CI أخضر (Typecheck & build + API tests) | ⏳ | يُتوقع PASS بعد الدمج |
+| 1 | دمج موجات 1–3 على `origin/main` | ✅ | @ `0eea161` |
+| 2 | CI أخضر (Typecheck & build + API tests) | ⏳ | تحقق بعد push موجة 4 |
 | 3 | `drizzle push` لجدول `upload_claims` على staging/prod | ⏳ | C-01 |
 | 4 | smoke staging بمفاتيح Clerk + تخزين حقيقي | ⏳ | رفع byte-path |
 
@@ -124,7 +124,7 @@ health smoke (محلي)    → PASS بعد موجة 1 (قبل Clerk)
 |---|--------|-------------|
 | 5 | شاشة **تعديل إعلان** كاملة على الموبايل | نطاق منتج — حالياً status فقط |
 | 6 | **بالقرب مني** `near_lat` / `radius_km` على الموبايل | API جاهز؛ يحتاج OpenAPI + UX |
-| 7 | فلترة نظام الإيجار **حسب دولة السوق** على البحث | تحسين اختياري؛ الإنشاء يدعم الدول بالفعل |
+| 7 | فلترة نظام الإيجار **حسب دولة السوق** على البحث | ✅ موجة 4 | `lib/searchTaxonomy.ts` |
 | 8 | المزيد من `property_type` في المحركات | facet-gated فقط عند وجود مخزون |
 
 ### P2 — بنية ونشر
@@ -136,11 +136,10 @@ health smoke (محلي)    → PASS بعد موجة 1 (قبل Clerk)
 | 11 | ESLint monorepo |
 | 12 | اختبارات offline / crash / أداء آلية |
 
-### P3 — موجة 4 مقترحة (خفيفة — بعد دمج main)
+### P3 — موجة 4 (منفّذة) + موجة 5 مقترحة
 
-- لمس خفيف haptic/sound حيث النمط موجود (لا إضافة فوضى).
-- مراجعة بحث **سيارات** (ماركة/وقود) — mirror engines فقط.
-- لا refactor واسع.
+- ✅ موجة 4: محاذاة بحث العقارات مع `MARKET_COUNTRIES` + sync محركات السيارات — `WAVE-4-SEARCH-TAXONOMY.md`
+- موجة 5: لمس خفيف haptic/sound؛ near-me؛ لا refactor واسع.
 
 ---
 

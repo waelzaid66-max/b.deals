@@ -53,7 +53,13 @@ import {
   type CarBrand,
 } from "@/constants/cars";
 import { labelForValue } from "@/constants/locations";
-import { RENTAL_TERMS } from "@/constants/listingCreateTaxonomy";
+import {
+  DEFAULT_MARKET_COUNTRY,
+  MARKET_COUNTRIES,
+  marketCountryLabel,
+  rentalTermsForSearch,
+  sanitizeRentalTermForMarket,
+} from "@/lib/searchTaxonomy";
 import { engineByKey, enginesForCategory } from "@/constants/engines";
 import { useI18n } from "@/context/LanguageContext";
 import { SavedSearch, useSession } from "@/context/SessionContext";
@@ -97,6 +103,7 @@ const CLEAR_ATTRS: Partial<SearchCriteria> = {
   originType: null,
   industrialType: "all",
   rentalTerm: null,
+  marketCountry: DEFAULT_MARKET_COUNTRY,
 };
 
 // The category-independent filters, reset by the sheet's "Clear all" (combined
@@ -506,7 +513,20 @@ export default function SearchScreen() {
     const engine = engineByKey(criteria.category, key);
     const patch: Partial<SearchCriteria> = { engineKey: key };
     if (engine?.params.offer_type === "sale") patch.rentalTerm = null;
+    if (criteria.category === "car") {
+      if (engine?.params.fuel_type) patch.fuelType = engine.params.fuel_type;
+      if (engine?.params.transmission)
+        patch.transmission = engine.params.transmission;
+    }
     update(patch);
+  };
+
+  const selectMarketCountry = (code: string) => {
+    const rentalTerm = sanitizeRentalTermForMarket(
+      criteria.rentalTerm,
+      code,
+    );
+    update({ marketCountry: code, rentalTerm });
   };
 
   const selectIndustrialType = (type: IndustrialType) =>
@@ -527,6 +547,11 @@ export default function SearchScreen() {
     criteria.category === "real_estate" &&
     engineByKey(criteria.category, criteria.engineKey)?.params.offer_type !==
       "sale";
+
+  const rentalTermOptions = useMemo(
+    () => rentalTermsForSearch(criteria.marketCountry),
+    [criteria.marketCountry],
+  );
 
   // Quick brand chip inside the sheet (closes the sheet via browseBrand).
   const browseBrandChip = useCallback(
@@ -820,7 +845,47 @@ export default function SearchScreen() {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={[styles.originRow, { flexDirection: rowDir }]}
         >
-          {RENTAL_TERMS.map((r) => {
+          {MARKET_COUNTRIES.map((m) => {
+            const active = criteria.marketCountry === m.value;
+            return (
+              <Pressable
+                key={m.value}
+                onPress={() => {
+                  playSound("tap");
+                  selectMarketCountry(m.value);
+                }}
+                style={[
+                  styles.originChip,
+                  {
+                    backgroundColor: active ? colors.primary : colors.secondary,
+                  },
+                ]}
+                testID={`search-market-${m.value}`}
+              >
+                <AppText
+                  style={[
+                    styles.originChipText,
+                    {
+                      color: active
+                        ? colors.primaryForeground
+                        : colors.mutedForeground,
+                    },
+                  ]}
+                >
+                  {marketCountryLabel(m.value, isRTL)}
+                </AppText>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+      ) : null}
+      {showRentalTerms ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={[styles.originRow, { flexDirection: rowDir }]}
+        >
+          {rentalTermOptions.map((r) => {
             const active = criteria.rentalTerm === r.value;
             return (
               <Pressable
