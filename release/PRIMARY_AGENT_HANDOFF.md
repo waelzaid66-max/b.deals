@@ -36,6 +36,16 @@ chmod +x scripts/push-mirror-remotes.sh
 - `scripts/push-mirror-remotes.sh` — أداة دفع مرآات
 - هذا الملف
 
-## تثبيت على Replit (لا تغيّر)
+## aws-virgen (second production repo)
+
+Primary `main` is finalized and tagged **`v1.0.0-rc.1`**. Publish to `aws-virgen` (owner token):
+
+```bash
+chmod +x scripts/publish-aws-virgen-rc.sh
+./scripts/publish-aws-virgen-rc.sh v1.0.0-rc.1
+```
+
+See [docs/AWS_VIRGEN_REPOSITORY.md](docs/AWS_VIRGEN_REPOSITORY.md).
+
 
 `packageManager: pnpm@11.9.0` + أمر التثبيت السريع في `.agents/memory/banco-replit-install-env.md`.

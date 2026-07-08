@@ -1,8 +1,9 @@
 # BANCO — حالة مزامنة الريبوهات (نسخة الإنتاج)
 
 **التاريخ:** 2026-07-08 (تحديث Cloud Agent)  
-**HEAD على `main` (origin):** `045112f`  
-**مرآات GitHub (`b-banco`, `b.deals`, `B-OOM`):** `31a4bfe` — شغّل `./scripts/push-mirror-remotes.sh` من Replit للوصول إلى `045112f`.
+**HEAD على `main` (origin):** `dc5918d` (RC finalization + tag `v1.0.0-rc.1`)  
+**مرآات GitHub:** `b-banco` / `b.deals` / `B-OOM` — `./scripts/push-mirror-remotes.sh` · **`aws-virgen`** — `./scripts/publish-aws-virgen-rc.sh`.
+
 **آخر commit كود/إصلاحات (قبل توثيق المزامنة فقط):** `92a33e0` (اعتماد إنتاج) · `f2dcab7` (Metro + OpenAI)  
 **أداة دفع المرآات:** `scripts/push-mirror-remotes.sh` (يتطلب صلاحيات المالك — `cursor[bot]` لا يملك push لـ `b-banco` / `b.deals` / `B-OOM`)
 
@@ -30,11 +31,12 @@
 
 | الاسم | GitHub URL | دور | `main` @ |
 |-------|------------|-----|----------|
-| **origin** (أساسي) | `waelzaid66-max/-BANCO-CA-OOM-` | مصدر العمل الرئيسي | `045112f` ✅ |
-| **bbanco** | `waelzaid66-max/b-banco` | مرآة كاملة | `31a4bfe` ⏳ (دفع `045112f` من Replit) |
-| **bdeals** | `waelzaid66-max/b.deals` | الريبو الأصلي (deploy) | `31a4bfe` ⏳ |
-| **boom** | `waelzaid66-max/B-OOM` | B-OOM الأصلي | `31a4bfe` ⏳ |
-| **upstream** (محلي) | `banco stor app/banco.store-main` | نسخة محلية | يدوي — قارن بـ `045112f` |
+| **origin** (أساسي) | `waelzaid66-max/-BANCO-CA-OOM-` | مصدر العمل الرئيسي | `dc5918d` ✅ tag `v1.0.0-rc.1` |
+| **bbanco** | `waelzaid66-max/b-banco` | مرآة كاملة | ⏳ `./scripts/push-mirror-remotes.sh` |
+| **bdeals** | `waelzaid66-max/b.deals` | الريبو الأصلي (deploy) | ⏳ |
+| **boom** | `waelzaid66-max/B-OOM` | B-OOM الأصلي | ⏳ |
+| **aws-virgen** | `waelzaid66-max/aws-virgen` | AWS EC2/CD | ⏳ `./scripts/publish-aws-virgen-rc.sh` |
+| **upstream** (محلي) | `banco stor app/banco.store-main` | نسخة محلية | يدوي — قارن بـ `dc5918d` |
 
 > **ملاحظة:** لا يوجد فرع `aws-virgen-main`. مجلد `aws-virgen` مرجع منفصل فقط.
 

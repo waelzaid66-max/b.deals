@@ -9,7 +9,7 @@
 | Repository | `main` after pass | Role |
 |------------|-------------------|------|
 | `waelzaid66-max/-BANCO-CA-OOM-` | This commit | Primary production monorepo |
-| `waelzaid66-max/aws-virgen` | Merge from primary `main` | AWS EC2/CD canonical clone path |
+| `waelzaid66-max/aws-virgen` | Merge prepared; **push blocked** for `cursor[bot]` — run `scripts/publish-aws-virgen-rc.sh` as owner |
 
 **Git history:** preserved (merge into aws-virgen, no rewrite).  
 **Branches:** not deleted (maintenance + cursor branches kept).
