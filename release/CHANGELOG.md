@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.0-rc.1] — 2026-07-08
+
+Repository finalization (both `-BANCO-CA-OOM-` and `aws-virgen`): docs index,
+SECURITY.md, .env.example, .gitattributes, untrack rc1 logs, AWS deploy workflow
+parity, tag `v1.0.0-rc.1`. No business-logic changes in this hygiene pass.
+
 ## [Unreleased] — Release Candidate (2026‑07‑04)
 
 ### Added (additive, isolated — pre‑RC)

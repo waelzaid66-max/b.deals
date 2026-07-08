@@ -4,7 +4,12 @@
 
 One backend, one typed API contract, four user surfaces. Built to publish anything tradeable ("the market is the source of truth" — never block a valid trade), then learn from the data it receives.
 
-> 📋 **Live status & verification evidence:** [STATUS_REPORT.md](STATUS_REPORT.md) · Replit ops notes: [replit.md](replit.md) · Security model: [threat_model.md](threat_model.md)
+> 📋 **Live status & verification evidence:** [STATUS_REPORT.md](STATUS_REPORT.md) · [docs/DEPLOYMENT_GUIDES.md](docs/DEPLOYMENT_GUIDES.md) · Replit: [replit.md](replit.md) · Security: [SECURITY.md](SECURITY.md) · [threat_model.md](threat_model.md)
+
+**Production GitHub repositories (same product, same `main` line):**
+
+- **Primary:** `waelzaid66-max/-BANCO-CA-OOM-`
+- **AWS deploy:** `waelzaid66-max/aws-virgen` (EC2 clone + tag-triggered CD)
 
 ---
 
