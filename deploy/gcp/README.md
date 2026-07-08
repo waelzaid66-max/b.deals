@@ -10,7 +10,7 @@ This folder mirrors `deploy/aws/` for teams that prefer **Cloud Run + Cloud SQL 
 |-----------|-------------|
 | API | Cloud Run (container from `Dockerfile.api`) |
 | Postgres | Cloud SQL for PostgreSQL 16 |
-| Object storage | Google Cloud Storage (native `@google-cloud/storage` adapter) |
+| Object storage | Cloud Storage via `OBJECT_STORAGE_PROVIDER=s3` (S3-compatible HMAC) or `replit` sidecar — **no `gcs` provider value** |
 | Secrets | Secret Manager → env on Cloud Run |
 | Web (admin/dealer/landing) | Cloud Storage + Cloud CDN or Firebase Hosting |
 | Mobile | EAS / app stores (not hosted on GCP) |

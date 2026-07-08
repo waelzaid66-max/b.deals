@@ -62,3 +62,9 @@ audit/rc1/*.log
 database_backup.dump
 database_backup.dump.gz
 attached_assets/
+
+# local secrets — NEVER commit
+.secrets/
+.env
+.env.*
+!.env*.example
