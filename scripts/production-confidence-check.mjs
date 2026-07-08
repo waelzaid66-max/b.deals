@@ -1,15 +1,15 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 /**
- * Local production-confidence gate — runs checks that do NOT need staging secrets.
+ * Local production-confidence gate â€” runs checks that do NOT need staging secrets.
  *
  * Usage (from repo root):
  *   node scripts/production-confidence-check.mjs
  *   node scripts/production-confidence-check.mjs --skip-typecheck
  *
  * Exit codes:
- *   0 — all executed checks passed
- *   1 — one or more checks failed
- *   2 — invalid invocation / missing repo layout
+ *   0 â€” all executed checks passed
+ *   1 â€” one or more checks failed
+ *   2 â€” invalid invocation / missing repo layout
  */
 
 import { spawnSync } from "node:child_process";
@@ -100,7 +100,7 @@ function checkExpoConfig() {
       pass("app identifiers");
     }
     if (!fs.existsSync(appConfig)) {
-      fail("app.config.ts", "missing — expo-router origin should be dynamic");
+      fail("app.config.ts", "missing â€” expo-router origin should be dynamic");
     } else {
       pass("app.config.ts present");
     }
@@ -147,7 +147,7 @@ function checkWorkspaceRefs() {
         const pkgPath = path.join(ROOT, "lib", name.replace("@workspace/", ""), "package.json");
         const alt = path.join(ROOT, "artifacts", name.replace("@workspace/", ""), "package.json");
         if (!fs.existsSync(pkgPath) && !fs.existsSync(alt)) {
-          fail("workspace ref", `${name} → ${ver} (package not found)`);
+          fail("workspace ref", `${name} â†’ ${ver} (package not found)`);
           return;
         }
       }
@@ -182,18 +182,18 @@ function checkMobileTests() {
 }
 
 function checkMobileTypecheck() {
-  const buildClient = run("npx", ["tsc", "-b", "../../lib/api-client-react", "--force"], MOBILE);
+  const buildClient = run("pnpm", ["exec", "tsc", "-b", "../../lib/api-client-react", "--force"], MOBILE);
   if (!buildClient.ok) {
     fail("mobile typecheck (api-client-react)", (buildClient.stderr || buildClient.stdout).split("\n").slice(-5).join(" "));
     return;
   }
-  const r = run("npx", ["tsc", "-p", "tsconfig.json", "--noEmit"], MOBILE);
+  const r = run("pnpm", ["exec", "tsc", "-p", "tsconfig.json", "--noEmit"], MOBILE);
   if (r.ok) pass("mobile typecheck");
   else fail("mobile typecheck", (r.stderr || r.stdout).split("\n").slice(-5).join(" "));
 }
 
 function checkLibsTypecheck() {
-  const r = run("npx", ["tsc", "--build"], ROOT);
+  const r = run("pnpm", ["exec", "tsc", "--build"], ROOT);
   if (r.ok) pass("libs typecheck");
   else fail("libs typecheck", (r.stderr || r.stdout).split("\n").slice(-5).join(" "));
 }
@@ -203,7 +203,7 @@ function summarize() {
   console.log(`\n--- ${results.length - failed.length}/${results.length} passed ---`);
   if (failed.length) {
     console.error("\nFailed:");
-    for (const f of failed) console.error(`  • ${f.name}: ${f.detail}`);
+    for (const f of failed) console.error(`  â€¢ ${f.name}: ${f.detail}`);
     process.exit(1);
   }
 }

@@ -6,6 +6,8 @@
 
 > **مبدأ العمل:** نُضيف ونُصلح دون هدم — لا حذف لمسارات أو فروع أو دول مدعومة. العقارات والأقسام متعددة الدول تبقى في التصنيف والإنشاء؛ الصيانة طبّقت **طبقة بحث إضافية** فوق ما هو موجود.
 
+**برنامج الجاهزية للإنتاج (21 مرحلة):** تتبّع منفصل في [`audit/production-readiness/README.md`](../production-readiness/README.md) — المرحلة 01 (البنية الأساسية) مكتملة بإصلاحات؛ المرحلة التالية الموصى بها: **02 — قاعدة البيانات والمخطط**.
+
 ---
 
 ## 1. ملخص تنفيذي
@@ -253,3 +255,11 @@ e24014b  fix(security): P0 upload IDOR, LIKE, visibility, ACL
 ---
 
 *عند بدء أي مهمة جديدة: ابحث في هذا الملف عن رقم المهمة في §4 — إن كانت ⏳ أو P1 مؤجّلة، ناقش القرار قبل التنفيذ.*
+
+### Wave — production-readiness consolidation (2026-07-08)
+
+- [x] Document deploy/launch pillars and playbooks under udit/production-readiness/
+- [x] scripts/production-confidence-check.mjs + root pnpm run confidence
+- [x] Listing publish lifecycle doc — verdict **publish safe** for consolidation diff
+- [ ] Human: staging EAS device runbook + listing publish smoke
+- [ ] Human: production secrets (GCP, EAS, auth providers)

@@ -1,34 +1,69 @@
 # Production Readiness — BANCO Store
 
-**Purpose:** Launch pillars, playbooks, and verification checklists for global production.  
+**Purpose:** 21-phase verification program for cloud launch readiness (no production deploy from this track).  
 **Last updated:** 2026-07-08  
-**Scope:** Documentation and env templates only — **no changes to listing publish defaults**.
+**Master maintenance plan:** [`audit/maintenance/MASTER-MAINTENANCE-READINESS-PLAN.md`](../maintenance/MASTER-MAINTENANCE-READINESS-PLAN.md)
 
 ---
 
-## Seven launch pillars (index)
+## 21-phase program (status index)
 
-See **[SEVEN-LAUNCH-PILLARS.md](./SEVEN-LAUNCH-PILLARS.md)** for status per pillar, launch blockers vs env-only gaps, and the publish-lifecycle safety statement.
+| Phase | Focus | Status | Report |
+|------:|-------|--------|--------|
+| 01 | Core architecture (pnpm workspace, deps, CI lockfile) | **pass** | [PHASE-01-CORE-ARCHITECTURE.md](./PHASE-01-CORE-ARCHITECTURE.md) |
+| 02 | Database & schema (Drizzle, migrations, indexes) | pending | — |
+| 03 | API server runtime (Express, health, bootstrap) | pending | — |
+| 04 | Authentication (Clerk, sessions, proxy) | pending | — |
+| 05 | Security & ACL (P0 fixes, upload claims) | pending | — |
+| 06 | Upload & media (S3/GCS, verify, claims) | pending | — |
+| 07 | Search, geo & maps (filters, clusters, near-me) | pending | — |
+| 08 | Billing, wallet & finance hub | pending | — |
+| 09 | Payments (Paymob/Stripe **structure only** — do not enable) | pending | — |
+| 10 | Mobile core UX & navigation | pending | — |
+| 11 | Mobile search performance & map WebView | pending | — |
+| 12 | Admin OS web (`artifacts/admin-os`) | pending | — |
+| 13 | Dealer OS web (`artifacts/dealer-os`) | pending | — |
+| 14 | Landing / consumer web (`artifacts/landing`) | pending | — |
+| 15 | CI/CD pipeline (GitHub Actions) | pending | — |
+| 16 | Docker & AWS deploy (`deploy/aws/`, root `Dockerfile`) | pending | — |
+| 17 | GCP deploy scaffold (`deploy/gcp/`) | pending | — |
+| 18 | Staging validation (P0 smoke, secrets) | pending | [WAVE-P0-STAGING-VALIDATION.md](../maintenance/WAVE-P0-STAGING-VALIDATION.md) |
+| 19 | EAS & store release (preview/production profiles) | pending | [EXPO-EAS-PRODUCTION-CHECKLIST.md](./EXPO-EAS-PRODUCTION-CHECKLIST.md) |
+| 20 | Observability & health probes | pending | [OBSERVABILITY-RUNBOOK.md](./OBSERVABILITY-RUNBOOK.md) |
+| 21 | RC sign-off & launch GO/NO-GO | pending | [RELEASE-CANDIDATE-FINAL.md](./RELEASE-CANDIDATE-FINAL.md) |
 
-### Expo / EAS / monorepo (2026-07-08)
+**Status values:** `pending` · `in_progress` · `pass` · `pass_with_fixes` · `blocked`
+
+**Next recommended phase:** **02 — Database & schema** (`lib/db`, `upload_claims`, Drizzle push on staging).
+
+---
+
+## Seven launch pillars (cross-cutting)
+
+See **[SEVEN-LAUNCH-PILLARS.md](./SEVEN-LAUNCH-PILLARS.md)** for pillar-level blockers and env-only gaps.
+
+| # | Pillar | Doc | Status |
+|---|--------|-----|--------|
+| 1 | Feature flags | [FEATURE-FLAGS.md](./FEATURE-FLAGS.md) | partial |
+| 2 | Data migration rollback | [MIGRATION-ROLLBACK-PLAYBOOK.md](./MIGRATION-ROLLBACK-PLAYBOOK.md) | partial |
+| 3 | Observability | [OBSERVABILITY-RUNBOOK.md](./OBSERVABILITY-RUNBOOK.md) | partial |
+| 4 | API versioning | [API-VERSIONING-POLICY.md](./API-VERSIONING-POLICY.md) | ready |
+| 5 | Backward compatibility | [BACKWARD-COMPATIBILITY.md](./BACKWARD-COMPATIBILITY.md) | ready |
+| 6 | Disaster recovery | [DISASTER-RECOVERY-VERIFICATION.md](./DISASTER-RECOVERY-VERIFICATION.md) | partial |
+| 7 | Release rollback | [RELEASE-ROLLBACK-PLAYBOOK.md](./RELEASE-ROLLBACK-PLAYBOOK.md) | partial |
+
+---
+
+## Expo / EAS / monorepo quick refs
 
 | Doc | Purpose |
 |-----|---------|
-| [EXPO-EAS-PRODUCTION-CHECKLIST.md](./EXPO-EAS-PRODUCTION-CHECKLIST.md) | Pass/fail per Expo/EAS item (**18/22**) |
 | [MONOREPO-PACKAGE-GUIDE.md](./MONOREPO-PACKAGE-GUIDE.md) | pnpm workspace, Metro, Windows install |
-| [STAGING-EAS-DEVICE-RUNBOOK.md](./STAGING-EAS-DEVICE-RUNBOOK.md) | Staging smoke → EAS preview → device QA |
+| [EXPO-EAS-PRODUCTION-CHECKLIST.md](./EXPO-EAS-PRODUCTION-CHECKLIST.md) | EAS pass/fail items |
+| [STAGING-EAS-DEVICE-RUNBOOK.md](./STAGING-EAS-DEVICE-RUNBOOK.md) | Staging → EAS preview → device QA |
+| [PHASE-LISTING-PUBLISH-LIFECYCLE.md](./PHASE-LISTING-PUBLISH-LIFECYCLE.md) | Publish safety verdict |
 
 Local gate (no secrets): `node scripts/production-confidence-check.mjs`
-
-| # | Pillar | Doc | Status (2026-07-08) |
-|---|--------|-----|---------------------|
-| 1 | Feature flags | [FEATURE-FLAGS.md](./FEATURE-FLAGS.md) | ⚠️ Partial |
-| 2 | Data migration rollback | [MIGRATION-ROLLBACK-PLAYBOOK.md](./MIGRATION-ROLLBACK-PLAYBOOK.md) | ⚠️ Partial |
-| 3 | Observability | [OBSERVABILITY-RUNBOOK.md](./OBSERVABILITY-RUNBOOK.md) | ⚠️ Partial |
-| 4 | API versioning | [API-VERSIONING-POLICY.md](./API-VERSIONING-POLICY.md) | ✅ Ready |
-| 5 | Backward compatibility | [BACKWARD-COMPATIBILITY.md](./BACKWARD-COMPATIBILITY.md) | ✅ Ready |
-| 6 | Disaster recovery | [DISASTER-RECOVERY-VERIFICATION.md](./DISASTER-RECOVERY-VERIFICATION.md) | ⚠️ Partial |
-| 7 | Release rollback | [RELEASE-ROLLBACK-PLAYBOOK.md](./RELEASE-ROLLBACK-PLAYBOOK.md) | ⚠️ Partial |
 
 ---
 
@@ -38,46 +73,20 @@ Local gate (no secrets): `node scripts/production-confidence-check.mjs`
 |------|----------|
 | Maintenance master plan | [`audit/maintenance/MASTER-MAINTENANCE-READINESS-PLAN.md`](../maintenance/MASTER-MAINTENANCE-READINESS-PLAN.md) |
 | RC-1 report | [`audit/rc1/BANCO-STORE-RELEASE-CANDIDATE-REPORT.md`](../rc1/BANCO-STORE-RELEASE-CANDIDATE-REPORT.md) |
-| P0 staging smoke | [`audit/maintenance/WAVE-P0-STAGING-VALIDATION.md`](../maintenance/WAVE-P0-STAGING-VALIDATION.md) |
-| PH-1 hardening | [`audit/maintenance/WAVE-PH1-PRODUCTION-HARDENING.md`](../maintenance/WAVE-PH1-PRODUCTION-HARDENING.md) |
+| PH-1 mobile hardening | [`audit/maintenance/WAVE-PH1-PRODUCTION-HARDENING.md`](../maintenance/WAVE-PH1-PRODUCTION-HARDENING.md) |
 | Live status | [`STATUS_REPORT.md`](../../STATUS_REPORT.md) |
-| AWS deploy readiness | [`deploy/aws/reports/06-READINESS_CHECKLIST_GONOGO.md`](../../deploy/aws/reports/06-READINESS_CHECKLIST_GONOGO.md) |
+| AWS deploy | [`deploy/aws/reports/06-READINESS_CHECKLIST_GONOGO.md`](../../deploy/aws/reports/06-READINESS_CHECKLIST_GONOGO.md) |
 | GCP scaffold | [`deploy/gcp/README.md`](../../deploy/gcp/README.md) |
-| Listing lifecycle E2E | `artifacts/api-server/src/services/MarketplaceLifecycle.e2e.test.ts` |
+| Website separation | [`audit/website/`](../website/) |
 
 ---
 
 ## Staging-only actions (operator)
 
-Before promoting to production:
+1. `node scripts/staging-p0-smoke.mjs` with real `BANCO_API_URL` + Clerk tokens.
+2. `node scripts/verify-upload-claims-schema.mjs` against staging DB.
+3. Checklist in [DISASTER-RECOVERY-VERIFICATION.md](./DISASTER-RECOVERY-VERIFICATION.md).
+4. Confirm `ERROR_ALERT_WEBHOOK` receives a test alert (optional).
+5. Tag release and rehearse [RELEASE-ROLLBACK-PLAYBOOK.md](./RELEASE-ROLLBACK-PLAYBOOK.md) on staging.
 
-1. Run `node scripts/staging-p0-smoke.mjs` with real `BANCO_API_URL` + Clerk tokens.
-2. Run `node scripts/verify-upload-claims-schema.mjs` against staging DB.
-3. Execute the checklist in [DISASTER-RECOVERY-VERIFICATION.md](./DISASTER-RECOVERY-VERIFICATION.md) (non-destructive).
-4. Confirm `ERROR_ALERT_WEBHOOK` receives a test alert (optional but recommended).
-5. Tag release (`v1.x.y`) and rehearse [RELEASE-ROLLBACK-PLAYBOOK.md](./RELEASE-ROLLBACK-PLAYBOOK.md) on staging.
-
-**Do not** run destructive DB restore or production rollback drills without an explicit ops window.
-
-## Consolidation index (2026-07-08)
-
-| Document | Purpose |
-|----------|---------|
-| [SEVEN-LAUNCH-PILLARS.md](./SEVEN-LAUNCH-PILLARS.md) | Launch pillars overview |
-| [PHASE-01-CORE-ARCHITECTURE.md](./PHASE-01-CORE-ARCHITECTURE.md) | Monorepo & deploy surfaces |
-| [PHASE-LISTING-PUBLISH-LIFECYCLE.md](./PHASE-LISTING-PUBLISH-LIFECYCLE.md) | Publish safety verdict |
-| [MONOREPO-PACKAGE-GUIDE.md](./MONOREPO-PACKAGE-GUIDE.md) | pnpm workspace alignment |
-| [EXPO-EAS-PRODUCTION-CHECKLIST.md](./EXPO-EAS-PRODUCTION-CHECKLIST.md) | EAS production |
-| [STAGING-EAS-DEVICE-RUNBOOK.md](./STAGING-EAS-DEVICE-RUNBOOK.md) | Staging device testing |
-| [MIGRATION-ROLLBACK-PLAYBOOK.md](./MIGRATION-ROLLBACK-PLAYBOOK.md) | DB migration rollback |
-| [OBSERVABILITY-RUNBOOK.md](./OBSERVABILITY-RUNBOOK.md) | Logs/metrics |
-| [API-VERSIONING-POLICY.md](./API-VERSIONING-POLICY.md) | API versioning |
-| [BACKWARD-COMPATIBILITY.md](./BACKWARD-COMPATIBILITY.md) | Client/API compat |
-| [DISASTER-RECOVERY-VERIFICATION.md](./DISASTER-RECOVERY-VERIFICATION.md) | DR checks |
-| [RELEASE-ROLLBACK-PLAYBOOK.md](./RELEASE-ROLLBACK-PLAYBOOK.md) | Release rollback |
-| [FEATURE-FLAGS.md](./FEATURE-FLAGS.md) | Feature flags |
-| [RELEASE-CANDIDATE-FINAL.md](./RELEASE-CANDIDATE-FINAL.md) | GO/NO-GO |
-
-**Confidence script:** `node scripts/production-confidence-check.mjs` from repo root.
-
-**Website:** see `../website/` checklists.
+**Do not** run destructive DB restore or production rollback without an explicit ops window.

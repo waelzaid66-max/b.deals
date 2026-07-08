@@ -151,3 +151,13 @@ Fix by aligning all packages to `catalog:` — never add a second React version 
 - [EXPO-EAS-PRODUCTION-CHECKLIST.md](./EXPO-EAS-PRODUCTION-CHECKLIST.md)
 - [STAGING-EAS-DEVICE-RUNBOOK.md](./STAGING-EAS-DEVICE-RUNBOOK.md)
 - [STATUS_REPORT.md](../../STATUS_REPORT.md)
+
+## Windows (pnpm)
+
+Root preinstall uses sh. On Windows without Git Bash in PATH:
+
+`ash
+pnpm install --ignore-scripts
+`
+
+CI uses Linux and runs full pnpm install normally.

@@ -85,3 +85,12 @@ The four markets (cars · real-estate incl. land · industrial/factories · B2B)
 5. Continued deploy/log hardening with real deploy runs.
 
 Work continues in the same environment; this report and the codebase are kept in sync on each push.
+
+---
+
+## Consolidation — production readiness (2026-07-08)
+
+- Added/updated udit/production-readiness/ playbooks, PHASE-01-CORE-ARCHITECTURE.md, PHASE-LISTING-PUBLISH-LIFECYCLE.md (**publish safe**), and RELEASE-CANDIDATE-FINAL.md (conditional GO staging / conditional NO-GO prod).
+- Root script: pnpm run confidence → scripts/production-confidence-check.mjs.
+- Mobile: session/map/search performance hardening (no publish-path changes).
+- **Windows install:** pnpm install --ignore-scripts when preinstall sh is unavailable.
