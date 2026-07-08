@@ -11,25 +11,38 @@ import OpenAI from "openai";
  * server can boot even when AI is not configured; only the AI features fail,
  * with a clear error, instead of crashing the whole process.
  */
+function isUnusableApiKey(apiKey: string): boolean {
+  const trimmed = apiKey.trim();
+  if (!trimmed) return true;
+  // Placeholders from local.env / CI must not call a real provider.
+  if (/DUMMY|CHANGEME|YOUR_.*_KEY|sk-placeholder/i.test(trimmed)) return true;
+  return false;
+}
+
 function resolveOpenAIConfig(): { apiKey: string; baseURL?: string } {
   // An explicitly-provided OPENAI_API_KEY takes precedence. It is a deliberate
   // operator choice and talks directly to api.openai.com, so it works even when
   // Replit's managed AI sidecar (AI_INTEGRATIONS_*) is present but not yet
   // activated by the platform. Remove OPENAI_API_KEY to fall back to managed AI.
-  const ownApiKey = process.env.OPENAI_API_KEY;
-  if (ownApiKey) {
+  const ownApiKey = process.env.OPENAI_API_KEY?.trim();
+  if (ownApiKey && !isUnusableApiKey(ownApiKey)) {
     return { apiKey: ownApiKey };
   }
 
-  const integrationBaseUrl = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL;
-  const integrationApiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY;
-  if (integrationBaseUrl && integrationApiKey) {
+  const integrationBaseUrl = process.env.AI_INTEGRATIONS_OPENAI_BASE_URL?.trim();
+  const integrationApiKey = process.env.AI_INTEGRATIONS_OPENAI_API_KEY?.trim();
+  if (
+    integrationBaseUrl &&
+    integrationApiKey &&
+    !isUnusableApiKey(integrationApiKey)
+  ) {
     return { apiKey: integrationApiKey, baseURL: integrationBaseUrl };
   }
 
   throw new Error(
-    "OpenAI is not configured. Set OPENAI_API_KEY, or provision the Replit OpenAI AI integration " +
-      "(which sets AI_INTEGRATIONS_OPENAI_BASE_URL and AI_INTEGRATIONS_OPENAI_API_KEY).",
+    "OpenAI is not configured (missing key, or only a placeholder/DUMMY key is set). " +
+      "Set a real OPENAI_API_KEY, or provision the Replit OpenAI AI integration " +
+      "(AI_INTEGRATIONS_OPENAI_BASE_URL + AI_INTEGRATIONS_OPENAI_API_KEY).",
   );
 }
 
@@ -51,12 +64,33 @@ export function defaultChatModel(): string {
 
 let cached: OpenAI | null = null;
 
+/**
+ * Production-safe OpenAI client defaults (operator overridable via env):
+ *  - OPENAI_TIMEOUT_MS: request timeout (default 30s)
+ *  - OPENAI_MAX_RETRIES: SDK retries on transient failures (default 1)
+ *
+ * Missing / dummy keys fail only on first AI use (lazy), so the API stays up.
+ */
+function openAiTimeoutMs(): number {
+  const raw = Number(process.env.OPENAI_TIMEOUT_MS);
+  if (Number.isFinite(raw) && raw >= 1000 && raw <= 120_000) return raw;
+  return 30_000;
+}
+
+function openAiMaxRetries(): number {
+  const raw = Number(process.env.OPENAI_MAX_RETRIES);
+  if (Number.isFinite(raw) && raw >= 0 && raw <= 5) return Math.floor(raw);
+  return 1;
+}
+
 function getOpenAIClient(): OpenAI {
   if (!cached) {
     const cfg = resolveOpenAIConfig();
     cached = new OpenAI({
       apiKey: cfg.apiKey,
       ...(cfg.baseURL ? { baseURL: cfg.baseURL } : {}),
+      timeout: openAiTimeoutMs(),
+      maxRetries: openAiMaxRetries(),
     });
   }
   return cached;

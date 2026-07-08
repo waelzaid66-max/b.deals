@@ -33,7 +33,8 @@
 | `CLERK_PUBLISHABLE_KEY` | **Yes** | Client-capable surfaces |
 | Object storage creds (`OBJECT_STORAGE_*` / S3 / GCS set used by project) | **Yes** for media | Exact names per `deploy/*/env` examples |
 | `RESEND_API_KEY` | Soft launch optional / OTP email needs Yes | Email delivery |
-| `OPENAI_API_KEY` | Optional | AI assistant only |
+| `OPENAI_API_KEY` | Optional | AI assistant only (placeholders/DUMMY rejected at runtime) |
+| `OPENAI_TIMEOUT_MS` / `OPENAI_MAX_RETRIES` / `OPENAI_MAX_COMPLETION_TOKENS` | Optional | Production AI hardening defaults (30s / 1 / 2048) |
 | `ERROR_ALERT_WEBHOOK` | Recommended for prod ops | Observability pillar |
 | Paymob keys | **No until B5** | Keep unset / admin-disabled |
 

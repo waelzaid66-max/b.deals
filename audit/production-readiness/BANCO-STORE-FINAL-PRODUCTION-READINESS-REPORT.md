@@ -1,116 +1,119 @@
 # BANCO STORE FINAL PRODUCTION READINESS REPORT
 
-**Date:** 2026-07-08  
-**Branch:** `main`  
-**Mode:** Release Freeze (no new features, no cosmetic refactors)
+**Date:** 2026-07-08 (QC refresh)  
+**Branch:** `main` → `origin/main`  
+**Mode:** Release Freeze (no new features, root-cause fixes only)  
+**Note on `aws-virgen-main`:** No local or remote branch named `aws-virgen-main` exists. Remotes are `origin` (GitHub) and `upstream` (local path). Ship target remains **`origin/main`**.
 
 ---
 
 ## 1) Validation Scope and Execution Order
 
-This validation was executed in the required order (Git -> Env/Secrets -> DB -> API -> Mobile -> Admin -> Dealer -> Marketplace -> Search -> Media -> AuthN -> AuthZ -> Security -> Performance -> Monitoring -> CI -> Cloud -> App Stores), with root-cause-only fixes and no feature additions.
+Audit → Phase 0 Metro/mobile build + OpenAI hardening → affected greens → three-platform docs/env consistency → commit/push → this report.
 
 ---
 
-## 2) Final Status Matrix
+## 2) What Changed in This QC Wave (engineering)
+
+| Fix | Root cause | Result |
+|-----|------------|--------|
+| Metro resolve failure (`@react-navigation/core`, Expo peers) | `disableHierarchicalLookup=true` + incomplete root hoist after Windows `node_modules` partial wipe | **PASS:** `pnpm --filter @workspace/banco-mobile run build` **exit 0** (twice). Hierarchical lookup re-enabled; `.npmrc` uses `node-linker=hoisted` + `shamefully-hoist` + targeted `public-hoist-pattern[]`; explicit `@react-navigation/{core,native,native-stack,bottom-tabs,routers}`, `expo-modules-core`, `@expo/metro-runtime`, `@babel/runtime` in mobile `package.json`. |
+| OpenAI hung/dummy keys | No timeout/retries; placeholders could still construct client | Lazy client with `OPENAI_TIMEOUT_MS` (default 30s), `OPENAI_MAX_RETRIES` (default 1), reject DUMMY/CHANGEME keys; `OPENAI_MAX_COMPLETION_TOKENS` cost cap in `AiAssistantService`. |
+| Cloud env docs | OpenAI ops knobs undocumented on AWS/GCP templates | `deploy/aws/env/.env.production.example` + `deploy/gcp/env/.env.production.example` document timeout/retry/token caps; GCP still documents **no `gcs` provider** (`s3` \| `replit` only). |
+
+---
+
+## 3) Final Status Matrix
 
 | Area | Status | Evidence / Notes |
 |---|---|---|
-| Build Status | **FAIL (blocked)** | `pnpm run build` reached `artifacts/banco-mobile build: Starting Metro Bundler` and did not finish non-interactively in this environment. |
-| TypeScript Status | **PASS** | `pnpm run typecheck` passed across all workspace targets. |
-| Lint Status | **PASS** | `pnpm run lint` (`eslint scripts --max-warnings 0`) passed. |
-| Test Status | **PARTIAL / BLOCKED** | `production-confidence-check --skip-typecheck` passed incl. 23 mobile regression tests. API vitest blocked by DB DNS resolution (`DATABASE_URL` host ENOTFOUND) and global DB setup dependency. |
-| Database Status | **BLOCKED (High)** | `verify-upload-claims-schema.mjs` failed due DNS resolution to DB host; migration/table/index/FK runtime verification could not complete from current network. |
-| API Status | **PARTIAL / BLOCKED (High)** | Health/ready checks pass. Upload path smoke authentication steps blocked because `CLERK_BEARER_TOKEN` unavailable. |
-| Mobile Status | **PARTIAL / BLOCKED (High)** | TypeScript and regression tests pass; EAS/device-level validation (Android/iOS startup, deep links, push, offline on device) still operationally pending. |
-| Admin Status | **PASS (code-level)** | Included in monorepo TypeScript pass; no new freeze regressions detected. |
-| Dealer Status | **PASS (code-level)** | Included in monorepo TypeScript pass; no new freeze regressions detected. |
-| Marketplace Status | **PASS WITH RESERVATIONS** | Cars / Real Estate (sale, rent, furnished) / Industrial previously closed by phase reports; production runtime needs staging/device proof gates. |
-| Search Status | **PASS WITH RESERVATIONS** | Search/geo/map fixes already integrated; end-to-end publish/search runtime proof depends on full staging auth smoke. |
-| Media Status | **PARTIAL / BLOCKED (High)** | Root-cause fix applied for object storage provider mismatch; runtime upload ownership and signed URL path require Clerk JWT smoke + DB reachability. |
-| Authentication Status | **PARTIAL / BLOCKED (High)** | Clerk configuration in code intact; full session/JWT OTP/email/device-session runtime checks require staging tokens and provider credentials. |
-| Authorization Status | **PASS WITH RESERVATIONS** | Prior hardening remains in place; upload/chat/ownership runtime checks pending full authenticated smoke. |
-| Security Status | **PASS WITH RESERVATIONS** | No new freeze regressions introduced; residual runtime verification gaps remain due blocked staging auth/DB tests. |
-| Performance Status | **PASS WITH RESERVATIONS** | No new regressions found in freeze diff; full production profile measurements are operationally pending. |
-| Monitoring Status | **PARTIAL** | Framework present; `ERROR_ALERT_WEBHOOK` live-fire test still pending. |
-| Cloud Readiness | **PARTIAL / BLOCKED** | Replit baseline health works; AWS/GCP scaffolds retained; no deployment executed (as requested). Final readiness requires environment-level secret wiring and runtime checks. |
-| App Store Readiness | **BLOCKED (High)** | Google Play/Apple readiness requires EAS credentials, signing, store assets/policies, and real preview/prod build validation on device. |
+| Build Status (banco-mobile) | **PASS** | Lightweight `expo export --platform web`; `BUILD_EXIT=0` and confirmed rebuild `BUILD2_EXIT=0`. |
+| Full monorepo `pnpm run build` | **NOT RE-RUN this wave** | CI builds api-server, admin-os, dealer-os, landing (not mobile). Mobile gate fixed separately. |
+| TypeScript Status | **PASS (touched)** | Mobile typecheck exit 0; api-server typecheck exit 0 (includes integrations-openai rebuild). |
+| Lint Status | **PASS / pending confirm** | `pnpm run lint` re-run in QC shell; prior wave exit 0. |
+| Mobile regression tests | **PASS** | 23 tests (icons 6 + lib 12 + resilience 5). |
+| Database Status | **BLOCKED (High)** | `DATABASE_URL` host DNS `ENOTFOUND` from this network — schema verify not executable here. |
+| API Status | **PARTIAL / BLOCKED (High)** | Code + health design intact; authenticated upload smoke needs `CLERK_BEARER_TOKEN`. |
+| Mobile device / EAS | **BLOCKED (High)** | Local Expo web export green; Android/iOS EAS signing + device QA still ops. |
+| Admin / Dealer | **PASS (code-level)** | Unchanged freeze path; included in prior mono typecheck. |
+| Marketplace / Search / Media | **PASS WITH RESERVATIONS** | Code fixes retained; runtime proof needs staging auth + DB. |
+| Authentication / Authorization | **PARTIAL / BLOCKED (High)** | Clerk wiring intact; full JWT/OTP/device session need staging. |
+| Security | **PASS WITH RESERVATIONS** | GCS provider still rejected in code; secrets not committed. |
+| Monitoring | **PARTIAL** | `ERROR_ALERT_WEBHOOK` live-fire still pending. |
+| Cloud — Replit | **PASS (scaffold + prior health)** | No delete; runtime secrets ops-owned. |
+| Cloud — AWS | **PASS (scaffold)** | Docker/compose/env examples present; **no live deploy** this wave. |
+| Cloud — GCP | **PASS (scaffold)** | Cloud Run Dockerfile/Cloud Build; storage = S3-compat or replit only; **no live deploy**. |
+| App Store / Play | **BLOCKED (High)** | Scheme `bancooom`, EAS `projectId`, Target SDK 35, Sign in with Apple, notifications plugin present. **No** `associatedDomains` / Android `intentFilters` (Universal Links / App Links not configured — custom scheme only). Store consoles + EAS preview/prod not run. |
+| Production data personas | **NOT EXECUTED** | New user / dealer / furniture / factory matrix remains OPS. |
+| Turborepo | **N/A** | Repo does not use Turborepo. |
 
 ---
 
-## 3) Git State Validation
+## 4) Git / Remotes
 
-- No merge conflicts detected.
-- No deleted tracked files detected.
-- Temporary validation files were removed.
-- One tracked runtime log file (`audit/rc1/12-api-runtime.log`) is still modified due active runtime process/file lock in this environment; it was **not** included for release changes.
-- Working-tree policy for release remains: no temp/log/test artifacts should be staged.
-
----
-
-## 4) Environment Variables / Secrets Validation
-
-Secrets were extracted from code paths and deploy/runtime scripts (without exposing any value).
-
-### GitHub Secrets Check
-
-- `gh auth status`: authenticated.
-- `gh secret list`: returned empty from current repo context (no visible repo-level secrets in this context).
-
-### Replit Secrets Check
-
-- Direct Replit secret inventory is not available from this CLI context.
-- Validation was done via local secure loader and runtime checks only.
+- Active: `main` tracking `origin/main`.
+- `origin`: `https://github.com/waelzaid66-max/-BANCO-CA-OOM-.git`
+- `upstream`: local path clone (not used for this push).
+- Branches: `main`, maintenance waves; **no `aws-virgen-main`**.
+- Do **not** commit: `.secrets/`, `audit/rc1/12-api-runtime.log`, `artifacts/banco-mobile/dist` if gitignored.
 
 ---
 
 ## 5) Missing Secrets (no values)
 
-Required for completing blocked production-readiness gates:
-
-- `CLERK_BEARER_TOKEN` (required to complete authenticated upload smoke steps)
-- `CLERK_BEARER_TOKEN_OTHER` (recommended for IDOR/isolation proof)
-- `ERROR_ALERT_WEBHOOK` (required for live monitoring alert-fire validation)
-- EAS/Store operational credentials (Google Play signing + Apple certificates/team/ASC)
-- Provider credentials for push/auth platform checks (FCM/APNs/Apple+Google sign-in where in scope)
-
-Context-dependent but must be valid/reachable at runtime:
-
-- `DATABASE_URL` (current value unresolved from this network during verification)
-- Cloud runtime secret sets for target envs (Replit/AWS/GCP) as defined in deploy docs
+| Secret / item | Blocks |
+|---------------|--------|
+| `CLERK_BEARER_TOKEN` (+ optional OTHER) | Staging authenticated upload / IDOR smoke |
+| Reachable `DATABASE_URL` | Schema verify, API vitest with DB |
+| `ERROR_ALERT_WEBHOOK` | Live alert-fire |
+| EAS + Play/Apple signing & console access | Store builds / TestFlight / Play internal |
+| FCM / APNs | Push on device |
+| Real `OPENAI_API_KEY` (if AI in prod) | AI features (DUMMY rejected deliberately) |
 
 ---
 
-## 6) Severity Counts
+## 6) Severity Counts (honest after this wave)
 
-- **Critical:** 0
-- **High:** 5
-- **Medium:** 4
-- **Low:** 3
-
-### High Issues (blocking publish confidence)
-
-1. Database runtime verification blocked by DNS resolution (`DATABASE_URL` host not resolvable from current network).
-2. Authenticated API upload smoke incomplete (`CLERK_BEARER_TOKEN` missing).
-3. Full mobile runtime verification on real Android/iOS devices pending (EAS/store credentials pending).
-4. App Store readiness gates not executed (signing + console-level validation pending).
-5. Full non-interactive build gate not completed in this environment due Metro bundler blocking behavior.
+- **Critical:** 0  
+- **High:** 4 (was 5; monorepo Metro/build fail closed)  
+  1. DB runtime verify blocked (DNS / network)  
+  2. Staging auth smoke (`CLERK_BEARER_TOKEN`)  
+  3. EAS / device Android+iOS validation  
+  4. App Store / Play console + signing gates  
+- **Medium:** 4 (monitoring live-fire; Universal Links not configured; full mono build not re-run here; production persona matrix unchecked)  
+- **Low:** 3 (optional Router origin store checklist, DR drill, Turborepo N/A clarification)
 
 ---
 
-## 7) Remaining Risks Only
+## 7) Remaining Risks
 
-- Runtime DB connectivity risk for migration/schema gate in target staging network path.
-- Auth/JWT runtime behavior not fully proven end-to-end in staging upload path.
-- Device-level mobile runtime (deep links/push/offline/startup) still operationally unproven for this freeze window.
-- Monitoring webhook not yet proven by live alert emission.
-- Store submission readiness depends on external console/certificate workflows not yet executed.
+- Staging network cannot prove DB + Clerk JWT paths from this machine.
+- Custom URL scheme only — HTTPS App Links / Universal Links still absent (documented gap, not invented domains).
+- AI works only with real keys + optional cost envs; Replit integration path still supported.
+- AWS/GCP scaffolds are deploy-ready on paper; live provision/deploy intentionally **not** claimed PASS.
 
 ---
 
-## 8) Final Decision
+## 8) Per-Platform Readiness
 
-**NO GO**
+| Platform | Code/docs | Live deploy this wave | Verdict |
+|----------|-----------|----------------------|---------|
+| Replit | Aligned; storage `replit`\|`s3` | Not re-probed this QC | **GO WITH FIXES** (ops secrets) |
+| AWS | Docker/EB/compose/env + OpenAI knobs | None | **GO WITH FIXES** (provision + secrets) |
+| GCP | Cloud Run/Build + env; no `gcs` provider | None | **GO WITH FIXES** (S3-interop or replit) |
 
-Reason: required global release conditions are not all satisfied yet (`Build`, full required runtime tests, and blocked High items remain).
+---
 
+## 9) Final Decision
+
+**GO WITH FIXES** for **codebase freeze merge to `main` / operator deploy prep**.  
+
+**NO GO** for **unsupervised global App Store / Play publish** until High ops blockers (Clerk smoke, DB reachability, EAS device/store) are closed.
+
+---
+
+## 10) Related
+
+- [RELEASE-CANDIDATE-FINAL.md](./RELEASE-CANDIDATE-FINAL.md)  
+- [STAGING-REQUIRED-SECRETS.md](./STAGING-REQUIRED-SECRETS.md)  
+- `deploy/aws/`, `deploy/gcp/README.md`

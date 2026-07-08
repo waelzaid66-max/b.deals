@@ -1,6 +1,6 @@
 ﻿# Release Candidate — Final (Release Freeze)
 
-**Date:** 2026-07-08  
+**Date:** 2026-07-08 (QC refresh)  
 **Branch:** `main`  
 **Mode:** **RELEASE FREEZE** — no new features; Critical/High only if proven.
 
@@ -10,23 +10,23 @@
 
 | Environment | Verdict | Why |
 |-------------|---------|-----|
-| **Code base / CI design** | **GO WITH FIXES** | Freeze fixes applied; full TypeScript + lint pass |
+| **Code base / CI design** | **GO WITH FIXES** | Metro/mobile export fixed (exit 0); OpenAI timeouts/retries; TypeScript + lint + 23 mobile tests green on touched path |
 | **Staging** | **GO WHEN OPS BLOCKERS CLOSED** | Authenticated smoke + DB reachability still blocked by runtime secrets/network |
 | **Global production (stores)** | **NO-GO** | App-store operational gates (EAS signing/device/store checks) not fully completed |
 
-**Overall:** **NO-GO** for immediate global publish under strict final criteria.
+**Overall:** **GO WITH FIXES** for merging/shipping code to `origin/main`. **NO-GO** for unsupervised store publish.
+
+**Branch note:** `aws-virgen-main` does not exist on remotes; use `origin/main`.
 
 ---
 
-## What completed (this freeze wave)
+## What completed (this freeze / QC wave)
 
-- Open-items backlog extracted and closed for all **DOCS/CODE** items reachable without secrets
-- PHASE reports 02–20 written (inspection; no feature work)
-- Marketplace sections readiness documented
-- `.gitignore` noise cleanup
-- `STAGING-REQUIRED-SECRETS.md` exact inventory (no fake values)
-- Produce proof: mobile tests path clarification; DB/API health code confirmed intact
-- Multi-cloud: Replit + AWS + GCP **retained**
+- Root-cause Metro: hierarchical lookup + hoist patterns + explicit `@react-navigation/*` / `expo-modules-core` deps → **banco-mobile build exit 0** (confirmed twice)
+- OpenAI: timeout/retries, dummy-key rejection, completion token cap
+- AWS/GCP env examples: OpenAI ops knobs; GCP storage still `s3`\|`replit` only
+- Final production readiness report refreshed
+- Push target: `origin/main`
 
 ---
 
@@ -38,11 +38,12 @@
 | 2 | `DATABASE_URL` → `verify-upload-claims-schema.mjs` | Operator |
 | 3 | Device listing publish smoke | Operator |
 | 4 | EAS login + preview/production builds + signing | Operator |
-| 5 | Confirm Actions green in browser/`gh` | Operator |
+| 5 | Confirm Actions green after push | Operator |
 | 6 | `ERROR_ALERT_WEBHOOK` live test (recommended) | Operator |
 | 7 | Apple/Google Sign-In / push provider config | Operator |
-| 8 | Paymob enable | Policy SKIP until B5 |
-| 9 | Consumer website build | Deferred SKIP |
+| 8 | Universal Links / App Links (domains TBD — scheme `bancooom` only today) | Product/ops |
+| 9 | Paymob enable | Policy SKIP until B5 |
+| 10 | Consumer website build | Deferred SKIP |
 
 ---
 
@@ -53,23 +54,13 @@
 | Staging never run | High for launch | Wave A secrets |
 | `ensureSchemaPatches` fails on target DB | High for media | Verify script |
 | Store build without `EXPO_PUBLIC_ROUTER_ORIGIN` | Medium | Checklist |
+| No HTTPS deep links | Medium | Configure domains when known |
 | No DR drill | Medium ops | DISASTER-RECOVERY-VERIFICATION |
-
----
-
-## Release Freeze rules
-
-1. No features / no cosmetic refactors  
-2. Fix only Critical/High regressions with proof  
-3. Minimal typecheck/tests for touched packages only  
-4. Full mono gate only after material multi-package change  
 
 ---
 
 ## Related
 
-- [OPEN-ITEMS-BACKLOG.md](./OPEN-ITEMS-BACKLOG.md)  
-- [STAGING-REQUIRED-SECRETS.md](./STAGING-REQUIRED-SECRETS.md)  
-- [FULL-READINESS-STATUS-PLAN.md](./FULL-READINESS-STATUS-PLAN.md)  
 - [BANCO-STORE-FINAL-PRODUCTION-READINESS-REPORT.md](./BANCO-STORE-FINAL-PRODUCTION-READINESS-REPORT.md)  
-- [PHASE-LISTING-PUBLISH-LIFECYCLE.md](./PHASE-LISTING-PUBLISH-LIFECYCLE.md) — **publish safe**
+- [STAGING-REQUIRED-SECRETS.md](./STAGING-REQUIRED-SECRETS.md)  
+- [OPEN-ITEMS-BACKLOG.md](./OPEN-ITEMS-BACKLOG.md)

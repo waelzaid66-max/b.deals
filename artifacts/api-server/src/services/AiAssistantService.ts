@@ -61,6 +61,13 @@ const MAX_CONTENT = 2000;
 const MAX_TOOL_ROUNDS = 4;
 const MAX_LISTING_ACTIONS = 4;
 
+/** Cap completion size (cost control). Override with OPENAI_MAX_COMPLETION_TOKENS. */
+function maxCompletionTokens(): number {
+  const raw = Number(process.env.OPENAI_MAX_COMPLETION_TOKENS);
+  if (Number.isFinite(raw) && raw >= 256 && raw <= 8192) return Math.floor(raw);
+  return 2048;
+}
+
 type Metrics = Awaited<ReturnType<typeof getMyMetrics>>;
 type DealerListing = Awaited<ReturnType<typeof getDealerListings>>["items"][number];
 type Conversation = Awaited<ReturnType<typeof listConversations>>[number];
@@ -386,7 +393,7 @@ export async function askBancoAssistant(
       // OpenAI model, the managed integration to its own catalog. OPENAI_MODEL
       // overrides both when an operator wants to pin a specific model.
       model: process.env.OPENAI_MODEL ?? defaultChatModel(),
-      max_completion_tokens: 8192,
+      max_completion_tokens: maxCompletionTokens(),
       messages,
       // On the final allowed round, force a text answer so we never end on a tool call.
       ...(lastRound ? { tool_choice: "none" as const } : { tools: TOOLS, tool_choice: "auto" as const }),
