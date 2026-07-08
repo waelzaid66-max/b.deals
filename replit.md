@@ -73,4 +73,5 @@ overview, STATUS_REPORT.md for verification evidence, threat_model.md for securi
 
 ## Pointers
 
-- Deploy: `deploy/aws/reports/00-README.md` (AWS) · `release/STORE_PUBLISHING_GUIDE.md` (app stores/EAS).
+- Deploy: `deploy/aws/reports/00-README.md` (AWS) · `deploy/gcp/reports/00-README.md` (GCP) · `release/STORE_PUBLISHING_GUIDE.md` (app stores/EAS).
+- **Primary agent handoff:** `release/PRIMARY_AGENT_HANDOFF.md` · unified ops: `release/REPLIT_GOOGLE_AWS_UNIFIED_RUNBOOK.md`.

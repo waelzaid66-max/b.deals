@@ -99,6 +99,8 @@ gcloud builds submit . --config=deploy/gcp/cloudbuild.deploy.yaml \
 | `deploy/gcp/cloudbuild.deploy.yaml` | Build + push + `gcloud run deploy` |
 | `.gcloudignore` | Smaller upload; never excludes lockfile/workspace |
 | `scripts/verify-gcp-docker-build-config.mjs` | CI/local gate for paths and tags |
+| `deploy/gcp/reports/` | Full GCP audit pack (hosting requirements, Go/No-Go) |
+| `deploy/gcp/TRIGGER_MIGRATION.md` | Fix Cloud Build Console triggers |
 
 ## After image is in Artifact Registry
 

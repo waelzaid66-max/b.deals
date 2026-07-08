@@ -33,7 +33,7 @@
 | **bbanco** | `waelzaid66-max/b-banco` | مرآة | `a8cc3e1` ✅ |
 | **bdeals** | `waelzaid66-max/b.deals` | deploy أصلي | `a8cc3e1` ✅ |
 | **boom** | `waelzaid66-max/B-OOM` | B-OOM | `a8cc3e1` ✅ |
-| **aws-virgen** | `waelzaid66-max/aws-virgen` | AWS EC2/CD | `./scripts/publish-aws-virgen-rc.sh` |
+| **aws-virgen** | `waelzaid66-max/aws-virgen` | AWS EC2/CD | `./scripts/publish-aws-virgen-rc.sh v1.0.0-rc.2` أو workflow **Sync aws-virgen** |
 | **upstream** (محلي) | `banco stor app/banco.store-main` | نسخة محلية | يدوي |
 
 > لا يوجد فرع `aws-virgen-main`.

@@ -7,4 +7,5 @@ This GitHub repo is the **AWS deployment canonical clone** for BANCO Store.
 - **CD:** `.github/workflows/deploy.yml` runs on version tags `v*.*.*`.
 
 Documentation index: [docs/DEPLOYMENT_GUIDES.md](docs/DEPLOYMENT_GUIDES.md)  
+Full publish (merge + manifest + tag): [docs/AWS_VIRGEN_FULL_PUBLISH.md](docs/AWS_VIRGEN_FULL_PUBLISH.md)  
 Finalization audit: [REPOSITORY_FINALIZATION_AUDIT.md](REPOSITORY_FINALIZATION_AUDIT.md)

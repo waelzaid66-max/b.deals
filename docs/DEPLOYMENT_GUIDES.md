@@ -26,7 +26,8 @@ Use this index before deploy. **Two official GitHub repositories** ship the same
 |----------|--------|
 | **Replit** | [replit.md](../replit.md) · [release/REPLIT_HANDOFF.md](../release/REPLIT_HANDOFF.md) · [release/DEPLOYMENT.md](../release/DEPLOYMENT.md) |
 | **AWS** | [deploy/aws/reports/](../deploy/aws/reports/) · [release/DEPLOY_VERIFICATION.md](../release/DEPLOY_VERIFICATION.md) · [.github/workflows/deploy.yml](../.github/workflows/deploy.yml) |
-| **Google Cloud** | [deploy/gcp/](../deploy/gcp/) · `deploy/gcp/env/.env.production.example` |
+| **Google Cloud** | [deploy/gcp/reports/](../deploy/gcp/reports/) · [deploy/gcp/TRIGGER_MIGRATION.md](../deploy/gcp/TRIGGER_MIGRATION.md) · [deploy/gcp/](../deploy/gcp/) |
+| **Primary agent** | [release/PRIMARY_AGENT_HANDOFF.md](../release/PRIMARY_AGENT_HANDOFF.md) · [release/REPLIT_GOOGLE_AWS_UNIFIED_RUNBOOK.md](../release/REPLIT_GOOGLE_AWS_UNIFIED_RUNBOOK.md) |
 
 ## Mobile / stores
 
