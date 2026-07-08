@@ -80,3 +80,19 @@
 3. Set D → `eas build --profile preview`.  
 4. Device publish smoke (create → photos → publish → feed/search).  
 5. Only then consider production EAS profile + store consoles.
+
+---
+
+## Local workstation note (2026-07-08)
+
+Secrets for this machine live only under **gitignored** `.secrets/local.env` (never committed).  
+Loader: `node scripts/load-local-secrets.mjs` (prints boolean flags only).
+
+| Check | Result |
+|-------|--------|
+| Replit API `healthz` / `readyz` | **PASS** (origin from existing `BANCO_API_URL`) |
+| Upload smoke path | **BLOCKED** — need live `CLERK_BEARER_TOKEN` (session JWT) |
+| `verify-upload-claims-schema` | **FAIL DNS** — `DATABASE_URL` host not resolvable from this network |
+| GitHub Actions (via token) | Latest `main` CI **success** before storage fix push; re-check after `c6f81b3` |
+| OpenAI | Still **dummy** key — AI assistant will not work until real key |
+| Paymob | Remains sandbox / disabled |

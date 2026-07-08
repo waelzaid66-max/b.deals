@@ -10,11 +10,11 @@
 
 | Environment | Verdict | Why |
 |-------------|---------|-----|
-| **Code base / CI design** | **GO WITH FIXES** | Phases 01–17 & 19–20 closed by inspection; prior P0+waves complete |
-| **Staging** | **GO WHEN SECRETS PROVIDED** | Scripts + runbooks ready; execution blocked on operator secrets |
-| **Global production (stores)** | **NO-GO** until Phase 18 + EAS preview device + store secrets |
+| **Code base / CI design** | **GO WITH FIXES** | Freeze fixes applied; full TypeScript + lint pass |
+| **Staging** | **GO WHEN OPS BLOCKERS CLOSED** | Authenticated smoke + DB reachability still blocked by runtime secrets/network |
+| **Global production (stores)** | **NO-GO** | App-store operational gates (EAS signing/device/store checks) not fully completed |
 
-**Overall:** **GO WITH FIXES** for engineering readiness · **NO-GO** for unsupervised world launch.
+**Overall:** **NO-GO** for immediate global publish under strict final criteria.
 
 ---
 
@@ -71,4 +71,5 @@
 - [OPEN-ITEMS-BACKLOG.md](./OPEN-ITEMS-BACKLOG.md)  
 - [STAGING-REQUIRED-SECRETS.md](./STAGING-REQUIRED-SECRETS.md)  
 - [FULL-READINESS-STATUS-PLAN.md](./FULL-READINESS-STATUS-PLAN.md)  
+- [BANCO-STORE-FINAL-PRODUCTION-READINESS-REPORT.md](./BANCO-STORE-FINAL-PRODUCTION-READINESS-REPORT.md)  
 - [PHASE-LISTING-PUBLISH-LIFECYCLE.md](./PHASE-LISTING-PUBLISH-LIFECYCLE.md) — **publish safe**
