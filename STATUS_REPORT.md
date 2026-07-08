@@ -1,8 +1,8 @@
 # BANCO Store — Completion & Status Report
 
-_Last updated: 2026-07-08 — Production readiness: Expo/EAS checklist, monorepo guide, staging runbook, mobile performance pass._
+_Last updated: 2026-07-08 — Pushed `main` @ `c37e1b6` (perf + expo + RC + website plans)._
 
-> **Release line:** `main` — **295 API tests / 3 skipped**, **23 mobile regression tests**, CI 4/4 green @ `7cb7a1b`+.
+> **Release line:** `main` @ **`c37e1b6`** — **23 mobile regression tests** pass locally; CI expected green post-push.
 
 This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin · Banco Market/dealer-os · API Server · shared libs). It records what is **done and verified**, the **architecture**, and the **honest remaining items** with the reason each is or isn't locally verifiable.
 
