@@ -1,0 +1,43 @@
+═══════════════════════════════════════════════════════════════
+رسالة للوكيل الأساسي على Replit — انسخها كما هي
+═══════════════════════════════════════════════════════════════
+
+أنت الوكيل الأساسي. Cloud Agent الثانوي جهّز الريبو؛ التنفيذ والدفع عليك.
+
+1) اسحب main من:
+   https://github.com/waelzaid66-max/-BANCO-CA-OOM-
+   الهدف: SHA 30dcb2a أو أحدث بعد دمج PR #5 و #3.
+
+2) اقرأ بالترتيب:
+   - release/PRIMARY_AGENT_HANDOFF.md
+   - release/REPLIT_GOOGLE_AWS_UNIFIED_RUNBOOK.md
+   - deploy/gcp/reports/00-README.md
+   - deploy/gcp/TRIGGER_MIGRATION.md
+
+3) على Replit شغّل فحص كامل:
+   pnpm install --frozen-lockfile
+   pnpm run typecheck
+   pnpm run lint
+   pnpm run confidence
+   pnpm --filter @workspace/api-server test
+   (وموبايل: test:icons, test:lib, test:resilience)
+
+4) تأكد GitHub Actions CI أخضر (5 jobs بما فيها GCP config gate).
+
+5) ارفع نسخة كاملة إلى aws-virgen:
+   ./scripts/publish-aws-virgen-rc.sh v1.0.0-rc.2
+   (يتطلب AWS_VIRGEN_SYNC_TOKEN أو workflow Sync aws-virgen)
+
+6) جوجل كلاود:
+   - bash deploy/gcp/scripts/bootstrap-project.sh
+   - أسرار Secret Manager حسب deploy/gcp/env/SECRET_MANAGER_MAPPING.md
+   - حدّث مشغّلات Cloud Build في Console حسب TRIGGER_MIGRATION.md
+   - نشر: deploy/gcp/cloudbuild.deploy.yaml مع substitutions SQL + secrets
+
+7) مرآات: ./scripts/push-mirror-remotes.sh
+
+8) حدّث REPO_SYNC_STATUS.md بآخر SHA.
+
+لا تترك aws-virgen على 61af147 — يجب merge من آخر main.
+
+═══════════════════════════════════════════════════════════════

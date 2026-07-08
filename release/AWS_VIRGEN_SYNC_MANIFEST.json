@@ -1,13 +1,13 @@
 {
   "schema": "banco-aws-virgen-sync/1",
-  "generatedAt": "2026-07-08T21:45:54.201Z",
+  "generatedAt": "2026-07-08T21:56:46.022Z",
   "releaseTag": "v1.0.0-rc.2",
   "primaryRepository": "waelzaid66-max/-BANCO-CA-OOM-",
   "awsVirgenRepository": "waelzaid66-max/aws-virgen",
   "commit": {
-    "full": "30dcb2a7b4d68de60916b8c9b2565ae3a7d6a2b0",
-    "short": "30dcb2a",
-    "subject": "Merge pull request #1 from waelzaid66-max/cursor/fix-seo-publish-visibility-2d01"
+    "full": "009b1b52caf589af7920c9fdb3c857f1bb7e3b87",
+    "short": "009b1b5",
+    "subject": "chore(release): full aws-virgen sync manifest, publish script, and Actions workflow"
   },
   "syncPolicy": "merge primary main into aws-virgen main (full tree, history preserved)",
   "ci": {
@@ -98,6 +98,7 @@
       "from-other-repos/banco.store-main__STATUS_REPORT.md"
     ],
     "release": [
+      "AWS_VIRGEN_SYNC_MANIFEST.json",
       "BUILD_REPORT.md",
       "CAR_BRANDS_REPORT.md",
       "CHANGELOG.md",
@@ -112,6 +113,7 @@
       "PROJECT_CONTEXT.md",
       "RELEASE_CHECKLIST.md",
       "RELEASE_NOTES_v1.0.0-rc.2.md",
+      "REPLIT_GOOGLE_AWS_UNIFIED_RUNBOOK.md",
       "REPLIT_HANDOFF.md",
       "SECURITY_REPORT.md",
       "STORE_PUBLISHING_GUIDE.md",
