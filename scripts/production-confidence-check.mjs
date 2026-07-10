@@ -36,12 +36,21 @@ function fail(name, detail) {
 }
 
 function run(cmd, args, cwd = ROOT) {
-  const r = spawnSync(cmd, args, {
-    cwd,
-    encoding: "utf8",
-    shell: process.platform === "win32",
-    stdio: ["ignore", "pipe", "pipe"],
-  });
+  const spawnPnpmOnWindows =
+    process.platform === "win32" && (cmd === "pnpm" || cmd === "npm");
+  const r = spawnPnpmOnWindows
+    ? spawnSync("cmd.exe", ["/d", "/s", "/c", cmd, ...args], {
+        cwd,
+        encoding: "utf8",
+        shell: false,
+        stdio: ["ignore", "pipe", "pipe"],
+      })
+    : spawnSync(cmd, args, {
+        cwd,
+        encoding: "utf8",
+        shell: false,
+        stdio: ["ignore", "pipe", "pipe"],
+      });
   return {
     ok: r.status === 0,
     status: r.status ?? 1,
@@ -270,6 +279,10 @@ function main() {
   checkMobileProof("audit/mobile/scripts/proof-create-fields.mjs", "proof-create-fields");
   checkMobileProof("audit/mobile/scripts/pre-redeploy-code-gate.mjs", "pre-redeploy code gate");
   checkApiPureTest("src/lib/sqlLikeEscape.test.ts", "C-02 LIKE escape (sqlLikeEscape)");
+  checkApiPureTest(
+    "src/services/sanitizeParsedSearchQuery.test.ts",
+    "API sanitizeParsedSearchQuery (section isolation)",
+  );
   summarize();
 }
 

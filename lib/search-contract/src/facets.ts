@@ -66,16 +66,31 @@ export function applyFacetToCriteria(
 
   if (section === "industrial_type") {
     next.industrialType = value as IndustrialType;
+    if (
+      next.category === "materials" &&
+      (value === "all" || value === "raw_material")
+    ) {
+      next.industry = null;
+    }
+    if (
+      next.category === "materials" &&
+      value !== "all" &&
+      value !== "raw_material"
+    ) {
+      next.material = null;
+    }
     return next;
   }
 
   if (section === "fuel_type") {
+    if (next.category !== "car") return next;
     next.fuelType = value as SearchListingsFuelType;
     next.engineKey = "all";
     return next;
   }
 
   if (section === "transmission") {
+    if (next.category !== "car") return next;
     next.transmission = value as SearchListingsTransmission;
     next.engineKey = "all";
     return next;

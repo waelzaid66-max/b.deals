@@ -79,7 +79,7 @@ interface Props {
    * arrive, falling back to the list when none carry coordinates — so tapping
    * this never lands the user on an empty map.
    */
-  onExploreMap: () => void;
+  onExploreMap: (section: Category) => void;
   /** Re-run a recent text search (fills the input + commits immediately). */
   onSearchQuery: (q: string) => void;
 }
@@ -355,7 +355,7 @@ export function SearchDiscover({
       {/* Explore on map — marketplace surface (before personal rails). */}
       {mapAvailable && (
         <Pressable
-          onPress={onExploreMap}
+          onPress={() => onExploreMap(openSection ?? "real_estate")}
           style={styles.mapCtaWrap}
           testID="discover-explore-map"
         >

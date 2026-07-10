@@ -107,6 +107,13 @@ const proof = {
     read("artifacts/banco-mobile/components/search/SearchResultsMap.tsx"),
   ),
   discoverMapCtaSectionAware: /openSection === "car"/.test(discover),
+  discoverMapPassesOpenSection: /onExploreMap\(openSection/.test(discover),
+  exploreOnMapAcceptsSection: /exploreOnMap = \(section: Category\)/.test(search),
+  apiSanitizesParsed: /sanitizeParsedSearchQuery/.test(
+    read("artifacts/api-server/src/controllers/searchController.ts"),
+  ),
+  mobileAutocompleteSubtype: /criteria\.industrialType !== "all"/.test(search),
+  activeFilterCountSectionGated: /rentEngineActive/.test(search),
 };
 
 const failures = Object.entries(proof)

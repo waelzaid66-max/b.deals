@@ -29,7 +29,7 @@
 | Typecheck (كل الحزم) | `pnpm run typecheck` | **PASS** | exit 0 — ~17.5 دقيقة على Windows؛ 7 مشاريع artifacts + libs + scripts |
 | ESLint (scripts) | `pnpm run lint` | **PASS** | exit 0 — ~10.5 دقيقة |
 | Mobile regression | `pnpm --filter @workspace/banco-mobile run test` | **PASS** | **34/34** (icons 6 + lib 21 + resilience 5 + universal-links 2) |
-| Production confidence | `pnpm run confidence` | **PASS** | **18/18** مع typecheck (أو **16/16** مع `--skip-typecheck`) |
+| Production confidence | `pnpm run confidence` | **PASS** | **19/19** مع typecheck (أو **17/17** مع `--skip-typecheck`) |
 | Upload claims schema | `node scripts/verify-upload-claims-schema.mjs` | **PASS** | جدول `upload_claims` + أعمدة + فهارس |
 | Staging P0 smoke | `node scripts/staging-p0-smoke.mjs` | **BLOCKED** | exit **2** — `BANCO_API_URL` و `CLERK_BEARER_TOKEN` غير مضبوطين في الجلسة |
 | GitHub Actions (محلي) | `gh run list` | **BLOCKED** | `gh auth login` مطلوب على الجهاز |

@@ -40,6 +40,11 @@ const checks = [
     includes: ["export function escapeLikeLiteral", "replace(/%/g"],
   },
   {
+    id: "api_sanitize_parsed_search",
+    file: "artifacts/api-server/src/controllers/searchController.ts",
+    includes: ["sanitizeParsedSearchQuery"],
+  },
+  {
     id: "upload_claims_schema",
     file: "lib/db/src/schema/index.ts",
     includes: ["uploadClaims", "upload_claims"],

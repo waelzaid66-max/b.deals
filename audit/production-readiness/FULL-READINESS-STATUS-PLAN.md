@@ -180,7 +180,7 @@
 - [x] Expo/EAS config + monorepo Metro (~18/22)
 - [x] سبعة ركائز (وثائق) + RC تقارير + OPEN-ITEMS + secrets inventory
 - [x] Website separation plan (تخطيط)
-- [x] بوابات محلية: typecheck، lint، **34** mobile، confidence (**18/18** أو **16/16** مع `--skip-typecheck`)
+- [x] بوابات محلية: typecheck، lint، **34** mobile، confidence (**19/19** أو **17/17** مع `--skip-typecheck`)
 - [x] فهرس البنية `ARCHITECTURE-FILE-INDEX.md` + موجة `WAVE-MOBILE-STABILIZE-ISOLATION.md`
 - [x] حماية مسار النشر في نطاق الـdiff الحالي
 - [x] Release Freeze entered (engineering)

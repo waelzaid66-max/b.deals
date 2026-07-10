@@ -413,8 +413,12 @@ export default function SearchScreen() {
           criteria.category === "materials"
         ) {
           params.category = "industrial";
-          const group = industrialGroupForCategory(criteria.category);
-          if (group?.length) params.industrial_type = group.join(",");
+          if (criteria.industrialType !== "all") {
+            params.industrial_type = criteria.industrialType;
+          } else {
+            const group = industrialGroupForCategory(criteria.category);
+            if (group?.length) params.industrial_type = group.join(",");
+          }
         }
         const res = await getAutocomplete(params);
         if (seq !== autocompleteSeq.current) return;
@@ -424,7 +428,7 @@ export default function SearchScreen() {
         setSuggestions([]);
       }
     },
-    [criteria.category],
+    [criteria.category, criteria.industrialType],
   );
 
   // Live typing: update the input immediately, debounce autocomplete (250ms) and
@@ -617,13 +621,14 @@ export default function SearchScreen() {
   // Discover "Explore on map" → latch map intent on the CURRENT category so we
   // never hijack cars/industrial into real-estate. Host falls back to list if
   // the browse has no coordinates.
-  const exploreOnMap = () => {
+  const exploreOnMap = (section: Category) => {
     if (brandValue) setDraftQuery("");
     setBrandValue(null);
     setWantMap(true);
+    const cat = section === "all" ? "real_estate" : section;
     update({
       ...CLEAR_ATTRS,
-      category: criteria.category === "all" ? "real_estate" : criteria.category,
+      category: cat,
       engineKey: "all",
     });
   };
@@ -751,22 +756,35 @@ export default function SearchScreen() {
     });
   };
 
-  // Count every live section filter so the badge matches what that company owns.
+  // Count filters owned by the active browse company (badge must not lie).
+  const rentEngineActive =
+    criteria.category === "real_estate" &&
+    engineByKey(criteria.category, criteria.engineKey)?.params.offer_type === "rent";
   const activeFilterCount = [
     criteria.category !== "all",
     criteria.engineKey !== "all",
-    criteria.industrialType !== "all",
+    criteria.category === "facilities" || criteria.category === "materials"
+      ? criteria.industrialType !== "all"
+      : false,
     !!criteria.minPrice || !!criteria.maxPrice,
     !!criteria.location,
-    criteria.paymentType !== "any",
-    !!criteria.rentalTerm,
-    !!criteria.brand || !!criteria.model,
-    !!criteria.fuelType,
-    !!criteria.transmission,
-    !!criteria.minYear || !!criteria.maxYear,
-    !!criteria.industry,
-    !!criteria.originType,
-    !!criteria.material,
+    criteria.paymentType !== "any" &&
+      (criteria.category === "car" ||
+        criteria.category === "real_estate" ||
+        criteria.category === "all"),
+    rentEngineActive && !!criteria.rentalTerm,
+    criteria.category === "car" && (!!criteria.brand || !!criteria.model),
+    criteria.category === "car" && !!criteria.fuelType,
+    criteria.category === "car" && !!criteria.transmission,
+    criteria.category === "car" && (!!criteria.minYear || !!criteria.maxYear),
+    (criteria.category === "facilities" ||
+      (criteria.category === "materials" &&
+        (criteria.industrialType === "machine" ||
+          criteria.industrialType === "production_line"))) &&
+      !!criteria.industry,
+    (criteria.category === "car" || criteria.category === "materials") &&
+      !!criteria.originType,
+    criteria.category === "materials" && !!criteria.material,
     criteria.nearMeEnabled,
     criteria.marketCountry !== DEFAULT_MARKET_COUNTRY,
   ].filter(Boolean).length;

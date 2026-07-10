@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { parseSearchQuery, searchListings, getAutocomplete, getTrending, getRecommendations, getFacets, mapClusters } from "../services/SearchService";
+import { sanitizeParsedSearchQuery } from "../services/sanitizeParsedSearchQuery";
 import { SearchQuerySchema, FacetsQuerySchema, FacetCountsSchema, FeedItemSchema, successResponse, errorResponse, validateResponse, MapClustersQuerySchema, MapClusterSchema } from "../validators/schemas";
 import { ZodError } from "zod";
 
@@ -44,7 +45,7 @@ function parsedFromSearchQuery(query: z.infer<typeof SearchQuerySchema>) {
   if (query.is_request !== undefined) parsed.is_request = query.is_request;
   // sort always has a value (schema default "recommended").
   parsed.sort = query.sort;
-  return parsed;
+  return sanitizeParsedSearchQuery(parsed);
 }
 
 export async function searchHandler(req: Request, res: Response) {

@@ -46,7 +46,8 @@ This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin
 
 | Item | Status | Why it needs you |
 |---|---|---|
-| **API redeploy** | Live Replit **STALE** (code gate PASS @ `8ba704e`; probe fails until redeploy) | `pnpm run ops:next` → `NEXT-OPS-REPLIT-REDEPLOY.md` |
+| **API redeploy** | Live Replit **STALE** (code gate PASS @ tip; probe fails until redeploy) | `pnpm run ops:next` → `NEXT-OPS-REPLIT-REDEPLOY.md` |
+| **Local automated** | **PASS** | `pnpm run confidence` **19/19** |
 | **Image-upload byte path** | OPS | Object Storage + device |
 | **OTP / Google / Apple / GPS / Push / AI key** | OPS | Clerk + secrets |
 | **Staging P0 smoke + upload_claims table** | O16 OPEN | `STAGING-REQUIRED-SECRETS.md` |
