@@ -1,13 +1,13 @@
 {
   "schema": "banco-aws-virgen-sync/1",
-  "generatedAt": "2026-07-10T15:34:48.366Z",
-  "releaseTag": "v1.1.2-contact-gate-2026-07-10",
+  "generatedAt": "2026-07-10T15:54:37.361Z",
+  "releaseTag": "v1.1.3-seller-social-2026-07-10",
   "primaryRepository": "waelzaid66-max/-BANCO-CA-OOM-",
   "awsVirgenRepository": "waelzaid66-max/aws-virgen",
   "commit": {
-    "full": "c8fd79c5890d498de33cb8b93d1d57cf51ced699",
-    "short": "c8fd79c",
-    "subject": "fix(mobile): gate listing contact for guests, owner CTAs, wizard validation"
+    "full": "5939849a4bf93eff88dfd802508f8807ff17e718",
+    "short": "5939849",
+    "subject": "feat(contact): seller social on listing detail + edit listing phones"
   },
   "syncPolicy": "merge primary main into aws-virgen main (full tree, history preserved)",
   "ci": {
