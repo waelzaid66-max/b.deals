@@ -620,3 +620,33 @@ test("profile menu routes are registered in root stack", () => {
   assert.match(profile, /menuItems/, "profile must define overflow menu items");
   assert.match(profile, /profileTabs/, "profile must define quick-link tabs");
 });
+
+test("home and promote modals use touch-safe backdrop pattern", () => {
+  const index = fs.readFileSync(path.join(APP_ROOT, "app", "(tabs)", "index.tsx"), "utf8");
+  const promote = fs.readFileSync(path.join(APP_ROOT, "components", "PromoteButton.tsx"), "utf8");
+  const authGate = fs.readFileSync(path.join(APP_ROOT, "hooks", "useAuthGate.tsx"), "utf8");
+
+  for (const [name, src, marker] of [
+    ["logo menu", index, "showLogoMenu"],
+    ["sort menu", index, "showSortMenu"],
+    ["promote sheet", promote, "visible"],
+    ["auth gate", authGate, "AuthGateModal"],
+  ]) {
+    assert.doesNotMatch(
+      src,
+      new RegExp(`${marker}[\\s\\S]*onStartShouldSetResponder`),
+      `${name} must not use onStartShouldSetResponder`,
+    );
+    assert.match(
+      src,
+      /StyleSheet\.absoluteFillObject/,
+      `${name} must use sibling absoluteFill backdrop`,
+    );
+  }
+
+  assert.doesNotMatch(
+    authGate,
+    /onPress=\{\(e\) => e\.stopPropagation\(\)\}/,
+    "auth gate must not rely on stopPropagation on nested Pressables",
+  );
+});

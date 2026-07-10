@@ -2,7 +2,7 @@
 
 **Goal:** Make live API **FRESH** so Device QA / EAS claims are honest.  
 **Branch:** `fix/mobile-master-stabilize`  
-**Tip commit:** `77b2159` (pull latest before redeploy)  
+**Tip commit:** `47e009a` (pull latest before redeploy)  
 **Repo:** `https://github.com/waelzaid66-max/-BANCO-CA-OOM-.git`
 
 Live host (`https://banco-ca-oom.replit.app`) is **STALE** until this branch is what the API runs.
@@ -23,7 +23,7 @@ node audit/mobile/scripts/ops-next-step.mjs      # code gate + live probe
 | Check | Result | Meaning |
 |-------|--------|---------|
 | Local confidence | PASS | كود الفرع سليم |
-| `pre-redeploy-code-gate` | PASS @ `77b2159` | بعد redeploy يجب أن يمر probe |
+| `pre-redeploy-code-gate` | PASS @ `f70e016` | بعد redeploy يجب أن يمر probe |
 | Live `healthz` + `readyz` | PASS | السيرفر شغّال — لكن **كود قديم** |
 | Live probe | **STALE** | `EGYPT→200`, map بدون `is_bookable`/`price_display` |
 | `CLERK_BEARER_TOKEN` | missing | upload smoke لاحقاً |
