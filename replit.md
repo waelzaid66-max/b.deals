@@ -7,6 +7,14 @@ overview, STATUS_REPORT.md for verification evidence, threat_model.md for securi
 
 ## Run & Operate (Replit / Linux)
 
+> **Fresh import?** Run `./scripts/replit-dev-setup.sh` once — it installs pnpm
+> (not pre-installed on a fresh repl), installs workspace deps, ensures the
+> `pg_trgm` extension, pushes the Drizzle schema, and seeds all data. After that
+> the six workflows (api-server, landing, admin-os, dealer-os, banco-mobile,
+> mockup-sandbox) run the app. Deployment uses the Replit **artifacts router**
+> (`router = "application"` in `.replit`) — all surfaces publish together, routed
+> by path (`/` landing · `/admin-os/` · `/dealer-os/` · `/api` · `/banco-mobile/`).
+
 > The API **requires** `PORT` and `DATABASE_URL` (it throws at boot without
 > `PORT`). On Replit these come from the workspace/secrets — do NOT hardcode a
 > port. There is NO fixed "port 5000".
