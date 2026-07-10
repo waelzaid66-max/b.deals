@@ -373,8 +373,8 @@ export default function ThreadScreen() {
             backgroundColor: mine ? colors.primary : colors.card,
             borderColor: failed ? colors.destructive : colors.border,
             borderWidth: mine && !failed ? 0 : StyleSheet.hairlineWidth,
-            borderBottomRightRadius: mine ? 4 : 16,
-            borderBottomLeftRadius: mine ? 16 : 4,
+            borderBottomRightRadius: mine === isRTL ? 16 : 4,
+            borderBottomLeftRadius: mine === isRTL ? 4 : 16,
             opacity: inFlight ? 0.85 : 1,
           },
         ]}
@@ -510,7 +510,15 @@ export default function ThreadScreen() {
         <View
           style={[
             styles.bubbleRow,
-            { justifyContent: mine ? "flex-end" : "flex-start" },
+            {
+              justifyContent: mine
+                ? isRTL
+                  ? "flex-start"
+                  : "flex-end"
+                : isRTL
+                  ? "flex-end"
+                  : "flex-start",
+            },
           ]}
         >
           {failed ? (
@@ -537,7 +545,13 @@ export default function ThreadScreen() {
             style={[
               styles.reactionRow,
               {
-                justifyContent: mine ? "flex-end" : "flex-start",
+                justifyContent: mine
+                  ? isRTL
+                    ? "flex-start"
+                    : "flex-end"
+                  : isRTL
+                    ? "flex-end"
+                    : "flex-start",
                 flexDirection: isRTL ? "row-reverse" : "row",
               },
             ]}

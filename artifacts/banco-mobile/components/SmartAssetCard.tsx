@@ -94,13 +94,22 @@ function SmartAssetCardComponent({
 
   const handleSave = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // Persist save AND teach the feed (Banco Potential / affinity). API has no
+    // dedicated "like" action — "interested" is the positive learning signal.
     onSave?.(item);
+    void sendBehaviorSignal({
+      session_id: sessionId,
+      listing_id: item.id,
+      action: "interested",
+      category: item.category ?? undefined,
+    }).catch(() => {});
   };
 
   // B-reactions (long-press on the identity B): real personalization signals —
   // "interested" boosts this category's affinity in the adaptive feed, "angry"
   // lowers it. Fire-and-forget; a network hiccup never touches the UI.
   const sendReaction = (action: "interested" | "angry") => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     void sendBehaviorSignal({
       session_id: sessionId,
       listing_id: item.id,

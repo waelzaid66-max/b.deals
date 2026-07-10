@@ -80,6 +80,8 @@ import { useI18n } from "@/context/LanguageContext";
 import { useSession } from "@/context/SessionContext";
 import { useAuthGate } from "@/hooks/useAuthGate";
 import { useColors } from "@/hooks/useColors";
+import { DEFAULT_MARKET_COUNTRY } from "@/constants/listingCreateTaxonomy";
+import { loadPreferredMarketCountry } from "@/lib/marketPreference";
 
 const PAGE_SIZE = 20;
 const SCROLL_SIGNAL_THROTTLE_MS = 3000;
@@ -317,6 +319,8 @@ export default function FeedScreen() {
   const [industrialType, setIndustrialType] = useState<IndustrialType>("all");
   // Per-section engine filter (cars / real-estate). Key into constants/engines.
   const [engineKey, setEngineKey] = useState<string>("all");
+  // Same preferred market as Search/Create — scopes home feed inventory.
+  const [marketCountry, setMarketCountry] = useState(DEFAULT_MARKET_COUNTRY);
   const [items, setItems] = useState<FeedItem[]>([]);
   const [cursor, setCursor] = useState<string | undefined>();
   const [hasNext, setHasNext] = useState(true);
@@ -454,6 +458,7 @@ export default function FeedScreen() {
         const params: Parameters<typeof getFeed>[0] = {
           limit: PAGE_SIZE,
           session_id: sessionId,
+          market_country: marketCountry,
         };
         if (apiCat) {
           params.category = apiCat;
@@ -488,7 +493,7 @@ export default function FeedScreen() {
         if (reset) setError(true);
       }
     },
-    [category, industrialType, engineKey, sessionId, prefetchImages]
+    [category, industrialType, engineKey, marketCountry, sessionId, prefetchImages]
   );
 
   // Discovery rails — fetched once; independent of the category filter below.
@@ -497,13 +502,18 @@ export default function FeedScreen() {
   const loadRails = useCallback(async () => {
     const [trendingRes, poolRes, industrialRes, geoCity] = await Promise.all([
       getTrending().catch(() => ({ data: [] as FeedItem[] })),
-      getFeed({ limit: 40, session_id: sessionId }).catch(() => ({
+      getFeed({
+        limit: 40,
+        session_id: sessionId,
+        market_country: marketCountry,
+      }).catch(() => ({
         data: [] as FeedItem[],
       })),
       getFeed({
         category: "industrial" as GetFeedCategory,
         limit: 20,
         session_id: sessionId,
+        market_country: marketCountry,
       }).catch(() => ({ data: [] as FeedItem[] })),
       detectCity().catch(() => null as string | null),
     ]);
@@ -532,7 +542,7 @@ export default function FeedScreen() {
     setRecentlyAddedItems(pool.slice(0, 12));
 
     setIndustrialItems(industrialRes.data ?? []);
-  }, [sessionId]);
+  }, [sessionId, marketCountry]);
 
   const loadRecommendations = useCallback(async () => {
     if (!isSignedIn) {
@@ -546,6 +556,17 @@ export default function FeedScreen() {
       setRecommendedItems([]);
     }
   }, [isSignedIn]);
+
+  // Hydrate preferred market once (shared with Search + Create publish stamp).
+  useEffect(() => {
+    let cancelled = false;
+    void loadPreferredMarketCountry().then((iso) => {
+      if (!cancelled) setMarketCountry(iso);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     loadRails();
@@ -570,16 +591,27 @@ export default function FeedScreen() {
     loadRecommendations();
   }, [listingsVersion, fetchFeed, loadRails, loadRecommendations]);
 
+  // Keep the previous feed visible while a category/engine change loads so the
+  // home tab never flashes an empty skeleton (search already preserves results).
+  // Only the true first load (no items yet) uses the full-list skeleton.
   useEffect(() => {
-    setLoading(true);
+    let cancelled = false;
+    const isFirstPaint = items.length === 0;
+    if (isFirstPaint) setLoading(true);
     setError(false);
     setCursor(undefined);
     setHasNext(true);
-    fetchFeed(true).then(() => setLoading(false));
+    fetchFeed(true).then(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [category, industrialType, engineKey]);
 
   const handleRetry = async () => {
-    setLoading(true);
+    const isFirstPaint = items.length === 0;
+    if (isFirstPaint) setLoading(true);
     setError(false);
     setCursor(undefined);
     setHasNext(true);

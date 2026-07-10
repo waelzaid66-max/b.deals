@@ -140,6 +140,7 @@ export const GetFeedQueryParams = zod.object({
   "furnished": zod.coerce.boolean().optional().describe('Furnished real-estate (specs.furnished).'),
   "offer_type": zod.enum(['sale', 'rent']).optional().describe('Real-estate offer type — sale (تمليك) or rent (إيجار), from specs.offer_type.'),
   "rental_term": zod.coerce.string().optional().describe('Rental system within rent — the country\'s legal\/duration regime (Egypt: furnished_daily from 1 day, new_law up to 5 years, old_law up to 59 years; Gulf: annual_contract). Free string; the catalog is client-side and grows per country.'),
+  "market_country": zod.coerce.string().regex(/^[A-Za-z]{2}$/).optional().describe('ISO 3166-1 alpha-2 market country (EG, SA, …). Filters inventory by specs.market_country; listings without the key are treated as EG.'),
   "fuel_type": zod.enum(['petrol', 'diesel', 'hybrid', 'electric', 'natural_gas']).optional().describe('Filter cars by fuel type (listing_attributes.fuel_type or specs).'),
   "transmission": zod.enum(['manual', 'automatic', 'cvt']).optional().describe('Filter cars by transmission (listing_attributes.transmission or specs).'),
   "brand": zod.coerce.string().optional().describe('Filter cars by brand, matched against the English listing title (titles are canonical \"<Brand> <Model> <Year>\").'),
@@ -148,6 +149,7 @@ export const GetFeedQueryParams = zod.object({
   "max_year": zod.coerce.number().optional().describe('Maximum car model year (numeric specs.year).'),
   "industry": zod.enum(['food', 'beverage', 'plastic', 'textile', 'pharmaceutical', 'chemical', 'engineering', 'other']).optional().describe('Filter industrial listings by industry (listing_attributes.industry).'),
   "origin_type": zod.enum(['local', 'imported']).optional().describe('Filter industrial listings by origin (listing_attributes.origin_type).'),
+  "material": zod.coerce.string().max(40).optional().describe('Filter raw-material commodity listings by specs.material (steel, aluminum, copper, …). Free string; catalog is client-side.'),
   "session_id": zod.coerce.string().optional()
 })
 
@@ -824,6 +826,7 @@ export const SearchListingsQueryParams = zod.object({
   "furnished": zod.coerce.boolean().optional().describe('Furnished real-estate (specs.furnished).'),
   "offer_type": zod.enum(['sale', 'rent']).optional().describe('Real-estate offer type — sale (تمليك) or rent (إيجار), from specs.offer_type.'),
   "rental_term": zod.coerce.string().optional().describe('Rental system within rent — the country\'s legal\/duration regime (Egypt: furnished_daily from 1 day, new_law up to 5 years, old_law up to 59 years; Gulf: annual_contract). Free string; the catalog is client-side and grows per country.'),
+  "market_country": zod.coerce.string().regex(/^[A-Za-z]{2}$/).optional().describe('ISO 3166-1 alpha-2 market country (EG, SA, …). Filters inventory by specs.market_country; listings without the key are treated as EG.'),
   "fuel_type": zod.enum(['petrol', 'diesel', 'hybrid', 'electric', 'natural_gas']).optional().describe('Filter cars by fuel type (listing_attributes.fuel_type or specs).'),
   "transmission": zod.enum(['manual', 'automatic', 'cvt']).optional().describe('Filter cars by transmission (listing_attributes.transmission or specs).'),
   "brand": zod.coerce.string().optional().describe('Filter cars by brand, matched against the English listing title (titles are canonical \"<Brand> <Model> <Year>\").'),
@@ -832,6 +835,7 @@ export const SearchListingsQueryParams = zod.object({
   "max_year": zod.coerce.number().optional().describe('Maximum car model year (numeric specs.year).'),
   "industry": zod.enum(['food', 'beverage', 'plastic', 'textile', 'pharmaceutical', 'chemical', 'engineering', 'other']).optional().describe('Filter industrial listings by industry (listing_attributes.industry).'),
   "origin_type": zod.enum(['local', 'imported']).optional().describe('Filter industrial listings by origin (listing_attributes.origin_type).'),
+  "material": zod.coerce.string().max(40).optional().describe('Filter raw-material commodity listings by specs.material (steel, aluminum, copper, …). Free string; catalog is client-side.'),
   "near_lat": zod.coerce.number().optional().describe('Near-me anchor latitude (requires near_lng and radius_km).'),
   "near_lng": zod.coerce.number().optional().describe('Near-me anchor longitude (requires near_lat and radius_km).'),
   "radius_km": zod.coerce.number().min(searchListingsQueryRadiusKmMin).max(searchListingsQueryRadiusKmMax).optional().describe('Search radius in kilometres from the near-me anchor.'),
@@ -909,6 +913,7 @@ export const GetMapClustersQueryParams = zod.object({
   "furnished": zod.coerce.boolean().optional(),
   "offer_type": zod.enum(['sale', 'rent']).optional().describe('sale (تمليك) or rent (إيجار).'),
   "rental_term": zod.coerce.string().optional().describe('Rental regime (furnished_daily \/ new_law \/ old_law \/ annual_contract).'),
+  "market_country": zod.coerce.string().regex(/^[A-Za-z]{2}$/).optional().describe('ISO market country (EG, SA, …); missing specs coalesce to EG.'),
   "fuel_type": zod.enum(['petrol', 'diesel', 'hybrid', 'electric', 'natural_gas']).optional(),
   "transmission": zod.enum(['manual', 'automatic', 'cvt']).optional(),
   "brand": zod.coerce.string().optional(),
@@ -917,6 +922,7 @@ export const GetMapClustersQueryParams = zod.object({
   "max_year": zod.coerce.number().optional(),
   "industry": zod.enum(['food', 'beverage', 'plastic', 'textile', 'pharmaceutical', 'chemical', 'engineering', 'other']).optional(),
   "origin_type": zod.enum(['local', 'imported']).optional(),
+  "material": zod.coerce.string().max(40).optional().describe('Filter raw-material commodity listings by specs.material (steel, aluminum, copper, …). Free string; catalog is client-side.'),
   "near_lat": zod.coerce.number().optional().describe('Near-me anchor latitude (requires near_lng and radius_km).'),
   "near_lng": zod.coerce.number().optional().describe('Near-me anchor longitude (requires near_lat and radius_km).'),
   "radius_km": zod.coerce.number().min(getMapClustersQueryRadiusKmMin).max(getMapClustersQueryRadiusKmMax).optional().describe('Search radius in kilometres from the near-me anchor.')
@@ -927,8 +933,10 @@ export const GetMapClustersResponse = zod.object({
   "lat": zod.number(),
   "lng": zod.number(),
   "count": zod.number(),
-  "listing_id": zod.string().nullable()
-}).describe('One occupied grid cell on the map — its centroid and how many listings it aggregates. listing_id is set ONLY when count is 1 (a single tappable pin); for multi-listing cells it is null and the client shows a count bubble.\n')).optional(),
+  "listing_id": zod.string().nullable(),
+  "is_bookable": zod.boolean().nullable().describe('True when the single pin is a furnished\/daily real-estate rental (same rule as FeedItem.is_bookable). Null for multi-listing cells.'),
+  "price_display": zod.string().nullable().describe('UI-ready price label for a single pin. Null for multi-listing cells.')
+}).describe('One occupied grid cell on the map — its centroid and how many listings it aggregates. listing_id \/ is_bookable \/ price_display are set ONLY when count is 1 (a single tappable pin); for multi-listing cells they are null.\n')).optional(),
   "error": zod.object({
   "code": zod.enum(['INVALID_DATA', 'NOT_FOUND', 'UNAUTHORIZED', 'INTERNAL_ERROR', 'FORBIDDEN', 'RATE_LIMITED']),
   "message": zod.string()

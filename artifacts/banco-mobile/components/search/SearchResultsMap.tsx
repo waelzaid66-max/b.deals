@@ -10,6 +10,7 @@ import {
   type MapViewport,
   type SearchCriteria,
 } from "@/lib/searchParams";
+import { marketCountryMapCenter } from "@/lib/searchTaxonomy";
 import {
   buildMapHtml,
   feedItemsToMarkers,
@@ -71,16 +72,28 @@ export function SearchResultsMap({
   const criteriaSig = useMemo(() => JSON.stringify(criteria), [criteria]);
   const html = useMemo(
     () =>
-      buildMapHtml(markers, {
-        primary: colors.primary,
-        primaryForeground: colors.primaryForeground,
-        card: colors.card,
-        foreground: colors.foreground,
-        border: colors.border,
-      }),
-    // Rebuild only when the plotted set or the themed colors change.
+      buildMapHtml(
+        markers,
+        {
+          primary: colors.primary,
+          primaryForeground: colors.primaryForeground,
+          card: colors.card,
+          foreground: colors.foreground,
+          border: colors.border,
+        },
+        marketCountryMapCenter(criteria.marketCountry),
+      ),
+    // Rebuild when plotted set, theme, or market country (map center) changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [sig, colors.primary, colors.primaryForeground, colors.card, colors.foreground, colors.border],
+    [
+      sig,
+      colors.primary,
+      colors.primaryForeground,
+      colors.card,
+      colors.foreground,
+      colors.border,
+      criteria.marketCountry,
+    ],
   );
 
   // Latest items, read inside the message handler without re-subscribing.
@@ -141,16 +154,27 @@ export function SearchResultsMap({
         const bookableById = new Set(
           itemsRef.current.filter((i) => i.is_bookable === true).map((i) => i.id),
         );
-        const enriched: MapClusterMarker[] = clusters.map((c) => ({
-          lat: c.lat,
-          lng: c.lng,
-          count: c.count,
-          listing_id: c.listing_id,
-          label:
-            c.count === 1 && c.listing_id ? priceById.get(c.listing_id) : undefined,
-          bookable:
-            c.count === 1 && c.listing_id ? bookableById.has(c.listing_id) : false,
-        }));
+        const enriched: MapClusterMarker[] = clusters.map((c) => {
+          const single = c.count === 1 && !!c.listing_id;
+          const fromApiPrice =
+            single && c.price_display != null && c.price_display !== ""
+              ? c.price_display
+              : undefined;
+          const fromPagePrice =
+            single && c.listing_id ? priceById.get(c.listing_id) : undefined;
+          const fromApiBookable =
+            single && typeof c.is_bookable === "boolean" ? c.is_bookable : null;
+          const fromPageBookable =
+            single && c.listing_id ? bookableById.has(c.listing_id) : false;
+          return {
+            lat: c.lat,
+            lng: c.lng,
+            count: c.count,
+            listing_id: c.listing_id,
+            label: fromApiPrice ?? fromPagePrice,
+            bookable: fromApiBookable ?? fromPageBookable,
+          };
+        });
         const total = clusters.reduce((sum, c) => sum + c.count, 0);
         const cache = clusterCacheRef.current;
         cache.set(cacheKey, { clusters: enriched, total });

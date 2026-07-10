@@ -7,6 +7,9 @@ import { transformFeedItems } from "./BffService";
 import { CircuitBreaker } from "../lib/circuitBreaker";
 import { publicVisibilityConditions } from "../lib/feedVisibility";
 import type { FeedItem, FacetCounts } from "../validators/schemas";
+import { allowCommodityMaterialFilter } from "./allowCommodityMaterialFilter";
+
+export { allowCommodityMaterialFilter } from "./allowCommodityMaterialFilter";
 
 export type PaymentPlan = "installment" | "bank" | "direct" | "islamic";
 
@@ -51,6 +54,8 @@ export interface ParsedSearchQuery {
   max_year?: number;
   industry?: string;
   origin_type?: string;
+  // Commodity material slug (specs.material) — materials company only.
+  material?: string;
   // Near-me / radius search. All three are required together; when present,
   // results are limited to listings whose EFFECTIVE coordinate (the listing's
   // own override, else its area centroid) lies within radius_km of the point.
@@ -58,6 +63,9 @@ export interface ParsedSearchQuery {
   near_lat?: number;
   near_lng?: number;
   radius_km?: number;
+  // ISO market country (EG, SA, …) stored on specs.market_country. Missing / null
+  // specs coalesce to EG so legacy inventory stays in the default market.
+  market_country?: string;
   sort?: SearchSort;
 }
 
@@ -169,6 +177,8 @@ export function parseSearchQuery(query: string): ParsedSearchQuery {
  * direct = seller_installment; islamic = sharia-compliant non-cash plan.
  */
 export function buildAttributeConditions(f: {
+  category?: "car" | "real_estate" | "industrial";
+  industrial_type?: IndustrialSubtype[];
   condition?: string;
   payment_plan?: PaymentPlan;
   has_installment?: boolean;
@@ -186,6 +196,7 @@ export function buildAttributeConditions(f: {
   max_year?: number;
   industry?: string;
   origin_type?: string;
+  material?: string;
 }): SQL[] {
   const conditions: SQL[] = [];
 
@@ -245,6 +256,10 @@ export function buildAttributeConditions(f: {
       sql`COALESCE(${listingAttributes.originType}::text, ${listingAttributes.specs}->>'origin_type') = ${f.origin_type}`
     );
   }
+  // Commodity material — specs-only; gated to materials inventory (not cars/RE/facilities).
+  if (allowCommodityMaterialFilter(f)) {
+    conditions.push(sql`${listingAttributes.specs}->>'material' = ${f.material!}`);
+  }
   // brand / model are matched against the English listing title (titles are
   // canonical "<Brand> <Model> <Year>"), keeping the NLP `q` param free for
   // genuine free text. Honest by design: a brand/model with no inventory
@@ -291,6 +306,21 @@ export function buildAttributeConditions(f: {
   }
 
   return conditions;
+}
+
+/**
+ * Market-country filter shared by list search and map clusters. ADDITIVE —
+ * when market_country is set, inventory must match specs.market_country
+ * (legacy rows without the key count as EG).
+ */
+export function marketCountryConditions(parsed: {
+  market_country?: string;
+}): SQL[] {
+  const iso = parsed.market_country?.trim().toUpperCase();
+  if (!iso || !/^[A-Z]{2}$/.test(iso)) return [];
+  return [
+    sql`COALESCE(${listingAttributes.specs}->>'market_country', 'EG') = ${iso}`,
+  ];
 }
 
 /**
@@ -371,6 +401,7 @@ export async function searchListings(
       )!
     );
   }
+  conditions.push(...marketCountryConditions(parsed));
   // The recency keyset predicate only applies to the default/newest ordering.
   // It keys off the EFFECTIVE (bump-aware) recency timestamp so recycled
   // listings page consistently with the bump-aware ordering below. The cursor is
@@ -481,6 +512,13 @@ export interface MapCluster {
   count: number;
   /** Present ONLY for a single-listing cluster (count === 1) → a tappable pin. */
   listing_id: string | null;
+  /**
+   * Single-pin only: furnished/daily real-estate rental (same rule as feed
+   * `is_bookable`). Null for multi-listing cells.
+   */
+  is_bookable: boolean | null;
+  /** Single-pin only: UI-ready price label. Null for multi-listing cells. */
+  price_display: string | null;
 }
 
 /**
@@ -523,6 +561,7 @@ export async function mapClusters(
   }
   conditions.push(...publicVisibilityConditions());
   conditions.push(...buildAttributeConditions(parsed));
+  conditions.push(...marketCountryConditions(parsed));
   conditions.push(...nearMeConditions(parsed));
 
   // Effective coordinate (listing override → area centroid), as float for math.
@@ -551,6 +590,12 @@ export async function mapClusters(
       // cluster holds exactly one listing (→ a tappable pin), so any single id is
       // correct; for multi-listing cells the value is ignored.
       sample: sql<string>`min(${listings.id}::text)`,
+      // Single-cell enrichment (valid when count=1; ignored for multi).
+      sample_category: sql<string>`min(${listings.category}::text)`,
+      sample_rental_term: sql<string | null>`(array_agg(${listingAttributes.specs}->>'rental_term'))[1]`,
+      sample_offer_type: sql<string | null>`(array_agg(${listingAttributes.specs}->>'offer_type'))[1]`,
+      sample_price: sql<string>`min(${listings.basePriceCash}::text)`,
+      sample_is_request: sql<boolean>`bool_or(${listings.isRequest})`,
     })
     .from(listings)
     .leftJoin(users, eq(listings.userId, users.id))
@@ -561,12 +606,60 @@ export async function mapClusters(
     // Bound the payload — a sane viewport never needs more cells than this.
     .limit(2000);
 
-  return rows.map((r) => ({
-    lat: Number(r.clat),
-    lng: Number(r.clng),
-    count: Number(r.cnt),
-    listing_id: Number(r.cnt) === 1 ? r.sample : null,
-  }));
+  return rows.map((r) => {
+    const count = Number(r.cnt);
+    if (count !== 1) {
+      return {
+        lat: Number(r.clat),
+        lng: Number(r.clng),
+        count,
+        listing_id: null,
+        is_bookable: null,
+        price_display: null,
+      };
+    }
+    const rentalTerm = r.sample_rental_term ?? null;
+    const offerType = r.sample_offer_type ?? null;
+    const isBookable =
+      r.sample_category === "real_estate" && rentalTerm === "furnished_daily";
+    const priceDisplay = formatMapPinPrice({
+      is_request: r.sample_is_request === true,
+      base_price_cash: r.sample_price,
+      offer_type: offerType,
+      rental_term: rentalTerm,
+    });
+    return {
+      lat: Number(r.clat),
+      lng: Number(r.clng),
+      count,
+      listing_id: r.sample,
+      is_bookable: isBookable,
+      price_display: priceDisplay,
+    };
+  });
+}
+
+/** Same display rules as feed pins — kept local so map clusters stay self-contained. */
+function formatMapPinPrice(row: {
+  is_request: boolean;
+  base_price_cash: string;
+  offer_type: string | null;
+  rental_term: string | null;
+}): string {
+  if (row.is_request) return "طلب سعر / Price requested";
+  const n = Number(row.base_price_cash);
+  let base: string;
+  if (n >= 1_000_000) {
+    base = `${(n / 1_000_000).toFixed(2).replace(/\.00$/, "")}M EGP`;
+  } else if (n >= 1_000) {
+    base = `${Math.round(n / 1_000).toLocaleString("en-EG")}K EGP`;
+  } else {
+    base = `${n.toLocaleString("en-EG")} EGP`;
+  }
+  if (row.offer_type !== "rent") return base;
+  if (row.rental_term === "furnished_daily") return `${base} /يوم`;
+  if (row.rental_term === "annual_contract") return `${base} /سنة`;
+  return `${base} /شهر`;
 }
 
 export async function getAutocomplete(query: string): Promise<string[]> {

@@ -1532,13 +1532,17 @@ export type AdminPlanCreate = AdminPlanUpdate & {
 };
 
 /**
- * One occupied grid cell on the map — its centroid and how many listings it aggregates. listing_id is set ONLY when count is 1 (a single tappable pin); for multi-listing cells it is null and the client shows a count bubble.
+ * One occupied grid cell on the map — its centroid and how many listings it aggregates. listing_id / is_bookable / price_display are set ONLY when count is 1 (a single tappable pin); for multi-listing cells they are null.
  */
 export interface MapCluster {
   lat: number;
   lng: number;
   count: number;
   listing_id: string | null;
+  /** True when the single pin is a furnished/daily real-estate rental. Null for multi-listing cells. */
+  is_bookable: boolean | null;
+  /** UI-ready price label for a single pin. Null for multi-listing cells. */
+  price_display: string | null;
 }
 
 /**
@@ -2404,6 +2408,10 @@ offer_type?: GetFeedOfferType;
  */
 rental_term?: string;
 /**
+ * ISO 3166-1 alpha-2 market country (EG, SA, …). Filters inventory by specs.market_country; listings without the key are treated as EG.
+ */
+market_country?: string;
+/**
  * Filter cars by fuel type (listing_attributes.fuel_type or specs).
  */
 fuel_type?: GetFeedFuelType;
@@ -2435,6 +2443,10 @@ industry?: GetFeedIndustry;
  * Filter industrial listings by origin (listing_attributes.origin_type).
  */
 origin_type?: GetFeedOriginType;
+/**
+ * Filter raw-material commodity listings by specs.material (steel, aluminum, …).
+ */
+material?: string;
 session_id?: string;
 };
 
@@ -2895,6 +2907,10 @@ offer_type?: SearchListingsOfferType;
  */
 rental_term?: string;
 /**
+ * ISO 3166-1 alpha-2 market country (EG, SA, …). Filters inventory by specs.market_country; listings without the key are treated as EG.
+ */
+market_country?: string;
+/**
  * Filter cars by fuel type (listing_attributes.fuel_type or specs).
  */
 fuel_type?: SearchListingsFuelType;
@@ -2926,6 +2942,10 @@ industry?: SearchListingsIndustry;
  * Filter industrial listings by origin (listing_attributes.origin_type).
  */
 origin_type?: SearchListingsOriginType;
+/**
+ * Filter raw-material commodity listings by specs.material (steel, aluminum, …).
+ */
+material?: string;
 /**
  * Near-me anchor latitude (requires near_lng and radius_km).
  */
@@ -3073,6 +3093,10 @@ offer_type?: GetMapClustersOfferType;
  * Rental regime (furnished_daily / new_law / old_law / annual_contract).
  */
 rental_term?: string;
+/**
+ * ISO market country (EG, SA, …); missing specs coalesce to EG.
+ */
+market_country?: string;
 fuel_type?: GetMapClustersFuelType;
 transmission?: GetMapClustersTransmission;
 brand?: string;
@@ -3081,6 +3105,10 @@ min_year?: number;
 max_year?: number;
 industry?: GetMapClustersIndustry;
 origin_type?: GetMapClustersOriginType;
+/**
+ * Filter raw-material commodity listings by specs.material (steel, aluminum, …).
+ */
+material?: string;
 /**
  * Near-me anchor latitude (requires near_lng and radius_km).
  */

@@ -111,8 +111,9 @@ function engineFacetCount(params: EngineDef["params"], f: FacetCounts): number {
  * - The "all" engine (no params) always passes.
  * - Core chips fail OPEN when facets are unavailable (a transient error must not
  *   hide long-standing inventory).
- * - `requiresFacet` chips (new taxonomy: fuel / transmission) fail CLOSED — they
- *   only appear once facets confirm real backing inventory.
+ * - `requiresFacet` chips (fine RE property types, etc.) fail CLOSED — they
+ *   only appear once facets confirm real backing inventory. Car fuel /
+ *   transmission are FilterSheet-only, not engines.
  */
 export function engineMatchesFacets(engine: EngineDef, facets: Facets): boolean {
   if (Object.keys(engine.params).length === 0) return true;

@@ -92,10 +92,17 @@ export function feedItemsToMarkers(items: FeedItem[]): MapMarker[] {
  * Tapping a count bubble drills in; tapping a single pin posts
  * {type:"select", id} so the host can reveal the listing card.
  */
-export function buildMapHtml(markers: MapMarker[], theme: MapTheme): string {
+export function buildMapHtml(
+  markers: MapMarker[],
+  theme: MapTheme,
+  center?: { lat: number; lng: number; zoom: number },
+): string {
   // JSON is safe inside a <script> except for a literal "</script>"; escaping
   // "<" to its unicode form neutralizes that without changing the parsed data.
   const json = JSON.stringify(markers).replace(/</g, "\\u003c");
+  const lat = center?.lat ?? 26.8;
+  const lng = center?.lng ?? 30.8;
+  const zoom = center?.zoom ?? 6;
   return `<!DOCTYPE html>
 <html>
 <head>
@@ -193,7 +200,7 @@ export function buildMapHtml(markers: MapMarker[], theme: MapTheme): string {
     }
     if (!window.L) { post({ type: "error" }); return; }
     var map = L.map("map", { zoomControl: false, attributionControl: true })
-      .setView([26.8, 30.8], 6);
+      .setView([${lat}, ${lng}], ${zoom});
     L.control.zoom({ position: "topright" }).addTo(map);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -266,6 +273,18 @@ export function buildMapHtml(markers: MapMarker[], theme: MapTheme): string {
         });
       }
     };
+
+    // Host → map (web iframe cannot injectJS like WebView). Parent posts
+    // {type:"setClusters", clusters:[…]} via postMessage.
+    window.addEventListener("message", function (event) {
+      try {
+        var raw = event.data;
+        var msg = typeof raw === "string" ? JSON.parse(raw) : raw;
+        if (msg && msg.type === "setClusters" && window.BANCO_MAP) {
+          window.BANCO_MAP.setClusters(msg.clusters || []);
+        }
+      } catch (e) {}
+    });
 
     // Report the visible bounds so the host can query /search/map for it.
     var vpTimer = null;

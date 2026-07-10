@@ -3,7 +3,13 @@ import { listings, ads, users, interactions, listingAttributes } from "@workspac
 import { and, eq, desc, sql, inArray, type SQL } from "drizzle-orm";
 import { normalizePaymentOptions } from "./PaymentService";
 import { transformFeedItems, transformToFeedItem } from "./BffService";
-import { enrichListings, buildAttributeConditions, type PaymentPlan, type IndustrialSubtype } from "./SearchService";
+import {
+  enrichListings,
+  buildAttributeConditions,
+  marketCountryConditions,
+  type PaymentPlan,
+  type IndustrialSubtype,
+} from "./SearchService";
 import { adaptFeed } from "./AdaptiveFeedEngine";
 import { publicVisibilityConditions } from "../lib/feedVisibility";
 import type { FeedItem } from "../validators/schemas";
@@ -154,6 +160,8 @@ export async function getFeed(options: {
   furnished?: boolean;
   offerType?: string;
   rentalTerm?: string;
+  /** ISO market country — same filter as list/map search (missing specs → EG). */
+  marketCountry?: string;
   fuelType?: string;
   transmission?: string;
   brand?: string;
@@ -162,6 +170,7 @@ export async function getFeed(options: {
   maxYear?: number;
   industry?: string;
   originType?: string;
+  material?: string;
   hasInstallment?: boolean;
   // Buyer request/wanted filter (undefined → both sales and requests).
   isRequest?: boolean;
@@ -185,6 +194,8 @@ export async function getFeed(options: {
   // Home feed in place and yields the same result set as the results screen.
   scopeConditions.push(
     ...buildAttributeConditions({
+      category,
+      industrial_type: industrialTypes,
       condition: options.condition,
       payment_plan: options.paymentPlan,
       property_type: options.propertyType,
@@ -201,8 +212,10 @@ export async function getFeed(options: {
       max_year: options.maxYear,
       industry: options.industry,
       origin_type: options.originType,
+      material: options.material,
       has_installment: options.hasInstallment,
-    })
+    }),
+    ...marketCountryConditions({ market_country: options.marketCountry }),
   );
 
   const conditions: SQL[] = [eq(listings.status, "active"), ...scopeConditions];

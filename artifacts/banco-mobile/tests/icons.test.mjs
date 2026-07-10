@@ -195,8 +195,12 @@ test("every icon name used in the app is mapped in the registry", () => {
     for (const m of src.matchAll(/renderTabIcon\(\s*["']([^"']+)["']/g))
       add(m[1]);
 
-    // 3. Data-driven config objects:  { icon: "x" }
+    // 3. Data-driven config objects:  { icon: "x" }  and JSX icon="x"
     for (const m of src.matchAll(/\bicon:\s*["']([^"']+)["']/g)) add(m[1]);
+    for (const m of src.matchAll(/\bicon=["']([^"']+)["']/g)) add(m[1]);
+
+    // 3b. SAVE_ICONS style: on:/off: icon pairs
+    for (const m of src.matchAll(/\b(?:on|off):\s*["']([^"']+)["']/g)) add(m[1]);
 
     // 4. CategoryIcon config:  { lib: "mci", name: "cog" }  (either field order)
     for (const m of src.matchAll(

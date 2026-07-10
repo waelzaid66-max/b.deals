@@ -17,8 +17,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Typecheck & build
+  build-core:
+    name: Typecheck & build (core)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,15 +31,16 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Typecheck (all packages)
+      - name: Typecheck (core — excludes consumer web)
         run: pnpm run typecheck
-      - name: Build server + web apps
+      - name: Build API + dealer + admin (no consumer web)
+        # W0 isolation: landing/banco-web run in ci-website.yml so mobile/core CI
+        # stays independent from website build issues.
         run: >-
           pnpm
           --filter @workspace/api-server
           --filter @workspace/dealer-os
           --filter @workspace/admin-os
-          --filter @workspace/landing
           run build
 
   test:
@@ -129,8 +130,10 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: Icons + lib + resilience guards
+      - name: Icons + lib + resilience + universal links
+        # Matches package.json `test` — App Links / AASA config is store-relevant.
         run: >-
           pnpm --filter @workspace/banco-mobile run test:icons
           && pnpm --filter @workspace/banco-mobile run test:lib
           && pnpm --filter @workspace/banco-mobile run test:resilience
+          && pnpm --filter @workspace/banco-mobile run test:universal-links

@@ -47,6 +47,11 @@ const SCREEN_ROUTES: Record<string, Href> = {
   create_listing: "/listings/create",
   profile: "/(tabs)/profile",
   notifications: "/notifications",
+  supply_hub: "/business/supply-hub",
+  industry: "/industry",
+  rentals: "/rentals/hub",
+  billing: "/billing",
+  assistant: "/assistant",
 };
 
 export default function AssistantScreen() {
@@ -86,16 +91,26 @@ export default function AssistantScreen() {
         const resp = await askBancoAssistant({ message, history });
         const answer = resp.data?.answer?.trim();
         const actions = resp.data?.actions ?? [];
+        const errMsg = resp.error?.message?.trim();
         setMessages((prev) => [
           ...prev,
           answer
             ? { id: nextId(), role: "assistant", content: answer, actions }
-            : { id: nextId(), role: "assistant", content: t("assistant.errorBubble"), error: true },
+            : {
+                id: nextId(),
+                role: "assistant",
+                content: errMsg || t("assistant.errorBubble"),
+                error: true,
+              },
         ]);
-      } catch {
+      } catch (e) {
+        const detail =
+          e instanceof Error && e.message.trim()
+            ? e.message.trim()
+            : t("assistant.errorBubble");
         setMessages((prev) => [
           ...prev,
-          { id: nextId(), role: "assistant", content: t("assistant.errorBubble"), error: true },
+          { id: nextId(), role: "assistant", content: detail, error: true },
         ]);
       } finally {
         setSending(false);

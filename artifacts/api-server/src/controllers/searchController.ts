@@ -31,6 +31,7 @@ function parsedFromSearchQuery(query: z.infer<typeof SearchQuerySchema>) {
   if (query.furnished !== undefined) parsed.furnished = query.furnished;
   if (query.offer_type) parsed.offer_type = query.offer_type;
   if (query.rental_term) parsed.rental_term = query.rental_term;
+  if (query.market_country) parsed.market_country = query.market_country;
   if (query.fuel_type) parsed.fuel_type = query.fuel_type;
   if (query.transmission) parsed.transmission = query.transmission;
   if (query.brand) parsed.brand = query.brand;
@@ -39,6 +40,7 @@ function parsedFromSearchQuery(query: z.infer<typeof SearchQuerySchema>) {
   if (query.max_year !== undefined) parsed.max_year = query.max_year;
   if (query.industry) parsed.industry = query.industry;
   if (query.origin_type) parsed.origin_type = query.origin_type;
+  if (query.material) parsed.material = query.material;
   if (query.is_request !== undefined) parsed.is_request = query.is_request;
   // sort always has a value (schema default "recommended").
   parsed.sort = query.sort;

@@ -67,8 +67,13 @@ import {
   UI_CATEGORIES,
   apiCategoryForUi,
   requiredSpecKeysFor,
+  DEFAULT_MARKET_COUNTRY,
   type UiListingCategory,
 } from "@/constants/listingCreateTaxonomy";
+import {
+  loadPreferredMarketCountry,
+  normalizeMarketCountry,
+} from "@/lib/marketPreference";
 import { buildPreviewFeedItem } from "@/constants/listingPreview";
 import {
   DEFAULT_COUNTRY,
@@ -176,6 +181,19 @@ export default function CreateListingScreen() {
   const [step, setStep] = useState(0);
   const [category, setCategory] = useState<UiListingCategory | null>(null);
   const [photos, setPhotos] = useState<ImagePicker.ImagePickerAsset[]>([]);
+  // Seller market for inventory scoping (same preference as Search country).
+  const [publishMarketCountry, setPublishMarketCountry] = useState(
+    DEFAULT_MARKET_COUNTRY,
+  );
+  useEffect(() => {
+    let cancelled = false;
+    void loadPreferredMarketCountry().then((iso) => {
+      if (!cancelled) setPublishMarketCountry(iso);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [captions, setCaptions] = useState<Record<string, string>>({});
   const [specs, setSpecs] = useState<Record<string, string>>({});
   // Free-form seller specs (philosophy: unlimited, save-everything). Stored as
@@ -262,8 +280,21 @@ export default function CreateListingScreen() {
     [specFields, requiredSpecKeys],
   );
 
+  // Spec writes clear sibling fields that become illegal for the new value so
+  // a sale→rent (or land→apartment) toggle never leaves a wrong field stamped.
   const setSpec = (key: string, value: string) =>
-    setSpecs((prev) => ({ ...prev, [key]: value }));
+    setSpecs((prev) => {
+      const next: Record<string, string> = { ...prev, [key]: value };
+      if (key === "offer_type") {
+        if (value === "sale") delete next.rental_term;
+        if (value === "rent") delete next.ownership;
+        if (value === "") {
+          delete next.rental_term;
+          delete next.ownership;
+        }
+      }
+      return next;
+    });
 
   // Capture the seller's current GPS location for the listing pin (#4). Optional
   // + best-effort: a denied permission or any failure leaves the pin unset and
@@ -573,11 +604,27 @@ export default function CreateListingScreen() {
     removePhoto(asset.uri);
   };
 
+  const requestLibraryPermission = async (): Promise<boolean> => {
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (perm.granted) return true;
+    if (Platform.OS !== "web" && !perm.canAskAgain) {
+      Alert.alert(t("create.libraryDeniedTitle"), t("create.libraryDeniedBody"), [
+        { text: t("common.cancel"), style: "cancel" },
+        {
+          text: t("create.openSettings"),
+          onPress: () => Linking.openSettings().catch(() => {}),
+        },
+      ]);
+    } else {
+      setError(t("create.libraryDeniedBody"));
+    }
+    return false;
+  };
+
   const launchPicker = async () => {
     setShowPhotoRationale(false);
     try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) return;
+      if (!(await requestLibraryPermission())) return;
       const remaining = MAX_MEDIA - photos.length;
       if (remaining <= 0) return;
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -619,8 +666,7 @@ export default function CreateListingScreen() {
   // for the rare case the platform returns an over-cap clip.
   const launchVideoTrimPicker = async () => {
     try {
-      const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (!perm.granted) return;
+      if (!(await requestLibraryPermission())) return;
       const videoCount = photos.filter(isVideoAsset).length;
       if (videoCount >= MAX_VIDEOS || photos.length >= MAX_MEDIA) return;
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -998,6 +1044,8 @@ export default function CreateListingScreen() {
       const specsClean: Record<string, unknown> = {};
       // Contact is the one spec dimension a buyer request also needs.
       specsClean.contact_phones = cleanPhones;
+      // Scope inventory to the seller's preferred market (search list + map).
+      specsClean.market_country = normalizeMarketCountry(publishMarketCountry);
       // WhatsApp opt-in: buyers only see the WhatsApp contact path when the
       // seller explicitly enables it. Stored on the free-form specs and surfaced
       // via the additive `whatsapp_enabled` field on the feed + detail contract.
@@ -1485,7 +1533,11 @@ export default function CreateListingScreen() {
     <View key={field.key}>
       <FieldLabel
         label={t(field.labelKey)}
-        tag={field.required ? t("create.required") : t("create.optional")}
+        tag={
+          requiredSpecKeys.includes(field.key)
+            ? t("create.required")
+            : t("create.optional")
+        }
         colors={colors}
         rowDir={rowDir}
       />

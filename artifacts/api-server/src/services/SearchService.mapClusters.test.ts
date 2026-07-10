@@ -47,6 +47,7 @@ async function mkReAt(
   offerType: "sale" | "rent",
   lat: number,
   lng: number,
+  extras: { rental_term?: string; market_country?: string } = {},
 ): Promise<string> {
   const id = randomUUID();
   await db.insert(listings).values({
@@ -72,7 +73,14 @@ async function mkReAt(
   await db.insert(listingAttributes).values({
     id: randomUUID(),
     listingId: id,
-    specs: { offer_type: offerType, property_type: "apartment" },
+    specs: {
+      offer_type: offerType,
+      property_type: "apartment",
+      ...(extras.rental_term ? { rental_term: extras.rental_term } : {}),
+      ...(extras.market_country
+        ? { market_country: extras.market_country }
+        : {}),
+    },
     propertyType: "apartment",
   });
   ids.push(id);
@@ -146,5 +154,56 @@ describe("SearchService — server-side map clustering", () => {
     // offer_type=sale → ONLY the sale (rent excluded — a real filter, not cosmetic).
     const saleOnly = await mapClusters({ ...base, offer_type: "sale" }, bbox, 1);
     expect(saleOnly.reduce((s, c) => s + c.count, 0)).toBe(1);
+  });
+
+  it("single pins expose is_bookable + price_display from the server", async () => {
+    const seller = await createUser();
+    uids.push(seller);
+    const token = uniq("bookpin");
+
+    const bookableId = await mkReAt(seller, token, "rent", 30.0, 31.0, {
+      rental_term: "furnished_daily",
+    });
+    await mkReAt(seller, token, "rent", 30.05, 31.05, {
+      rental_term: "new_law",
+    });
+
+    const bbox = { min_lat: 29.5, max_lat: 31.0, min_lng: 30.5, max_lng: 32.0 };
+    const fine = await mapClusters(
+      { category: "real_estate", search_term: token, offer_type: "rent" },
+      bbox,
+      18,
+    );
+    expect(fine.length).toBe(2);
+    const bookable = fine.find((c) => c.listing_id === bookableId);
+    const longTerm = fine.find((c) => c.listing_id !== bookableId);
+    expect(bookable?.is_bookable).toBe(true);
+    expect(bookable?.price_display).toBeTruthy();
+    expect(longTerm?.is_bookable).toBe(false);
+    expect(longTerm?.price_display).toBeTruthy();
+  });
+
+  it("market_country filters map inventory (missing specs coalesce to EG)", async () => {
+    const seller = await createUser();
+    uids.push(seller);
+    const token = uniq("mktmap");
+
+    await mkReAt(seller, token, "sale", 30.0, 31.0, { market_country: "SA" });
+    await mkReAt(seller, token, "sale", 30.01, 31.01); // no key → EG
+
+    const bbox = { min_lat: 29.5, max_lat: 31.0, min_lng: 30.5, max_lng: 32.0 };
+    const base: ParsedSearchQuery = {
+      category: "real_estate",
+      search_term: token,
+    };
+
+    const eg = await mapClusters({ ...base, market_country: "EG" }, bbox, 1);
+    expect(eg.reduce((s, c) => s + c.count, 0)).toBe(1);
+
+    const sa = await mapClusters({ ...base, market_country: "SA" }, bbox, 1);
+    expect(sa.reduce((s, c) => s + c.count, 0)).toBe(1);
+
+    const all = await mapClusters(base, bbox, 1);
+    expect(all.reduce((s, c) => s + c.count, 0)).toBe(2);
   });
 });

@@ -98,7 +98,7 @@ export const PROPERTY_TYPES: { value: string; en: string; ar: string }[] = [
   { value: "office", en: "Office", ar: "مكتب" },
   { value: "clinic", en: "Clinic", ar: "عيادة" },
   { value: "shop", en: "Shop", ar: "محل" },
-  { value: "warehouse", en: "Warehouse", ar: "مستودع" },
+  { value: "warehouse", en: "Warehouse property", ar: "مخزن عقاري" },
   { value: "commercial_land", en: "Commercial land", ar: "أرض تجارية" },
   { value: "land", en: "Land", ar: "أرض" },
 ];
@@ -267,7 +267,9 @@ export const SPEC_FIELDS_BY_UI: Record<UiListingCategory, SpecField[]> = {
     { key: "year", labelKey: "create.fields.year", placeholderKey: "create.fields.yearPh", type: "number" },
   ],
   raw_materials: [
-    { key: "industry", labelKey: "create.fields.industry", type: "select", required: true, options: enumOptions(INDUSTRY_TYPES) },
+    // `industry` intentionally omitted — materials are defined by `material`
+    // (see visibleSpecFieldsFor / requiredSpecKeysFor). Kept out of the form
+    // so sellers never see a factory-sector field on a commodity listing.
     { key: "material", labelKey: "create.fields.material", type: "select", required: true, options: enumOptions(MATERIAL_TYPES) },
     { key: "capacity", labelKey: "create.fields.quantity", placeholderKey: "create.fields.quantityPh", type: "text", required: true },
     { key: "origin", labelKey: "create.fields.origin", type: "select", options: enumOptions(ORIGIN_COUNTRIES) },
@@ -286,7 +288,7 @@ export const REQUIRED_SPEC_KEYS: Record<UiListingCategory, readonly string[]> = 
   car: ["mileage", "year", "condition", "fuel_type"],
   real_estate: ["offer_type", "area", "rooms", "property_type", "finishing"],
   industrial: ["capacity", "industry", "industrial_type"],
-  raw_materials: ["capacity", "industry", "material", "industrial_type"],
+  raw_materials: ["capacity", "material", "industrial_type"],
 };
 
 /**
@@ -304,19 +306,25 @@ export const requiredSpecFieldsFor = (ui: UiListingCategory): SpecField[] => {
 
 /**
  * Real-estate property types that have no rooms/finishing — raw land and bare
- * commercial units. For these, rooms + finishing are NOT required (a plot of
- * land has no room count, no finishing level). Mirrors the server floor in
+ * commercial units (incl. warehouse / commercial_land added with engine chips).
+ * For these, rooms + finishing are NOT required. Mirrors the server floor in
  * validateAttributes so the mobile gate and the API never disagree.
  */
-export const REAL_ESTATE_NO_ROOMS_TYPES = ["land", "shop", "office", "clinic"] as const;
+export const REAL_ESTATE_NO_ROOMS_TYPES = [
+  "land",
+  "commercial_land",
+  "shop",
+  "office",
+  "clinic",
+  "warehouse",
+] as const;
 
 /**
  * Effective required spec keys given the CURRENT field values — most are static
  * (REQUIRED_SPEC_KEYS) but a few only apply to a sub-type, so a listing is never
  * forced to invent a value that doesn't fit reality:
- * - real_estate: rooms + finishing are dropped for land/shop/office/clinic.
- * - raw_materials: `industry` (a manufacturing-sector concept) is never required
- *   — a raw material is defined by its `material`, not by a factory industry.
+ * - real_estate: rooms + finishing dropped for no-rooms types (land, warehouse, …).
+ * - raw_materials: `industry` never required — material defines the commodity.
  * KEEP IN SYNC with the server floors (api-server validateAttributes).
  */
 export function requiredSpecKeysFor(
@@ -344,18 +352,28 @@ const RE_HIDDEN_FOR_NO_ROOMS = new Set(["rooms", "bathrooms", "finishing"]);
 
 /**
  * The structured spec fields to RENDER for a category given the CURRENT values.
- * Drops fields that don't apply to the chosen sub-type (e.g. rooms/finishing for
- * land), so the form only ever shows real, relevant questions.
+ * Drops fields that don't apply to the chosen sub-type / offer, so the form only
+ * ever shows real, relevant questions (no cross-section field noise).
  */
 export function visibleSpecFieldsFor(
   ui: UiListingCategory,
   specs: Record<string, string | undefined>
 ): SpecField[] {
   let fields = SPEC_FIELDS_BY_UI[ui];
+
+  // Raw materials: industry is a manufacturing-sector concept — never show it.
+  if (ui === "raw_materials") {
+    fields = fields.filter((f) => f.key !== "industry");
+  }
+
   if (ui === "real_estate") {
-    // rental_term only makes sense for rentals — hidden until offer_type=rent.
-    if (specs.offer_type !== "rent") {
+    const offer = specs.offer_type;
+    // rental_term only for rent; ownership (resale/primary) only for sale.
+    if (offer !== "rent") {
       fields = fields.filter((f) => f.key !== "rental_term");
+    }
+    if (offer === "rent") {
+      fields = fields.filter((f) => f.key !== "ownership");
     }
     const pt = specs.property_type ?? "";
     if ((REAL_ESTATE_NO_ROOMS_TYPES as readonly string[]).includes(pt)) {

@@ -68,3 +68,9 @@ attached_assets/
 .env
 .env.*
 !.env*.example
+
+# agent scratch probe outputs (never commit)
+_*.txt
+_proof_*.txt
+_api_*.txt
+_test_out*.txt

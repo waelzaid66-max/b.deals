@@ -2,7 +2,8 @@ import { Feather } from "@/components/icons";
 import { FeedItem, useGetTrending } from "@workspace/api-client-react";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import React, { useState } from "react";
+import { router } from "expo-router";
+import React, { useMemo, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -27,12 +28,13 @@ import { enginesForCategory } from "@/constants/engines";
 import { useI18n } from "@/context/LanguageContext";
 import { SavedSearch, useSession } from "@/context/SessionContext";
 import { useColors } from "@/hooks/useColors";
+import { useInventoryFacets, visibleEngines } from "@/lib/facets";
 
 // Concrete, browseable sections (no "all" — these are the real catalogues a
 // shopper picks between). Each gets a bold image-style card; cars / real-estate
 // then reveal their engine chips, others go straight to results.
 const SECTIONS: Category[] = ["car", "real_estate", "facilities", "materials"];
-const QUICK_BRANDS: CarBrand[] = POPULAR_BRANDS.filter((b) => b.createSafe);
+const QUICK_BRANDS: CarBrand[] = POPULAR_BRANDS;
 
 // On-brand gradient pairs per section so each card reads as its own world while
 // staying in the BANCO red/charcoal family.
@@ -155,6 +157,17 @@ export function SearchDiscover({
 
   // Which section card is expanded to reveal its engine chips (cars/real-estate).
   const [openSection, setOpenSection] = useState<Category | null>(null);
+
+  // Same honest inventory gate as the Search chrome engine bar — never show
+  // empty engines / car brands when facets prove there is no backing stock.
+  const facetCategory: Category = openSection ?? "all";
+  const { globalFacets, scopedFacets } = useInventoryFacets(facetCategory);
+  const openEngines = useMemo(
+    () => (openSection ? visibleEngines(openSection, scopedFacets) : []),
+    [openSection, scopedFacets]
+  );
+  const showCarBrands =
+    !globalFacets || (globalFacets.category.car ?? 0) > 0;
 
   const { data: trendingRes, isLoading: trendingLoading } = useGetTrending();
   const trending = trendingRes?.data ?? [];
@@ -286,20 +299,53 @@ export function SearchDiscover({
         })}
       </View>
 
-      {/* Engine chips for the expanded section → dedicated results screen */}
-      {openSection && enginesForCategory(openSection) && (
+      {/* Engine chips for the expanded section — facet-gated like Search chrome */}
+      {openSection && openEngines.length > 1 && (
         <View style={styles.engineReveal}>
           <EngineChips
-            engines={enginesForCategory(openSection)!}
+            engines={openEngines}
             selected="all"
             onChange={(key) => goToResults(openSection, key)}
           />
         </View>
       )}
 
-      {/* Explore on map — gated on real coordinate-bearing inventory (see
-          mapAvailable). If a browse still resolves with no coordinates the host
-          falls back to the list, so this never lands on an empty map. */}
+      {/* Car import — marketplace cars only (not under Business hub). */}
+      {showCarBrands ? (
+        <Pressable
+          onPress={() => onBrowseSection("car", "import")}
+          style={styles.mapCtaWrap}
+          testID="discover-car-import"
+        >
+          <LinearGradient
+            colors={["#1A2030", "#0A0C12"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.mapCta}
+          >
+            <View style={[styles.mapCtaRow, { flexDirection: rowDir }]}>
+              <View style={[styles.mapBadge, { backgroundColor: "#2A6FDB" }]}>
+                <Feather name="truck" size={20} color="#FFFFFF" />
+              </View>
+              <View style={styles.mapCtaText}>
+                <AppText style={[styles.mapTitle, { textAlign }]}>
+                  {t("search.discover.carImport")}
+                </AppText>
+                <AppText style={[styles.mapSub, { textAlign }]}>
+                  {t("search.discover.carImportSub")}
+                </AppText>
+              </View>
+              <Feather
+                name={isRTL ? "chevron-left" : "chevron-right"}
+                size={20}
+                color="rgba(255,255,255,0.8)"
+              />
+            </View>
+          </LinearGradient>
+        </Pressable>
+      ) : null}
+
+      {/* Explore on map — marketplace surface (before personal rails). */}
       {mapAvailable && (
         <Pressable
           onPress={onExploreMap}
@@ -339,9 +385,6 @@ export function SearchDiscover({
         </Pressable>
       )}
 
-      {/* Companies & developers with live inventory (hidden when none). */}
-      <CompanyOffers />
-
       {/* Recent text searches — the fastest re-entry for a returning user.
           Local-only history (SessionContext), hidden entirely when empty. */}
       {recentQueries.length > 0 && (
@@ -379,28 +422,34 @@ export function SearchDiscover({
         </>
       )}
 
-      {/* Popular brands */}
-      <SectionHeader label={t("search.discover.popularBrands")} />
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[styles.chipRow, { flexDirection: rowDir }]}
-      >
-        {QUICK_BRANDS.map((b) => (
-          <Pressable
-            key={b.value}
-            onPress={() => onBrowseBrand(b)}
-            style={[
-              styles.brandChip,
-              { backgroundColor: colors.secondary, borderRadius: 20 },
-            ]}
+      {/* Popular car brands — only when car inventory exists (or facets loading) */}
+      {showCarBrands ? (
+        <>
+          <SectionHeader label={t("search.discover.popularBrands")} />
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.chipRow, { flexDirection: rowDir }]}
           >
-            <AppText style={[styles.brandChipText, { color: colors.foreground }]}>
-              {brandLabel(b, isRTL)}
-            </AppText>
-          </Pressable>
-        ))}
-      </ScrollView>
+            {QUICK_BRANDS.map((b) => (
+              <Pressable
+                key={b.value}
+                onPress={() => onBrowseBrand(b)}
+                style={[
+                  styles.brandChip,
+                  { backgroundColor: colors.secondary, borderRadius: 20 },
+                ]}
+              >
+                <AppText
+                  style={[styles.brandChipText, { color: colors.foreground }]}
+                >
+                  {brandLabel(b, isRTL)}
+                </AppText>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </>
+      ) : null}
 
       {/* Saved searches */}
       {savedSearches.length > 0 && (
@@ -437,8 +486,7 @@ export function SearchDiscover({
         </>
       )}
 
-      {/* Trending — hidden entirely when there is nothing real to show (no
-          empty-state hint; honesty rule). */}
+      {/* Trending */}
       {(trendingLoading || trending.length > 0) && (
         <>
           <SectionHeader label={t("search.discover.trending")} />
@@ -475,6 +523,43 @@ export function SearchDiscover({
           </ScrollView>
         </>
       )}
+
+      {/* —— Business hub (B2B only — not marketplace car filters) —— */}
+      <SectionHeader label={t("search.discover.businessHub")} />
+
+      <Pressable
+        onPress={() => router.push("/business/supply-hub")}
+        style={styles.mapCtaWrap}
+        testID="discover-supply-portal"
+      >
+        <LinearGradient
+          colors={["#3A0A10", "#120406"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.mapCta}
+        >
+          <View style={[styles.mapCtaRow, { flexDirection: rowDir }]}>
+            <View style={[styles.mapBadge, { backgroundColor: colors.primary }]}>
+              <Feather name="globe" size={20} color="#FFFFFF" />
+            </View>
+            <View style={styles.mapCtaText}>
+              <AppText style={[styles.mapTitle, { textAlign }]}>
+                {t("search.discover.supplyPortal")}
+              </AppText>
+              <AppText style={[styles.mapSub, { textAlign }]}>
+                {t("search.discover.supplyPortalSub")}
+              </AppText>
+            </View>
+            <Feather
+              name={isRTL ? "chevron-left" : "chevron-right"}
+              size={20}
+              color="rgba(255,255,255,0.8)"
+            />
+          </View>
+        </LinearGradient>
+      </Pressable>
+
+      <CompanyOffers />
     </ScrollView>
   );
 }
@@ -490,7 +575,9 @@ const styles = StyleSheet.create({
   },
   sectionCardWrap: {
     width: "47%",
-    flexGrow: 1,
+    maxWidth: "47%",
+    flexGrow: 0,
+    flexBasis: "47%",
   },
   sectionCard: {
     height: 118,

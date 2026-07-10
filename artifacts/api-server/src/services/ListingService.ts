@@ -158,7 +158,16 @@ export function validateAttributes(
   // land listing is never forced to invent one. Mirrors the mobile gate
   // (requiredSpecKeysFor / REAL_ESTATE_NO_ROOMS_TYPES).
   if (category === "real_estate") {
-    const noRooms = ["land", "shop", "office", "clinic"];
+    // Keep in sync with mobile REAL_ESTATE_NO_ROOMS_TYPES (incl. warehouse /
+    // commercial_land from the property_type engine expansion).
+    const noRooms = [
+      "land",
+      "commercial_land",
+      "shop",
+      "office",
+      "clinic",
+      "warehouse",
+    ];
     const pt = typeof specs.property_type === "string" ? specs.property_type : "";
     if (!noRooms.includes(pt)) requiredKeys.push("rooms");
   }

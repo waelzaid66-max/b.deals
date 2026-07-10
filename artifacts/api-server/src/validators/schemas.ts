@@ -822,6 +822,13 @@ const engineFilterFields = {
   // furnished_daily / new_law / old_law; Gulf: annual_contract). Free string on
   // purpose: the catalog is client-side and grows per country (adaptive data).
   rental_term: z.string().max(40).optional(),
+  // ISO market country for inventory scoping (specs.market_country; missing → EG).
+  market_country: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z]{2}$/, "market_country must be a 2-letter ISO code")
+    .optional(),
   // Car engine filters. fuel_type / transmission are real enum columns (with a
   // specs JSON fallback); brand / model match the English listing title (titles
   // are canonical "<Brand> <Model> <Year>") so `q` stays free for NLP text;
@@ -846,6 +853,9 @@ const engineFilterFields = {
     ])
     .optional(),
   origin_type: z.enum(["local", "imported"]).optional(),
+  // Commodity material (steel, aluminum, …) — specs.material only; materials
+  // company browse. Free string like rental_term (catalog lives client-side).
+  material: z.string().trim().max(40).optional(),
 } as const;
 
 // Result ordering for the search results screen. `recommended` (default) and
@@ -941,6 +951,9 @@ export const MapClusterSchema = z
     lng: z.number(),
     count: z.number(),
     listing_id: z.string().nullable(),
+    // Single-pin enrichment; null for multi-listing cells.
+    is_bookable: z.boolean().nullable(),
+    price_display: z.string().nullable(),
   })
   .strict();
 

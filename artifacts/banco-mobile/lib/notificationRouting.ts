@@ -54,13 +54,28 @@ export function routeForNotification(
     return "/billing" as Href;
   }
 
-  // comment, price_drop, new_match, lead, review, system → listing when present.
+  // comment, price_drop, new_match, lead, review, system, verification → listing when present.
   if (typeof d.listing_id === "string") {
     return { pathname: "/listing/[id]", params: { id: d.listing_id } };
   }
 
   if (type === "review") {
     return "/(tabs)/profile";
+  }
+
+  // Verification / business account updates land on the business hub.
+  if (
+    type === "verification" ||
+    type === "account" ||
+    type === "business" ||
+    type === "dealer"
+  ) {
+    return "/business/supply-hub" as Href;
+  }
+
+  // Lead without listing id → seller leads inbox when available.
+  if (type === "lead") {
+    return "/business/requests" as Href;
   }
 
   return null;

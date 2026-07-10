@@ -18,6 +18,7 @@ import type {
 } from "@workspace/api-client-react";
 
 import { AppText } from "@/components/AppText";
+import { MarketCountryButton, MarketCountryPicker } from "@/components/MarketCountryPicker";
 import {
   apiCategoryFor,
   Category,
@@ -26,12 +27,10 @@ import {
 } from "@/components/CategoryTabs";
 import { brandLabel, type CarBrand } from "@/constants/cars";
 import { engineByKey, type EngineDef } from "@/constants/engines";
-import { INDUSTRY_TYPES } from "@/constants/listingCreateTaxonomy";
+import { INDUSTRY_TYPES, MATERIAL_TYPES } from "@/constants/listingCreateTaxonomy";
 import { useI18n } from "@/context/LanguageContext";
 import { useColors } from "@/hooks/useColors";
 import {
-  MARKET_COUNTRIES,
-  marketCountryLabel,
   rentalTermsForSearch,
   sanitizeRentalTermForMarket,
 } from "@/lib/searchTaxonomy";
@@ -50,9 +49,8 @@ const SORTS: SearchSort[] = [
 ];
 const PAYMENTS: PaymentType[] = ["any", "installment"];
 
-// Section-specific attribute filters. These criteria/back-end params existed but
-// had NO controls in the sheet — cars get fuel + transmission, industrial gets
-// industry + origin, each a single-select chip row (tap again to clear).
+// Section-specific attribute filters — cars: fuel + transmission live HERE only
+// (not as engine chips). Industrial: industry + origin. One control family = one job.
 const FUELS: SearchListingsFuelType[] = [
   "petrol",
   "diesel",
@@ -138,6 +136,7 @@ export function FilterSheet({
   const [maxPrice, setMaxPrice] = useState(criteria.maxPrice);
   const [minYear, setMinYear] = useState(criteria.minYear);
   const [maxYear, setMaxYear] = useState(criteria.maxYear);
+  const [marketPickerOpen, setMarketPickerOpen] = useState(false);
 
   useEffect(() => {
     if (visible) {
@@ -162,7 +161,26 @@ export function FilterSheet({
   // them while the تمليك (sale) chip is active would be contradictory noise.
   const selectedEngine = engineByKey(criteria.category, criteria.engineKey);
   const showRentalTerms =
-    isRealEstate && selectedEngine?.params.offer_type !== "sale";
+    isRealEstate && selectedEngine?.params.offer_type === "rent";
+  // Industry = manufacturing sector. Never on raw_material (commodity is
+  // `material` at create). Hide for materials+all too so the group browse
+  // doesn't ask a factory-sector question over steel/resin listings.
+  const showIndustry =
+    isIndustrial &&
+    !(
+      criteria.category === "materials" &&
+      (criteria.industrialType === "all" ||
+        criteria.industrialType === "raw_material")
+    );
+  // Local/imported logistics: materials company only — facilities are sites.
+  const showOrigin = criteria.category === "materials";
+  // Commodity material chips: materials company, especially raw_material browse
+  // (create writes specs.material). Shown for materials+all too so shoppers can
+  // refine the group without picking a subtype first.
+  const showMaterial =
+    criteria.category === "materials" &&
+    (criteria.industrialType === "all" ||
+      criteria.industrialType === "raw_material");
   const rentalTerms = rentalTermsForSearch(criteria.marketCountry);
 
   return (
@@ -444,51 +462,12 @@ export function FilterSheet({
             {showRentalTerms && (
               <>
                 <SectionLabel text={t("create.fields.market")} align={textAlign} colors={colors} />
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={[styles.chipRow, { flexDirection: rowDir }]}
-                >
-                  {MARKET_COUNTRIES.map((m) => {
-                    const active = criteria.marketCountry === m.value;
-                    return (
-                      <Pressable
-                        key={m.value}
-                        onPress={() =>
-                          onUpdate({
-                            marketCountry: m.value,
-                            rentalTerm: sanitizeRentalTermForMarket(
-                              criteria.rentalTerm,
-                              m.value,
-                            ),
-                          })
-                        }
-                        style={[
-                          styles.chip,
-                          {
-                            backgroundColor: active
-                              ? colors.primary
-                              : colors.secondary,
-                          },
-                        ]}
-                        testID={`filter-market-${m.value}`}
-                      >
-                        <AppText
-                          style={[
-                            styles.chipText,
-                            {
-                              color: active
-                                ? colors.primaryForeground
-                                : colors.mutedForeground,
-                            },
-                          ]}
-                        >
-                          {marketCountryLabel(m.value, isRTL)}
-                        </AppText>
-                      </Pressable>
-                    );
-                  })}
-                </ScrollView>
+                <View style={[styles.chipRow, { flexDirection: rowDir }]}>
+                  <MarketCountryButton
+                    selected={criteria.marketCountry}
+                    onPress={() => setMarketPickerOpen(true)}
+                  />
+                </View>
                 <SectionLabel text={t("create.fields.rentalTerm")} align={textAlign} colors={colors} />
                 <ToggleChipRow
                   options={rentalTerms.map((r) => r.value)}
@@ -497,7 +476,12 @@ export function FilterSheet({
                     const def = rentalTerms.find((r) => r.value === v);
                     return def ? (isRTL ? def.ar : def.en) : v;
                   }}
-                  onToggle={(v) => onUpdate({ rentalTerm: v })}
+                  onToggle={(v) =>
+                    onUpdate({
+                      rentalTerm: v,
+                      ...(v ? { engineKey: "rent" } : {}),
+                    })
+                  }
                   rowDir={rowDir}
                   colors={colors}
                   testPrefix="filter-rental-term"
@@ -505,33 +489,69 @@ export function FilterSheet({
               </>
             )}
 
-            {/* Industry + origin (industrial sections) */}
-            {isIndustrial && (
+            {/* Industry (facilities / machine / production_line) + origin + material (materials) */}
+            {(showIndustry || showOrigin || showMaterial) && (
               <>
-                <SectionLabel text={t("create.fields.industry")} align={textAlign} colors={colors} />
-                <ToggleChipRow
-                  options={INDUSTRY_TYPES.map((i) => i.value as SearchListingsIndustry)}
-                  selected={criteria.industry}
-                  labelFor={(v) => {
-                    const def = INDUSTRY_TYPES.find((i) => i.value === v);
-                    return def ? (isRTL ? def.ar : def.en) : v;
-                  }}
-                  onToggle={(v) => onUpdate({ industry: v })}
-                  rowDir={rowDir}
-                  colors={colors}
-                  testPrefix="filter-industry"
-                />
+                {showIndustry ? (
+                  <>
+                    <SectionLabel
+                      text={t("create.fields.industry")}
+                      align={textAlign}
+                      colors={colors}
+                    />
+                    <ToggleChipRow
+                      options={INDUSTRY_TYPES.map(
+                        (i) => i.value as SearchListingsIndustry,
+                      )}
+                      selected={criteria.industry}
+                      labelFor={(v) => {
+                        const def = INDUSTRY_TYPES.find((i) => i.value === v);
+                        return def ? (isRTL ? def.ar : def.en) : v;
+                      }}
+                      onToggle={(v) => onUpdate({ industry: v })}
+                      rowDir={rowDir}
+                      colors={colors}
+                      testPrefix="filter-industry"
+                    />
+                  </>
+                ) : null}
 
-                <SectionLabel text={t("create.fields.origin")} align={textAlign} colors={colors} />
-                <ToggleChipRow
-                  options={ORIGINS}
-                  selected={criteria.originType}
-                  labelFor={(v) => t(`create.opts.${v}`)}
-                  onToggle={(v) => onUpdate({ originType: v })}
-                  rowDir={rowDir}
-                  colors={colors}
-                  testPrefix="filter-origin"
-                />
+                {showMaterial ? (
+                  <>
+                    <SectionLabel
+                      text={t("create.fields.material")}
+                      align={textAlign}
+                      colors={colors}
+                    />
+                    <ToggleChipRow
+                      options={MATERIAL_TYPES.map((m) => m.value)}
+                      selected={criteria.material}
+                      labelFor={(v) => {
+                        const def = MATERIAL_TYPES.find((m) => m.value === v);
+                        return def ? (isRTL ? def.ar : def.en) : v;
+                      }}
+                      onToggle={(v) => onUpdate({ material: v })}
+                      rowDir={rowDir}
+                      colors={colors}
+                      testPrefix="filter-material"
+                    />
+                  </>
+                ) : null}
+
+                {showOrigin ? (
+                  <>
+                    <SectionLabel text={t("create.fields.origin")} align={textAlign} colors={colors} />
+                    <ToggleChipRow
+                      options={ORIGINS}
+                      selected={criteria.originType}
+                      labelFor={(v) => t(`create.opts.${v}`)}
+                      onToggle={(v) => onUpdate({ originType: v })}
+                      rowDir={rowDir}
+                      colors={colors}
+                      testPrefix="filter-origin"
+                    />
+                  </>
+                ) : null}
               </>
             )}
 
@@ -716,6 +736,18 @@ export function FilterSheet({
           </View>
         </View>
       </View>
+      <MarketCountryPicker
+        visible={marketPickerOpen}
+        selected={criteria.marketCountry}
+        onClose={() => setMarketPickerOpen(false)}
+        onSelect={(iso) => {
+          onUpdate({
+            marketCountry: iso,
+            rentalTerm: sanitizeRentalTermForMarket(criteria.rentalTerm, iso),
+          });
+          setMarketPickerOpen(false);
+        }}
+      />
     </Modal>
   );
 }

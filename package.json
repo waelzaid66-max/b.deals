@@ -7,8 +7,10 @@
     "preinstall": "node scripts/preinstall-enforce-pnpm.mjs",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
-    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck",
+    "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"!./artifacts/banco-web\" --filter \"!./artifacts/landing\" --filter \"./scripts\" --if-present run typecheck",
+    "typecheck:website": "pnpm --filter @workspace/design-tokens run typecheck && pnpm --filter @workspace/search-contract run typecheck && pnpm --filter @workspace/landing run typecheck && pnpm --filter @workspace/banco-web run typecheck",
     "lint": "eslint scripts --max-warnings 0",
+    "lint:website": "eslint artifacts/banco-web artifacts/landing --max-warnings 0",
     "lint:report": "eslint scripts artifacts/api-server/src lib/db/src",
     "confidence": "node scripts/production-confidence-check.mjs"
   },

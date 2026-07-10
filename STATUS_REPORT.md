@@ -1,60 +1,44 @@
 # BANCO Store — Completion & Status Report
 
-_Last updated: 2026-07-08 — Production readiness phases 02–20 closed; product fixes through `92a33e0`; `main` HEAD `31a4bfe` (sync docs). See `REPO_SYNC_STATUS.md`._
+_Last updated: 2026-07-10 — Mobile stabilize M01–M31 on `fix/mobile-master-stabilize`; security P0 closed; Live Replit still STALE until API redeploy. Canonical mobile publish gate: `audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md`._
 
-> **Release line:** `main` (see `git log -1`) — **23 mobile regression tests** via confidence script; phases index: `audit/production-readiness/README.md`. Staging smoke still **OPS** (secrets).
+> **Release line:** worktree branch `fix/mobile-master-stabilize` (see `git log -1` / `git status`). Mobile regression via `pnpm --filter @workspace/banco-mobile run test` (icons + lib + resilience + universal-links). Staging smoke still **OPS** (secrets). Website does **not** block mobile (O17 SKIP).
 
-This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin · Banco Market/dealer-os · API Server · shared libs). It records what is **done and verified**, the **architecture**, and the **honest remaining items** with the reason each is or isn't locally verifiable.
+This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin · Banco Market/dealer-os · API Server · shared libs · optional banco-web). It records what is **done and verified**, the **architecture**, and the **honest remaining items** with the reason each is or isn't locally verifiable.
 
 ---
 
 ## 1. How verification works here
 
-- **Backend (api-server):** **295 passed / 3 skipped** (includes geo map/list parity, map clusters, rental_term, industrial isolation).
-- **Mobile regression:** **23 passed** (icons + lib-hardening + resilience).
-- **ESLint:** `pnpm run lint` on `scripts/**` — **0 errors** (Node globals include `URL` for staging smoke).
-- **Type safety (all surfaces):** `pnpm -r --if-present run typecheck` → **0 errors across 7 packages** (api-server, banco-mobile, admin-os, dealer-os, landing, mockup-sandbox, scripts).
-- **API contract:** `lib/api-spec/openapi.yaml` is the source of truth → `orval` regenerates the typed client (`lib/api-client-react`) + zod (`lib/api-zod`). Generated diffs this session were **purely additive (0 deletions)**.
-- **Build:** runs on CI (Linux). Locally on Windows the esbuild native binary differs, so **typecheck is the local proxy** for compilation.
+- **Backend (api-server):** large vitest suite (needs `DATABASE_URL` / CI Postgres). Includes geo map/list parity, map clusters, rental_term, industrial isolation, material gate (pure unit).
+- **Mobile regression:** `test:icons` + `test:lib` + `test:resilience` + `test:universal-links` (CI `mobile-regression` runs all four).
+- **Search isolation proofs:** `audit/mobile/scripts/proof-isolation.mjs` + `proof-create-fields.mjs`.
+- **ESLint:** `pnpm run lint` on `scripts/**`.
+- **Type safety:** `pnpm run typecheck` (core excludes consumer web; website has its own workflow).
+- **API contract:** `lib/api-spec/openapi.yaml` → orval → `lib/api-client-react` + `lib/api-zod`.
+- **Build:** CI Linux. Local Windows may need `pnpm install --ignore-scripts` when `preinstall` needs `sh`.
 
 ---
 
-## 2. Delivered & verified this phase
+## 2. Delivered & verified (product + stabilize)
 
 | Area | What | Verification |
 |---|---|---|
-| **Server-side map clustering** | `GET /v1/search/map` → grid-clustered pins for a viewport, reusing the **exact** search filters. Scales (returns cells, not all pins). | DB test: zoom-out clusters, zoom-in pins, bbox gates, total conserved |
-| **Map UI wired to viewport clusters** | The Leaflet/WebView map now reports its viewport (debounced) → fetches `/search/map` with the SAME committed filters (`buildMapClusterParams` reuses `buildSearchParams`) → injects authoritative clusters (`window.BANCO_MAP.setClusters`), count bubbles drill in, off-page singles open by id, honest viewport-wide count, monotonic seq guard, graceful degradation to the loaded page on fetch failure. | Wired on Replit; code-reviewed + typecheck 0 locally; device QA on Replit |
-| **Messenger mini composer** | Quick-emoji strip collapsed behind a Messenger-style smiley toggle in the composer (primary-tinted while open) — thread keeps full height; reactions/reply/attach/preview untouched. | typecheck 0 |
-| **Rental systems (Booking-style, per-country law)** | `rental_term` dimension across create + search + feed + map: Egypt = furnished (from 1 day) / new-law lease (≤5 years) / old-law lease (≤59 years); Gulf markets = annual contract + furnished-daily. 8-country market catalog (EG SA AE KW QA JO OM LY) — adding a country/term is config-only (specs-based, adaptive-data philosophy). Create shows the rental-system field only for rentals; FilterSheet chips filter it; the map inherits it automatically. | DB test: each regime filters independently, no-filter returns all |
-| **Search speed at scale (GIN trigram)** | `idx_listings_title_trgm` + `idx_listings_description_trgm` (gin_trgm_ops) accelerate the existing `ILIKE '%term%'` search — plan changes, semantics don't. Self-provisioning at boot (idempotent, CONCURRENTLY, non-fatal) + declared in the Drizzle schema for fresh environments. | DB test: indexes created idempotently + search results unchanged |
-| **Booking-style RENT map** | `offer_type=rent` on the map/search clusters **only rentals** — real-estate, land, factories. One shared filter path (`parsedFromSearchQuery` + `buildAttributeConditions`) → map & list always consistent. | DB test (rent vs sale) |
-| **Admin "control keys"** | Full plan management (price, quota, CPL ×4, boost, ranking, active/baseline) via `GET/POST/PATCH /admin/plans` (gated `manage_payments`) + **Plans & Pricing** page in Banco Admin. | service tests + admin-os typecheck |
-| **Observability** | Server: structured error reporting + optional alert webhook + process-level unhandled-error capture. Mobile: global JS + React render crash capture. | tests + wired |
-| **Marketplace lifecycle** | publish → appears (feed + search + SEO) → open → message → favorite → edit → bump → archive → republish → delete (+ cascade). | end-to-end DB test |
-| **Adaptive Data philosophy** | Custom specs (unlimited), search across description + spec values, minimal floor, Candidate-Attributes learning pipeline. | tests |
-| **Furnished rental host hub (R1)** | Isolated `/rentals/hub` for `is_bookable` units; edit listing (title/location/price); profile menu + booking deep-links; separate from sale/long-term rent. | mobile typecheck + manual path review |
-| **Production hardening PH-1** | Profile Payments → `/billing` hub; finance stack routes; notification deep-links guarded; `WAVE-P0-STAGING-VALIDATION.md` checklist. | `test:lib` + typecheck |
-| **Billing export B4** | Invoice PDF download + monthly CSV from `/billing`; API `…/invoices/{id}/pdf` + `…/report.csv`; OpenAPI/orval. | unit tests + `test:lib` |
-| **Wave 4/5 search parity** | Market-scoped rental chips (`searchTaxonomy`), near-me on FilterSheet + API/OpenAPI, map clusters honour radius | `searchParams`, `FilterSheet`, `SearchService.nearMeConditions` |
-| **Mobile performance (RC)** | Home rails: parallel `getTrending` + feed pool + industrial + geo (no waterfall). Map: 300ms viewport debounce + LRU cluster cache. Search: facet normalize via `applyPatch` + single retry; autocomplete seq guard; stable list header / card press. Session: debounced AsyncStorage + memoized provider value. | 23 mobile regression tests pass |
-| **Expo/EAS production readiness** | `app.config.ts` dynamic router origin; Metro monorepo; Android SDK 35 + adaptive icon; iOS privacy placeholders; `production-confidence-check.mjs`; staging runbook | `node scripts/production-confidence-check.mjs` |
-| **Health smoke (P0)** | Automated vitest for `GET /api/healthz`, `/api/livez`, `/api/readyz` (no Clerk). | `health.test.ts` |
-| **P0 staging tooling** | `scripts/staging-p0-smoke.mjs` (upload byte-path) + `scripts/verify-upload-claims-schema.mjs`. | run on staging with secrets |
-| **Search engines P1-8** | Ten facet-gated `property_type` chips; create taxonomy aligned (`commercial_land`, `warehouse`). | `test:lib` + i18n en/ar |
-| **P2 infra** | GCP deploy scaffold (`deploy/gcp/`), ESLint monorepo + CI job, mobile regression CI job. | `WAVE-P2-INFRA.md` + Actions |
-| **Upload schema P0 (C-01)** | `ensureSchemaPatches` on boot + `ensureSchema.test.ts` proves `upload_claims` exists. | DB integration test |
-
-**Deploy hardening already in place:** `app.listen` binds the port **before** `ensureDbExtensions` (the earlier deploy failure was the port never opening because startup awaited a DB extension). Process-level `unhandledRejection`/`uncaughtException` handlers added.
+| **P0 security** | Upload IDOR claims, LIKE escape, deleted-user visibility, ACL owner IDs | `audit/fixes/C-01…H-03`, commit history on main |
+| **Mobile stabilize M01–M27** | Profile phone, create permissions, home paint, search chrome, market picker, map, isolation | ACCEPTANCE + lib-hardening |
+| **Section companies M28–M31** | material filter, CLEAR_SECTION_ATTRS, web parity, hub new_law, feed `market_country` | proof-isolation + create-fields |
+| **Server-side map clustering** | `GET /v1/search/map` + bookable/price on single pins (local code) | DB tests when DATABASE_URL set; **live STALE** |
+| **Market country** | list + map + feed filter; create stamps `specs.market_country` | search-contract + home feed asserts |
+| **Rental systems** | per-country law terms; rent engine gate | FilterSheet + SearchControls |
+| **Billing B1–B4** | invoices/PDF/CSV without Paymob | test:lib |
+| **Expo/EAS config** | preview APK + production AAB profiles | `eas.json`, production-readiness checklists |
 
 ---
 
 ## 3. Content / i18n (reviewed — sound)
 
-- Mobile i18n (`constants/i18n.ts`, ~3,338 lines) is **comprehensive**, English + Arabic in parallel, with **`ar: typeof en` parity enforced at typecheck** → no missing keys possible.
-- No hardcoded user-facing English strings found in the mobile screens.
-- The **AI assistant already replies in the user's language** (Egyptian Arabic if they wrote Arabic, else English — `AiAssistantService` system prompt).
-- Conclusion: the translation layer is functionally sound; no forced changes were made.
+- Mobile i18n EN/AR with `ar: typeof en` parity at typecheck.
+- AI assistant language follows user input when key present.
 
 ---
 
@@ -62,9 +46,12 @@ This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin
 
 | Item | Status | Why it needs you |
 |---|---|---|
-| **Image-upload byte path** | object-storage config fixed + permission prompts added on Replit (`1bfc2f5`, `769086c`); byte path not locally testable | Needs the Replit Object Storage env — verify avatar/cover/listing/chat uploads on a real device. |
-| **Replit-env runtime blockers (from device testing)** | tracked | OTP email delivery · Google Sign-In · Apple Sign-In (unconfigured) · GPS location update · push notifications · settings deep-links · AI assistant (needs `OPENAI_API_KEY` secret; client now prefers it over the stuck managed integration). All are environment/integration items in the Replit workspace, not local code defects. |
-| **Real-device / store / load QA** | — | Android/iPhone/iPad device runs, store forms, and load testing are environment tasks. |
+| **API redeploy** | Live Replit **STALE** | Local has M23–M31; host does not until redeploy |
+| **Image-upload byte path** | OPS | Object Storage + device |
+| **OTP / Google / Apple / GPS / Push / AI key** | OPS | Clerk + secrets |
+| **Staging P0 smoke + upload_claims table** | O16 OPEN | `STAGING-REQUIRED-SECRETS.md` |
+| **EAS preview install + Device QA** | OPEN | `MOBILE-PUBLISH-SUCCESS-GATE.md` §2–3 |
+| **Store production submit** | NO-GO until above | Play / App Store consoles |
 
 These are flagged rather than faked — nothing was marked "done" that wasn't actually verified.
 
@@ -72,25 +59,27 @@ These are flagged rather than faked — nothing was marked "done" that wasn't ac
 
 ## 5. Sections, journeys & "no feature blocks another"
 
-The four markets (cars · real-estate incl. land · industrial/factories · B2B) all flow through **one** search + map + filter engine. Per-section filters (offer_type, property_type, fuel/transmission/brand/model/year, industry, origin, industrial_type) are additive and independent — a filter that doesn't apply to a section is simply absent, never conflicting. Adding a filter once makes it work in **both** the list and the map (single source of truth).
+The four browse companies (cars · real-estate · facilities · materials) plus host (Profile) and B2B (Business hub) stay isolated. Filters that don't apply to a section are absent, never conflicting. List / map / feed share the same attribute + market gates.
 
 ---
 
-## 6. Path to 100% (next, in this same environment)
+## 6. Path to mobile publish success
 
-1. ~~Wire the existing map UI to `/v1/search/map`~~ → **done** (Replit wiring, locally reviewed + typecheck-verified); remaining: device QA on Replit.
-2. Verify the Replit-env runtime blockers on device (uploads byte-path, OTP, Google/Apple sign-in, GPS, push, AI key).
-3. ~~GIN search index for large-catalog scale~~ → **done** (trigram indexes, boot-provisioned + schema-declared, DB-tested).
-4. Profile-completion polish + phone-permission flow review (account creation UX).
-5. Continued deploy/log hardening with real deploy runs.
+Follow **`audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md`** only:
 
-Work continues in the same environment; this report and the codebase are kept in sync on each push.
+1. Redeploy API from this branch  
+2. Live probe green  
+3. Staging smoke + upload_claims  
+4. EAS preview on device  
+5. Device QA matrix  
+6. Then production EAS / stores  
+
+Website / Paymob remain optional SKIP and must not block mobile.
 
 ---
 
-## Consolidation — production readiness (2026-07-08)
+## Consolidation
 
-- Added/updated udit/production-readiness/ playbooks, PHASE-01-CORE-ARCHITECTURE.md, PHASE-LISTING-PUBLISH-LIFECYCLE.md (**publish safe**), and RELEASE-CANDIDATE-FINAL.md (conditional GO staging / conditional NO-GO prod).
-- Root script: pnpm run confidence → scripts/production-confidence-check.mjs.
-- Mobile: session/map/search performance hardening (no publish-path changes).
-- **Windows install:** pnpm install --ignore-scripts when preinstall sh is unavailable.
+- Canonical readiness: `audit/production-readiness/FULL-READINESS-STATUS-PLAN.md`
+- Mobile gate: `audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md`
+- Open OPS: `audit/production-readiness/OPEN-ITEMS-BACKLOG.md` → **O16 only**
