@@ -37,6 +37,7 @@ export function MapOverlayChrome({
   const colors = useColors();
   const { t, isRTL } = useI18n();
   const insets = useSafeAreaInsets();
+  const captionSide = isRTL ? { right: 12 } : { left: 12 };
   const closeSide = isRTL ? { left: 4 } : { right: 4 };
 
   return (
@@ -44,6 +45,7 @@ export function MapOverlayChrome({
       <View
         style={[
           styles.caption,
+          captionSide,
           {
             flexDirection: isRTL ? "row-reverse" : "row",
             backgroundColor: colors.card,
@@ -90,7 +92,6 @@ const styles = StyleSheet.create({
   caption: {
     position: "absolute",
     top: 12,
-    left: 12,
     alignItems: "center",
     gap: 6,
     paddingVertical: 6,

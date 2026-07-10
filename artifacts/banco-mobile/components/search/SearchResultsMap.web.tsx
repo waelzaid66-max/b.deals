@@ -133,10 +133,19 @@ export function SearchResultsMap({
               : undefined;
           const fromPagePrice =
             single && c.listing_id ? priceById.get(c.listing_id) : undefined;
+          const allowBookableChrome = criteria.category === "real_estate";
           const fromApiBookable =
-            single && typeof c.is_bookable === "boolean" ? c.is_bookable : null;
+            allowBookableChrome &&
+            single &&
+            typeof c.is_bookable === "boolean"
+              ? c.is_bookable
+              : null;
           const fromPageBookable =
-            single && c.listing_id ? bookableById.has(c.listing_id) : false;
+            allowBookableChrome &&
+            single &&
+            c.listing_id
+              ? bookableById.has(c.listing_id)
+              : false;
           return {
             lat: c.lat,
             lng: c.lng,

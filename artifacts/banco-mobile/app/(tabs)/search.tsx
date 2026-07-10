@@ -663,6 +663,9 @@ export default function SearchScreen() {
   const selectOrigin = (o: "all" | "local" | "imported") =>
     update({ originType: o === "all" ? null : o });
 
+  const selectListingMode = (mode: "all" | "sale" | "buy") =>
+    update({ listingMode: mode });
+
   // Materials own local/imported logistics; facilities are site assets.
   const showOriginChrome = criteria.category === "materials";
 
@@ -980,6 +983,46 @@ export default function SearchScreen() {
         onChange={selectCategory}
         visible={shownCategories}
       />
+      <View style={[styles.originRow, { flexDirection: rowDir }]}>
+        {(["all", "sale", "buy"] as const).map((mode) => {
+          const active = criteria.listingMode === mode;
+          return (
+            <Pressable
+              key={mode}
+              onPress={() => {
+                playSound("tap");
+                selectListingMode(mode);
+              }}
+              style={[
+                styles.originChip,
+                {
+                  backgroundColor: active
+                    ? sectionAccent(criteria.category)
+                    : colors.secondary,
+                },
+              ]}
+              testID={`search-listing-mode-${mode}`}
+            >
+              <AppText
+                style={[
+                  styles.originChipText,
+                  {
+                    color: active
+                      ? colors.primaryForeground
+                      : colors.mutedForeground,
+                  },
+                ]}
+              >
+                {mode === "all"
+                  ? t("search.listingModeAll")
+                  : mode === "sale"
+                    ? t("search.listingModeSale")
+                    : t("search.listingModeBuy")}
+              </AppText>
+            </Pressable>
+          );
+        })}
+      </View>
       <View style={[styles.secondaryChrome, { flexDirection: rowDir }]}>
         {!facetsLoading && engineList.length > 1 && !showIndustrialChips ? (
           <View style={styles.secondaryChromeFlex}>

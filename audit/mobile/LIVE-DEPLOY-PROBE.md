@@ -1,66 +1,56 @@
 # Live deploy probe — banco-ca-oom.replit.app
 
-Probed: 2026-07-10 (re-confirmed same day via `probe-live-deploy.mjs`)  
-Branch with fixes: local `fix/mobile-master-stabilize` (not yet on this host)
+**Updated:** 2026-07-10  
+**Branch:** `origin/main` @ `3b40782` (wave 8 feature `5939849`)
 
-## Latest automated probe (exit 2 = STALE)
-
-```json
-{
-  "health": "ok",
-  "egEqSa": true,
-  "badIsoStatus": 200,
-  "mapKeys": "count,lat,listing_id,lng",
-  "hasBookable": false,
-  "hasPrice": false,
-  "verdict": "STALE — redeploy fix/mobile-master-stabilize API before device claims"
-}
-```
-
-Re-run anytime: `node audit/mobile/scripts/probe-live-deploy.mjs`  
-Or guided: `node audit/mobile/scripts/ops-next-step.mjs` → see `NEXT-OPS-REPLIT-REDEPLOY.md`
-
-## URLs opened
-
-| URL | What we saw |
-|-----|-------------|
-| `/banco-mobile/` | Expo Go landing + QR only — **no in-browser app UI** to screenshot for M01–M25 |
-| `/dealer-os/` → `/dealer-os/sign-in` | BANCO Market Clerk sign-in (dark). Logo + Google + email. **Development mode**. Not a black crash — first paint looked empty until Clerk mounted |
-| `/api/healthz` `/api/livez` `/api/readyz` | `ok` / DB ok |
-
-## Live API vs stabilize code (critical)
-
-Base: `https://banco-ca-oom.replit.app/api/v1`
-
-| Check | Live result | Local code expectation |
-|-------|-------------|------------------------|
-| `market_country=EG` vs `SA` on `/search` | **Identical listing ids** | Must diverge when inventory tagged |
-| Invalid `market_country=EGYPT` | **HTTP 200 + data** (param ignored) | Zod reject / 400 |
-| `/search/map` cluster object | keys: `lat,lng,count,listing_id` only | + `is_bookable`, `price_display` |
-| EG vs SA map totals | **Same 8 clusters** | Filter by market |
-
-Raw captures: `audit/mobile/live-probes/*.json`
-
-## Conclusion
-
-1. **Hosted Replit build does not include M23/M24** (and likely not the rest of this branch).
-2. Mobile link cannot show in-app defects in a desktop browser — needs Expo Go / device.
-3. Market link is auth-gated; no seller inventory UI without credentials.
-4. **Next ops step:** redeploy API + mobile from `fix/mobile-master-stabilize`, then re-run this probe (expect map keys + EG≠SA when data tagged).
-
-## Re-probe helper (2026-07-10)
+## Combined probe (recommended)
 
 ```bash
-node audit/mobile/scripts/probe-live-deploy.mjs
-# optional: node audit/mobile/scripts/probe-live-deploy.mjs https://your-staging-host
+node audit/mobile/scripts/probe-full-deploy.mjs
+# writes audit/mobile/live-probes/YYYY-MM-DD-full-deploy-proof.json
 ```
 
-Exit `0` = FRESH (bad ISO → 4xx, map has `is_bookable`/`price_display`, EG≠SA when inventory differs).  
-Exit `2` = STALE (current Replit host as of this write).
+| Exit | Meaning |
+|------|---------|
+| 0 | Wave 6 + wave 8 **FRESH** |
+| 1 | Wave 6 FRESH, wave 8 **STALE** (`seller.social_links` missing) |
+| 2 | Wave 6 **STALE** (redeploy required) |
 
-## Local proof still green
+## Latest automated probe (2026-07-10)
 
-- mobile regression 32/32 (icons + lib + resilience + universal-links)
-- `proof-isolation.mjs` ok (incl. M31)
-- `allowCommodityMaterialFilter` 4/4
+**Wave 6 — FRESH**
 
+- `market_country=EGYPT` → HTTP **400**
+- Map clusters include `is_bookable` + `price_display`
+- `healthz` / `readyz` ok
+
+**Wave 8 — STALE on Replit**
+
+- `GET /v1/listings/{id}` → `seller` keys: `id,name,role,is_verified` only
+- Missing `social_links` until api-server redeploys from `main`
+
+```bash
+node audit/mobile/scripts/probe-live-deploy.mjs      # wave 6 only
+node audit/mobile/scripts/probe-wave8-seller-social.mjs
+node audit/mobile/scripts/ops-next-step.mjs
+node audit/mobile/scripts/post-redeploy-verify.mjs   # after redeploy
+```
+
+## Replit redeploy (blocking for wave 8)
+
+```bash
+git fetch origin && git checkout main && git pull --ff-only origin main
+pnpm install --frozen-lockfile
+pnpm --filter @workspace/db run push-force
+# Stop → Run api-server
+```
+
+Full runbook: `NEXT-OPS-REPLIT-REDEPLOY.md`
+
+## What this probe does **not** prove
+
+- Device UX (Expo Go / APK only)
+- Upload smoke (needs `CLERK_BEARER_TOKEN`)
+- Store publish / EAS production
+
+Raw captures: `audit/mobile/live-probes/*.json`

@@ -26,6 +26,7 @@ export {
   DEFAULT_NEAR_RADIUS_KM,
   criteriaKey,
   hasActiveCriteria,
+  type ListingMode,
   type PaymentType,
   type SearchCriteria,
   type SearchSort,

@@ -14,7 +14,7 @@
 | O03 | **CLOSED** | Doc: icons.test.mjs under banco-mobile (PHASE-10-11) |
 | O04 | **CLOSED** | `STAGING-REQUIRED-SECRETS.md` |
 | O05–O15 | **CLOSED** | PHASE-02…20 + marketplace + README index |
-| O16 | **OPEN — OPS** | Staging smoke / device / EAS — needs your secrets. Mobile code M01–M31 closed on `fix/mobile-master-stabilize`. Gate: `audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md` |
+| O16 | **OPEN — OPS** | Staging smoke / device / EAS — needs secrets. Mobile code M01–M31 + waves 6–9 on `main`. Live wave 8 STALE until Replit redeploy. Gate: `MOBILE-PUBLISH-SUCCESS-GATE.md` |
 | O17 | **SKIP** | Website build — must not block mobile CI/EAS |
 | O18 | **SKIP** | Paymob B5 |
 | O19 | **CLOSED** | Release freeze + RC update (this wave) |

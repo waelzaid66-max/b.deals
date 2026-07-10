@@ -778,3 +778,63 @@ test("listing detail modals use touch-safe backdrop pattern", () => {
     "report modal must use sibling backdrop + sheet",
   );
 });
+
+test("wave 9 — search exposes sale vs buy listing mode chips", () => {
+  const search = fs.readFileSync(path.join(APP_ROOT, "app", "(tabs)", "search.tsx"), "utf8");
+  const nav = fs.readFileSync(path.join(APP_ROOT, "lib", "searchNavParams.ts"), "utf8");
+  assert.match(search, /listingMode:\s*mode/, "search must update listingMode in criteria");
+  assert.match(search, /listingModeSale|listingModeBuy/, "search must render sale/buy chips");
+  assert.match(nav, /listing_mode/, "mobile nav must serialize listing_mode");
+});
+
+test("wave 9 — B reaction is Potential not heart save", () => {
+  const bBtn = fs.readFileSync(
+    path.join(APP_ROOT, "components", "BReactionButton.tsx"),
+    "utf8",
+  );
+  const card = fs.readFileSync(path.join(APP_ROOT, "components", "SmartAssetCard.tsx"), "utf8");
+  const listing = fs.readFileSync(path.join(APP_ROOT, "app", "listing", "[id].tsx"), "utf8");
+  assert.match(bBtn, /onPotential/, "BReactionButton must expose onPotential");
+  assert.match(bBtn, /Banco Potential/, "B glyph must document Potential semantics");
+  assert.match(card, /BReactionButton[\s\S]*onPotential/, "cards must wire Potential handler");
+  assert.match(listing, /BReactionButton[\s\S]*onPotential/, "listing detail must wire Potential");
+});
+
+test("wave 9 — profile menu exposes saved and notifications without duplicate edit CTA", () => {
+  const profile = fs.readFileSync(PROFILE, "utf8");
+  assert.match(profile, /key:\s*"saved"/, "overflow menu must include saved searches");
+  assert.match(profile, /key:\s*"activity"/, "overflow menu must include notifications");
+  assert.match(profile, /key:\s*"edit"/, "edit profile must live in overflow menu");
+  assert.doesNotMatch(
+    profile,
+    /testID="profile-edit"/,
+    "duplicate avatar edit button must stay removed",
+  );
+});
+
+test("wave 9 — messenger RTL send icon and viewer close placement", () => {
+  const thread = fs.readFileSync(path.join(APP_ROOT, "app", "messages", "[id].tsx"), "utf8");
+  assert.match(thread, /scaleX:\s*-1/, "send icon must mirror in RTL");
+  assert.match(
+    thread,
+    /isRTL\s*\?\s*\{\s*left:\s*16\s*\}\s*:\s*\{\s*right:\s*16\s*\}/,
+    "image viewer close must flip horizontal side in RTL",
+  );
+});
+
+test("wave 9 — create listing reverse-geocodes GPS when label empty", () => {
+  const create = fs.readFileSync(path.join(APP_ROOT, "app", "listings", "create.tsx"), "utf8");
+  assert.match(create, /reverseGeocodeAsync/, "create must reverse-geocode captured coordinates");
+});
+
+test("wave 9 — web map bookable chrome gated to real_estate only", () => {
+  const webMap = fs.readFileSync(
+    path.join(APP_ROOT, "components", "search", "SearchResultsMap.web.tsx"),
+    "utf8",
+  );
+  assert.match(
+    webMap,
+    /criteria\.category\s*===\s*"real_estate"/,
+    "web map must gate bookable pin chrome to real_estate",
+  );
+});

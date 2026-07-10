@@ -1,7 +1,7 @@
 # بوابة نجاح نشر الموبايل — من أول الأهداف إلى الآن
 
 **التاريخ:** 2026-07-10  
-**الفرع:** `main` · tag `v1.1.1-product-truth-2026-07-10` @ `1aecea5`  
+**الفرع:** `main` · tag `v1.1.3-seller-social-2026-07-10` @ `3b40782`  
 **القاعدة:** لا أخضر مزيف. الكود ≠ الجهاز ≠ Live ≠ المتجر.
 
 ---
@@ -27,8 +27,9 @@
 | طبقة | الحالة | دليل |
 |------|--------|------|
 | كود محلي M01–M31 + أمان P0 | **CLOSED** | `MOBILE-STABILIZE-PROGRESS.md`, `audit/fixes/C-01…` |
-| اختبارات أوتوماتيك محلية | **PASS** | mobile lib-hardening **36/36** · production-confidence **19/19** |
-| Live Replit API | **FRESH** | `ops-next-step.mjs` — ISO reject + map bookable/price |
+| اختبارات أوتوماتيك محلية | **PASS** | lib-hardening **47/47** · production-confidence **17/17** · search-contract |
+| Live Replit API موجة 6 | **FRESH** | ISO + map bookable/price |
+| Live Replit API موجة 8 | **STALE** | `seller.social_links` — أعد النشر من `main` |
 | Device QA | **OPEN** | `DEVICE-QA-SECTION-COMPANIES.md` لم يُنفَّذ |
 | OPS O16 | **OPEN** | أسرار + smoke + EAS |
 | Website | **غير حاجز** | O17 SKIP |
@@ -42,6 +43,7 @@
         → دليل تنفيذي: NEXT-OPS-REPLIT-REDEPLOY.md
         → فحص سريع: node audit/mobile/scripts/ops-next-step.mjs
         → بعد redeploy: node audit/mobile/scripts/post-redeploy-verify.mjs
+        → إثبات مجمّع: pnpm run ops:probe-full
         ↓
 [2] إعادة فحص Live: EG≠SA عند بيانات موسومة · map is_bookable/price · ISO سيء → 4xx
         ↓
@@ -72,7 +74,8 @@
 
 ### يغلقه أنت فقط (لا يمكن تزويره)
 
-- [x] Redeploy API (الفرع الحالي → Replit/staging) — **FRESH** 2026-07-10
+- [x] Redeploy API موجة 6 — **FRESH** 2026-07-10
+- [ ] Redeploy API موجة 8 — **STALE** (`seller.social_links`)
 - [ ] `BANCO_API_URL` + `CLERK_BEARER_TOKEN` + `DATABASE_URL`
 - [ ] `node scripts/staging-p0-smoke.mjs` exit 0
 - [ ] `node scripts/verify-upload-claims-schema.mjs` PASS
@@ -87,8 +90,9 @@
 
 ```bash
 # إثباتات كود الموبايل + بوابة محلية
-pnpm run confidence -- --skip-typecheck
+pnpm run ops:full-verify
 pnpm run ops:code-gate
+pnpm run ops:probe-full
 pnpm --filter @workspace/banco-mobile run test
 node audit/mobile/scripts/proof-isolation.mjs
 node audit/mobile/scripts/proof-create-fields.mjs
@@ -107,11 +111,11 @@ eas build --profile preview --platform android
 
 ### Redeploy checklist (Replit / staging host)
 
-1. تأكد أن الـ host يسحب فرع `fix/mobile-master-stabilize` (أو merge إلى الفرع الذي ينشر منه).
+1. تأكد أن الـ host يسحب فرع `main` (5939849+).
 2. أعد تشغيل/نشر `api-server` بعد سحب الكود.
 3. إن لزم: `pnpm --filter @workspace/db run push` / schema patches لـ `upload_claims`.
-4. أعد `probe-live-deploy.mjs` حتى `verdict: FRESH`.
-5. بعدها فقط Device QA / EAS claims لـ market + map bookable.
+4. أعد `post-redeploy-verify.mjs` حتى wave 6 **و** wave 8 = FRESH.
+5. بعدها فقط Device QA / EAS claims لـ market + map bookable + seller links.
 
 ---
 

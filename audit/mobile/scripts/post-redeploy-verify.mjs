@@ -1,7 +1,11 @@
 /**
- * After Replit redeploy: prove FRESH, then health smoke on the same host.
+ * After Replit redeploy: prove FRESH (wave 6 + wave 8), then health smoke.
  * Usage:
  *   node audit/mobile/scripts/post-redeploy-verify.mjs [baseUrl]
+ *
+ * Exit 0 — wave 6 + wave 8 FRESH + health smoke ok
+ * Exit 1 — wave 6 FRESH but wave 8 STALE (partial deploy)
+ * Exit 2 — wave 6 STALE (redeploy required)
  *
  * Does not require Clerk JWT (health-only). For full upload smoke set
  * BANCO_API_URL + CLERK_BEARER_TOKEN and run scripts/staging-p0-smoke.mjs.
@@ -13,6 +17,22 @@ import { fileURLToPath } from "node:url";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const base = (process.argv[2] || "https://banco-ca-oom.replit.app").replace(/\/$/, "");
 const probe = path.join(root, "audit/mobile/scripts/probe-live-deploy.mjs");
+const wave8Probe = path.join(root, "audit/mobile/scripts/probe-wave8-seller-social.mjs");
+
+const REDEPLOY_SHELL = `
+STILL STALE (wave 6).
+On Replit Shell paste:
+
+  git fetch origin
+  git checkout main
+  git pull --ff-only origin main
+  pnpm install --frozen-lockfile
+  pnpm --filter @workspace/db run push-force
+  # Stop → Run api-server workflow
+
+Then re-run:
+  node audit/mobile/scripts/post-redeploy-verify.mjs
+`;
 
 console.log("=== post-redeploy verify ===\n");
 console.log(`Host: ${base}\n`);
@@ -25,24 +45,29 @@ process.stdout.write(probeRun.stdout || "");
 process.stderr.write(probeRun.stderr || "");
 
 if (probeRun.status !== 0) {
-  console.log(`
-STILL STALE.
-On Replit Shell paste:
-
-  git fetch origin
-  git checkout fix/mobile-master-stabilize
-  git pull --ff-only origin fix/mobile-master-stabilize
-  pnpm install --frozen-lockfile
-  pnpm --filter @workspace/db run push-force
-  # Stop → Run api-server workflow
-
-Then re-run:
-  node audit/mobile/scripts/post-redeploy-verify.mjs
-`);
+  console.log(REDEPLOY_SHELL);
   process.exit(2);
 }
 
-console.log("\nFRESH confirmed. Running health-only smoke on same host…\n");
+console.log("\nWave 6 FRESH. Checking wave 8 (seller.social_links)…\n");
+
+const w8Run = spawnSync(process.execPath, [wave8Probe, base], {
+  encoding: "utf8",
+  cwd: root,
+});
+process.stdout.write(w8Run.stdout || "");
+process.stderr.write(w8Run.stderr || "");
+
+if (w8Run.status !== 0) {
+  console.log(`
+PARTIAL DEPLOY — stabilize signals are live but seller.social_links is missing.
+Redeploy api-server from origin/main @ 5939849+, then re-run:
+  node audit/mobile/scripts/post-redeploy-verify.mjs
+`);
+  process.exit(1);
+}
+
+console.log("\nWave 6 + wave 8 FRESH. Running health-only smoke on same host…\n");
 
 const smoke = spawnSync(
   process.execPath,

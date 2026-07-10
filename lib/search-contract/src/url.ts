@@ -3,6 +3,7 @@ import { buildSearchParams } from "./buildSearchParams";
 import {
   DEFAULT_CRITERIA,
   DEFAULT_NEAR_RADIUS_KM,
+  type ListingMode,
   type PaymentType,
   type SearchCriteria,
   type SearchSort,
@@ -56,6 +57,12 @@ function asPaymentType(value: SearchParamValue): PaymentType {
   return raw === "installment" ? "installment" : "any";
 }
 
+function asListingMode(value: SearchParamValue): ListingMode {
+  const raw = first(value);
+  if (raw === "sale" || raw === "buy") return raw;
+  return "all";
+}
+
 /**
  * Parse URL search params into committed SearchCriteria (web + shared contract).
  */
@@ -98,6 +105,7 @@ export function parseSearchCriteriaFromUrl(
     nearLat: nearLat ?? null,
     nearLng: nearLng ?? null,
     nearRadiusKm: asNumber(searchParams.radius_km) ?? DEFAULT_NEAR_RADIUS_KM,
+    listingMode: asListingMode(searchParams.listing_mode),
   };
 }
 
@@ -130,6 +138,10 @@ export function buildSearchUrlParams(
 
   if (options.view === "map") {
     params.set("view", "map");
+  }
+
+  if (criteria.listingMode !== "all") {
+    params.set("listing_mode", criteria.listingMode);
   }
 
   return params;

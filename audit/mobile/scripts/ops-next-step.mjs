@@ -12,6 +12,7 @@ import { tryLoadLocalSecrets } from "../../../scripts/load-local-secrets.mjs";
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
 const base = process.argv[2] || process.env.BANCO_API_URL || process.env.API_URL || "https://banco-ca-oom.replit.app";
 const probe = path.join(root, "audit/mobile/scripts/probe-live-deploy.mjs");
+const wave8Probe = path.join(root, "audit/mobile/scripts/probe-wave8-seller-social.mjs");
 const codeGate = path.join(root, "audit/mobile/scripts/pre-redeploy-code-gate.mjs");
 
 tryLoadLocalSecrets();
@@ -55,12 +56,29 @@ process.stderr.write(result.stderr || "");
 
 const fresh = result.status === 0;
 
+if (existsSync(wave8Probe)) {
+  const w8 = spawnSync(process.execPath, [wave8Probe, base], {
+    encoding: "utf8",
+    cwd: root,
+  });
+  process.stdout.write(w8.stdout || "");
+  process.stderr.write(w8.stderr || "");
+  if (w8.status !== 0 && fresh) {
+    console.log(`
+WAVE 8 PARTIAL — stabilize API is FRESH but seller.social_links is not on the live host.
+Redeploy Replit from origin/main (5939849+), then re-run:
+  node audit/mobile/scripts/probe-wave8-seller-social.mjs
+`);
+  }
+  console.log("");
+}
+
 if (!fresh) {
   console.log(`
 NEXT (blocking) — paste on Replit Shell:
   git fetch origin
-  git checkout fix/mobile-master-stabilize
-  git pull --ff-only origin fix/mobile-master-stabilize
+  git checkout main
+  git pull --ff-only origin main
   pnpm install --frozen-lockfile
   pnpm --filter @workspace/db run push-force
   # Stop → Run api-server, then on your PC:

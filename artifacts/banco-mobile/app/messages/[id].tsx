@@ -898,6 +898,7 @@ export default function ThreadScreen() {
               color={
                 !draft.trim() ? colors.mutedForeground : colors.primaryForeground
               }
+              style={isRTL ? { transform: [{ scaleX: -1 }] } : undefined}
             />
           </Pressable>
         </View>
@@ -992,7 +993,11 @@ export default function ThreadScreen() {
           ) : null}
           <Pressable
             onPress={() => setViewerUri(null)}
-            style={[styles.viewerClose, { top: insets.top + 12 }]}
+            style={[
+              styles.viewerClose,
+              { top: insets.top + 12 },
+              isRTL ? { left: 16 } : { right: 16 },
+            ]}
             hitSlop={12}
             accessibilityLabel={t("chat.viewerClose")}
             testID="viewer-close"
@@ -1221,7 +1226,6 @@ const styles = StyleSheet.create({
   viewerImage: { width: "100%", height: "80%" },
   viewerClose: {
     position: "absolute",
-    right: 16,
     width: 40,
     height: 40,
     borderRadius: 20,

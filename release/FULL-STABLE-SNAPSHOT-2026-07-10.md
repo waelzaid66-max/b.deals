@@ -1,7 +1,7 @@
 # BANCO — نسخة مستقرة كاملة للتجربة (Snapshot)
 
 **التاريخ:** 2026-07-10  
-**الوسم:** `v1.1.1-product-truth-2026-07-10` @ `1aecea5`  
+**الوسم:** `v1.1.3-seller-social-2026-07-10` @ `3b40782` (موجة 9 UX محلي)  
 **الفرع المصدر:** `main`  
 **الريبوهان الرسميان:**
 
@@ -15,22 +15,26 @@
 ## 1) SHA والتحقق الآلي (آخر تشغيل)
 
 ```bash
-git fetch origin main fix/mobile-master-stabilize
-git rev-parse origin/main                    # بعد هذا الدمج
+git fetch origin main
+git rev-parse origin/main                    # 3b40782+
 node scripts/production-confidence-check.mjs # 19/19
-node artifacts/banco-mobile/tests/lib-hardening.test.mjs  # 36/36
-node audit/mobile/scripts/pre-redeploy-code-gate.mjs      # PASS @ 1aecea5
-node audit/mobile/scripts/ops-next-step.mjs             # LIVE FRESH
-node audit/mobile/scripts/post-redeploy-verify.mjs      # FRESH + health smoke
+node artifacts/banco-mobile/tests/lib-hardening.test.mjs  # 47/47
+pnpm --filter @workspace/search-contract run test
+node audit/mobile/scripts/pre-redeploy-code-gate.mjs      # PASS
+node audit/mobile/scripts/ops-next-step.mjs             # wave6 FRESH, wave8 STALE
+node audit/mobile/scripts/probe-full-deploy.mjs         # PARTIAL until redeploy
+node audit/mobile/scripts/post-redeploy-verify.mjs      # after Replit redeploy
 ```
 
 | البوابة | النتيجة | ملاحظة |
 |---------|---------|--------|
 | production-confidence | **19/19** | proofs + contract + mobile regression |
-| lib-hardening | **36/36** | بروفايل social + routes + touch |
+| lib-hardening | **47/47** | موجات 6–9 + touch + routes |
+| search-contract | **PASS** | `listingMode` → `is_request` |
 | pre-redeploy-code-gate | **PASS** | market_country + map bookable/price |
-| Live probe (Replit) | **FRESH** | probe `2026-07-10-wave6-fresh.json` |
-| post-redeploy-verify | **FRESH** | health + readyz 2/2 |
+| Live probe موجة 6 | **FRESH** | ISO + map signals |
+| Live probe موجة 8 | **STALE** | `seller.social_links` missing on Replit |
+| post-redeploy-verify | **PARTIAL** | wave 6 ok · wave 8 blocked |
 | Device QA | **OPEN** | لم يُنفَّذ على جهاز حقيقي |
 | staging-p0-smoke (upload) | **BLOCKED** | يحتاج `CLERK_BEARER_TOKEN` |
 

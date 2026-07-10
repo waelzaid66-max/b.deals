@@ -54,6 +54,16 @@ const checks = [
     file: "artifacts/api-server/src/services/SearchService.ts",
     includes: ["getAutocomplete"],
   },
+  {
+    id: "wave8_seller_social_links",
+    file: "artifacts/api-server/src/services/ListingService.ts",
+    includes: ["social_links: sellerSocialLinks"],
+  },
+  {
+    id: "wave9_listing_mode_contract",
+    file: "lib/search-contract/src/buildSearchParams.ts",
+    includes: ['c.listingMode === "sale"', 'c.listingMode === "buy"'],
+  },
 ];
 
 const failures = [];

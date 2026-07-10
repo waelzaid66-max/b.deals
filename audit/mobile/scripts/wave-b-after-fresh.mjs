@@ -47,7 +47,7 @@ console.log(
   }),
 );
 
-const probeStatus = run("1) Live freshness", "audit/mobile/scripts/probe-live-deploy.mjs", [base]);
+const probeStatus = run("1) Live freshness (wave 6)", "audit/mobile/scripts/probe-live-deploy.mjs", [base]);
 if (probeStatus === 2) {
   console.error(`
 Live is STALE — Wave B cannot start honestly.
@@ -60,13 +60,27 @@ if (probeStatus !== 0) {
   process.exit(probeStatus);
 }
 
-const smokeStatus = run("2) Staging P0 smoke", "scripts/staging-p0-smoke.mjs");
+const wave8Status = run("2) Wave 8 seller.social_links", "audit/mobile/scripts/probe-wave8-seller-social.mjs", [
+  base,
+]);
+if (wave8Status === 2) {
+  console.error(`
+Wave 8 STALE — seller.social_links not on live API.
+Redeploy from origin/main @ 5939849+ before upload/EAS claims.
+`);
+  process.exit(1);
+}
+if (wave8Status !== 0) {
+  process.exit(wave8Status);
+}
+
+const smokeStatus = run("3) Staging P0 smoke", "scripts/staging-p0-smoke.mjs");
 if (smokeStatus !== 0) {
   process.exit(smokeStatus);
 }
 
 if (process.env.DATABASE_URL) {
-  const schemaStatus = run("3) upload_claims schema", "scripts/verify-upload-claims-schema.mjs");
+  const schemaStatus = run("4) upload_claims schema", "scripts/verify-upload-claims-schema.mjs");
   if (schemaStatus !== 0) {
     console.warn("\n[WARN] Schema verify failed — check DATABASE_URL reachability from this network.");
   }

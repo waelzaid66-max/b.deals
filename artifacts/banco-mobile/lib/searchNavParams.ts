@@ -29,6 +29,7 @@ const CAMEL_TO_SNAKE: Record<string, string> = {
   nearLat: "near_lat",
   nearLng: "near_lng",
   nearRadiusKm: "radius_km",
+  listingMode: "listing_mode",
 };
 
 const SEARCH_PARAM_KEYS = new Set([
@@ -55,6 +56,7 @@ const SEARCH_PARAM_KEYS = new Set([
   "near_lat",
   "near_lng",
   "radius_km",
+  "listing_mode",
   ...Object.keys(CAMEL_TO_SNAKE),
 ]);
 

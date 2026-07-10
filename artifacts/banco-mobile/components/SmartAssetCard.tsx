@@ -1,7 +1,7 @@
 import { Ionicons, MaterialCommunityIcons } from "@/components/icons";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
@@ -92,17 +92,23 @@ function SmartAssetCardComponent({
     onPress?.(item);
   };
 
-  const handleSave = () => {
+  const [potentialFlash, setPotentialFlash] = useState(false);
+
+  const handlePotential = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // Persist save AND teach the feed (Banco Potential / affinity). API has no
-    // dedicated "like" action — "interested" is the positive learning signal.
-    onSave?.(item);
+    setPotentialFlash(true);
     void sendBehaviorSignal({
       session_id: sessionId,
       listing_id: item.id,
       action: "interested",
       category: item.category ?? undefined,
     }).catch(() => {});
+    setTimeout(() => setPotentialFlash(false), 1200);
+  };
+
+  const handleSave = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    onSave?.(item);
   };
 
   // B-reactions (long-press on the identity B): real personalization signals —
@@ -187,6 +193,11 @@ function SmartAssetCardComponent({
                   <Ionicons name="calendar" size={12} color="#FFFFFF" />
                 </View>
               ) : null}
+              {item.is_request ? (
+                <View style={[styles.sponsoredBadge, { backgroundColor: "#C9CCD1" }]}>
+                  <Text style={styles.sponsoredText}>{t("create.kindRequest")}</Text>
+                </View>
+              ) : null}
             </View>
 
             {item.has_video && (
@@ -208,9 +219,10 @@ function SmartAssetCardComponent({
                 <View style={styles.actionBtn}>
                   <BReactionButton
                     saved={!!isSaved}
-                    likeIcon={saveIconFor(item.category, true)}
-                    onLike={handleSave}
-                    onInterested={() => sendReaction("interested")}
+                    potentialActive={potentialFlash}
+                    saveIcon={saveIconFor(item.category, true)}
+                    onPotential={handlePotential}
+                    onSave={handleSave}
                     onAngry={() => sendReaction("angry")}
                     height={30}
                     testID={`save-${item.id}`}

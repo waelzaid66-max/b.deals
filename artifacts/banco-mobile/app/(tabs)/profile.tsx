@@ -885,6 +885,24 @@ export default function ProfileScreen() {
         },
       },
       {
+        key: "saved",
+        icon: "heart",
+        label: t("profile.tabSaved"),
+        onPress: () => {
+          setShowMenu(false);
+          router.push("/(tabs)/saved");
+        },
+      },
+      {
+        key: "activity",
+        icon: "bell",
+        label: t("profile.tabActivity"),
+        onPress: () => {
+          setShowMenu(false);
+          router.push("/notifications");
+        },
+      },
+      {
         key: "business",
         icon: "briefcase",
         label: t("profile.menuBusiness"),
@@ -1025,7 +1043,26 @@ export default function ProfileScreen() {
             style={[
               styles.coverActions,
               { top: topPad + 8 },
-              isRTL && styles.rowReverse,
+              isRTL ? { left: 16 } : { right: 16 },
+            ]}
+          >
+            <Pressable
+              onPress={() => {
+                Haptics.selectionAsync();
+                setShowMenu(true);
+              }}
+              hitSlop={8}
+              style={styles.coverActionBtn}
+              testID="profile-menu"
+            >
+              <Ionicons name="ellipsis-horizontal" size={20} color="#ffffff" />
+            </Pressable>
+          </View>
+          <View
+            style={[
+              styles.coverActions,
+              { top: topPad + 8 },
+              isRTL ? { right: 16 } : { left: 16 },
             ]}
           >
             <Pressable
@@ -1039,17 +1076,6 @@ export default function ProfileScreen() {
               ) : (
                 <Feather name="camera" size={18} color="#ffffff" />
               )}
-            </Pressable>
-            <Pressable
-              onPress={() => {
-                Haptics.selectionAsync();
-                setShowMenu(true);
-              }}
-              hitSlop={8}
-              style={styles.coverActionBtn}
-              testID="profile-menu"
-            >
-              <Ionicons name="ellipsis-horizontal" size={20} color="#ffffff" />
             </Pressable>
           </View>
         </View>
@@ -1106,22 +1132,6 @@ export default function ProfileScreen() {
                   <Feather name="camera" size={13} color={colors.foreground} />
                 )}
               </View>
-            </Pressable>
-
-            <Pressable
-              onPress={openEditProfile}
-              style={[
-                styles.editProfileBtn,
-                { borderColor: colors.border, borderRadius: colors.radius },
-              ]}
-              testID="edit-profile"
-            >
-              <Feather name="edit-2" size={14} color={colors.foreground} />
-              <AppText
-                style={[styles.editProfileText, { color: colors.foreground }]}
-              >
-                {t("profile.editProfile")}
-              </AppText>
             </Pressable>
           </View>
 
@@ -3635,7 +3645,6 @@ const styles = StyleSheet.create({
   },
   coverActions: {
     position: "absolute",
-    right: 16,
     flexDirection: "row",
     gap: 8,
   },

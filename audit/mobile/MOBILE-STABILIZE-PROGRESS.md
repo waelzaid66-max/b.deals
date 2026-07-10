@@ -2,6 +2,18 @@
 
 Branch: `main` (was `fix/mobile-master-stabilize` — merged)
 
+### Wave 9 — UX/product pass (2026-07-10, local — pending commit)
+| Fix | Detail |
+|-----|--------|
+| Search | Chips: الكل / بيع / شراء·مطلوب via `listing_mode` → `is_request` |
+| Search contract | `@workspace/search-contract` `listingMode` in URL + API params |
+| Map | Web bookable pin chrome gated to `real_estate` (parity native) |
+| B button | Tap = **Potential** (`onPotential`); long-press = save + angry |
+| Profile | ⋮ menu: saved + notifications; single edit entry (menu + bio) |
+| Messenger | RTL send icon mirror; viewer close flips side in RTL |
+| Create | GPS capture → `reverseGeocodeAsync` fills location label when empty |
+| Tests | lib-hardening **47/47** (wave 9 guards), search-contract listingMode test |
+
 ### Wave 8 — contact completeness + public seller links (2026-07-10)
 | Fix | Detail |
 |-----|--------|
@@ -131,16 +143,14 @@ Quick status:
 node audit/mobile/scripts/ops-next-step.mjs
 ```
 
-## Latest verification (automated) — deep re-run 2026-07-10
-- Full report: `FULL-DEEP-VERIFICATION-2026-07-10.md`
-- Mobile `node --test`: **36/36** (lib-hardening)
-- `proof-isolation` / `proof-create-fields`: **ok**
-- search-contract: **33/33** (fixed stale `monthly`/facilities URL round-trip)
-- `allowCommodityMaterialFilter`: **4/4**
-- Live probe: **FRESH** (exit 0) — ISO reject + map bookable/price
-- Staging smoke default host: **404 dead**; schema verify: **ENOTFOUND**
-- CI `mobile-regression`: icons + lib + resilience + **universal-links**
-- Architecture maintenance closure: `ARCHITECTURE-FILE-INDEX.md`, `pnpm run confidence` (proofs + contract)
+## Latest verification (automated) — 2026-07-10 (waves 6–9)
+
+- Full report: `COMPREHENSIVE-AUDIT-2026-07-10.md`
+- lib-hardening: **47/47**
+- search-contract: **37/37** (incl. `listing_mode` URL round-trip)
+- `pnpm run confidence -- --skip-typecheck`: **17/17**
+- Live: wave 6 **FRESH**, wave 8 **STALE** — `probe-full-deploy.mjs`
+- Device QA: **OPEN**
 
 ## Reference folders
 Not modified.

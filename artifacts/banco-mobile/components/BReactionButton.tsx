@@ -1,7 +1,7 @@
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -15,24 +15,18 @@ import { useColors } from "@/hooks/useColors";
 /**
  * The identity "B" (lightning bolt) cropped from the OFFICIAL transparent
  * B-OOM wordmark — the exact logo pixels, never redrawn, never simplified.
- * B = Banco; OOM = Owners Opportunity Market. The glyph itself is a static,
- * crisp asset (deliberately NOT animated — zero UI/scroll lag).
+ * B = Banco Potential (affinity signal), not a generic "like/heart".
  */
 const LOGO = require("@/assets/images/boom-logo.png");
-const LOGO_RATIO = 2045 / 769; // full wordmark width / height
-const B_START = 0.05; // where the B begins (fraction of wordmark width)
-const B_END = 0.3; // where the B ends (including the bolt tail)
+const LOGO_RATIO = 2045 / 769;
+const B_START = 0.05;
+const B_END = 0.3;
 
 export function BGlyph({
   height = 24,
   tintColor,
 }: {
   height?: number;
-  /**
-   * Optional single-colour tint. Used ONLY by the reaction button to signal
-   * state (white = idle, red = saved). Left undefined everywhere else (e.g. the
-   * tab bar) so the original multi-tone logo pixels render untouched.
-   */
   tintColor?: string;
 }) {
   const imgW = height * LOGO_RATIO;
@@ -55,40 +49,34 @@ export function BGlyph({
   );
 }
 
-export type BReaction = "like" | "interested" | "angry";
+export type BReaction = "save" | "angry";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
 
 const CHIP_SIZE = 34;
 const CHIP_GAP = 8;
 const AUTO_CLOSE_MS = 3500;
+const POTENTIAL_SILVER = "#C9CCD1";
 
 /**
- * B-OOM reaction button — the identity "B" replaces the like/heart.
- *
- *  - TAP: the primary action (save/like) — same contract as the old heart.
- *  - LONG-PRESS: the B stays anchored and three reactions spring out of it
- *    (اعجبني / مهتم / اغضبني) — Facebook/Instagram flow, premium metallic
- *    red/dark styling, GPU-only transforms (opacity/translate/scale via
- *    Reanimated springs) so no frames drop and the B itself never animates.
- *
- * Chips expand horizontally INSIDE the card bounds (no overlay/portal), so
- * nothing can clip or cover the navigation.
+ * B-OOM reaction button — tap B = Banco Potential (affinity), long-press = save / not for me.
  */
 export function BReactionButton({
   saved,
-  likeIcon,
-  onLike,
-  onInterested,
+  potentialActive,
+  saveIcon,
+  onPotential,
+  onSave,
   onAngry,
   height = 24,
   testID,
 }: {
   saved: boolean;
-  /** Section-aware glyph for the "like" chip (car / key / factory / heart). */
-  likeIcon: IoniconName;
-  onLike: () => void;
-  onInterested: () => void;
+  /** Visual hint after a Potential tap this session. */
+  potentialActive?: boolean;
+  saveIcon: IoniconName;
+  onPotential: () => void;
+  onSave: () => void;
   onAngry: () => void;
   height?: number;
   testID?: string;
@@ -123,20 +111,14 @@ export function BReactionButton({
 
   const chips: {
     key: BReaction;
-    icon: IoniconName;
+    icon: IoniconName | "potential-p";
     color: string;
     onPress: () => void;
   }[] = [
-    { key: "like", icon: likeIcon, color: colors.primary, onPress: onLike },
-    // Metallic silver — the deliberate "I'm interested" signal.
-    { key: "interested", icon: "star", color: "#C9CCD1", onPress: onInterested },
-    // Dark metal red — the deliberate "not for me" signal.
+    { key: "save", icon: saveIcon, color: colors.primary, onPress: onSave },
     { key: "angry", icon: "thumbs-down", color: "#B3122F", onPress: onAngry },
   ];
 
-  // One spring drives all chips (single GPU timeline). Chips fan out to the
-  // physical left of the B, staying over the card image — never clipped.
-  // Three explicit hook calls (fixed order — React Compiler friendly).
   const chipStyle0 = useAnimatedStyle(() => ({
     opacity: progress.value,
     transform: [
@@ -151,20 +133,19 @@ export function BReactionButton({
       { scale: 0.4 + 0.6 * progress.value },
     ],
   }));
-  const chipStyle2 = useAnimatedStyle(() => ({
-    opacity: progress.value,
-    transform: [
-      { translateX: -3 * (CHIP_SIZE + CHIP_GAP) * progress.value },
-      { scale: 0.4 + 0.6 * progress.value },
-    ],
-  }));
-  const chipStyles = [chipStyle0, chipStyle1, chipStyle2];
+  const chipStyles = [chipStyle0, chipStyle1];
 
   const pick = (chip: (typeof chips)[number]) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     chip.onPress();
     close();
   };
+
+  const bTint = saved
+    ? colors.primary
+    : potentialActive
+      ? POTENTIAL_SILVER
+      : "#FFFFFF";
 
   return (
     <View style={styles.wrap}>
@@ -178,28 +159,51 @@ export function BReactionButton({
             onPress={() => pick(chip)}
             style={[
               styles.chip,
-              { backgroundColor: "rgba(12,12,12,0.92)", borderColor: chip.color },
+              {
+                backgroundColor: "rgba(12,12,12,0.92)",
+                borderColor: chip.color,
+              },
             ]}
             testID={`${testID ?? "breact"}-${chip.key}`}
           >
-            <Ionicons name={chip.icon} size={17} color={chip.color} />
+            <Ionicons name={chip.icon as IoniconName} size={17} color={chip.color} />
           </Pressable>
         </Animated.View>
       ))}
 
       <Pressable
-        onPress={() => (open ? close() : onLike())}
+        onPress={() => {
+          if (open) {
+            close();
+            return;
+          }
+          onPotential();
+        }}
         onLongPress={openMenu}
         delayLongPress={320}
         hitSlop={8}
         style={styles.bBtn}
         testID={testID}
+        accessibilityLabel="Banco Potential"
       >
-        {/* The B IS the state: red (primary) when saved, white when idle — the
-            same fill/idle contract as every other action icon on the card. */}
-        <BGlyph height={height} tintColor={saved ? colors.primary : "#FFFFFF"} />
+        <BGlyph height={height} tintColor={bTint} />
       </Pressable>
     </View>
+  );
+}
+
+/** Small "P" chip label for Potential tooltips / docs parity. */
+export function PotentialMark({ size = 14 }: { size?: number }) {
+  return (
+    <Text
+      style={{
+        fontSize: size,
+        fontFamily: "Inter_700Bold",
+        color: POTENTIAL_SILVER,
+      }}
+    >
+      P
+    </Text>
   );
 }
 

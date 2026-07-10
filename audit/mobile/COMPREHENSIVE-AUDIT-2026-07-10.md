@@ -1,8 +1,8 @@
 # تقرير فحص شامل — 2026-07-10
 
-**الفرع:** `main` @ `1aecea5` (wave 6 product truth)  
+**الفرع:** `main` @ `3b40782` (موجة 8 `5939849` · موجة 9 UX محلي)  
 **القاعدة:** لا أخضر مزيف — كود ≠ Live ≠ جهاز ≠ متجر  
-**الغرض:** مراجعة كل ما سبق (M01–M31، P0 أمان، عزل الشركات، OPS) + إصلاح عميق للثغرات المكتشفة في هذه الجلسة.
+**الغرض:** مراجعة M01–M31، موجات 6–9، P0 أمان، عزل الشركات، OPS + إثبات نشر صادق.
 
 ---
 
@@ -10,15 +10,14 @@
 
 | الطبقة | الحالة | ملاحظة |
 |--------|--------|--------|
-| بوابة `pnpm run confidence` | **PASS 19/19** | typecheck + 36 lib-hardening + contract + proofs |
-| كود عزل الأقسام (محلي) | **مُحسَّن** | wave 6: بروفايل روابط + ماركة مخصصة |
-| Live Replit | **FRESH** | `1aecea5` على الإنتاج — ISO 400، map bookable/price، EG≠SA |
-| Smoke كامل (upload) | **BLOCKED** | `CLERK_BEARER_TOKEN` غير موجود في `.secrets/local.env` |
-| Schema verify من PC | **BLOCKED** | `DATABASE_URL` → ENOTFOUND (شبكة/DNS) |
-| EAS | **جاهز تقنياً** | `EXPO_TOKEN` موجود — ينتظر FRESH + Device QA |
-| Website / Paymob | **خارج النطاق** | O17 SKIP، B5 معطّل |
-
-**الخلاصة:** مسار **كود + API حي** أخضر على `1aecea5`. المتبقي: **smoke upload + Device QA + EAS**.
+| بوابة `pnpm run confidence` | **PASS 19/19** | typecheck + lib-hardening + contract + proofs |
+| lib-hardening (موجة 9) | **47/47** | بيع/شراء · B=Potential · بروفايل · ماسنجر RTL |
+| search-contract tests | **PASS** | `listingMode` → `is_request` |
+| كود عزل الأقسام (محلي) | **مُحسَّن** | موجات 6–9 |
+| Live Replit موجة 6 | **FRESH** | ISO 400، map `is_bookable`/`price_display` |
+| Live Replit موجة 8 | **STALE** | `seller.social_links` غير موجود — أعد النشر من `main` |
+| Smoke كامل (upload) | **BLOCKED** | `CLERK_BEARER_TOKEN` |
+| EAS / Device QA | **OPEN** | بعد FRESH كامل + جهاز |
 
 ---
 
@@ -26,11 +25,12 @@
 
 | الأمر | النتيجة |
 |-------|---------|
-| `pnpm run confidence` | **19/19 PASS** |
-| `probe-live-deploy.mjs` | exit **2** STALE |
+| `pnpm run ops:full-verify` | lib-hardening + search-contract + probe-full |
+| `probe-live-deploy.mjs` | exit **0** FRESH (موجة 6) |
+| `probe-wave8-seller-social.mjs` | exit **2** STALE |
+| `probe-full-deploy.mjs` | **PARTIAL** — wave 6 FRESH، wave 8 STALE |
 | `pre-redeploy-code-gate.mjs` | exit **0** @ HEAD |
 | `staging-p0-smoke` (health فقط) | **2/2** healthz/readyz |
-| `verify-upload-claims-schema` | فشل ENOTFOUND (شبكة) |
 
 ---
 

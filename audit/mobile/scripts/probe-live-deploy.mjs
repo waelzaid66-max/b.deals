@@ -67,7 +67,7 @@ report.marketFilterNote = report.egEqSa
 
 report.verdict = coreFresh
   ? "FRESH — ISO reject + map bookable/price deployed"
-  : "STALE — redeploy fix/mobile-master-stabilize API before device claims";
+  : "STALE — redeploy API from origin/main before device claims";
 
 console.log(JSON.stringify(report, null, 2));
 process.exit(coreFresh ? 0 : 2);

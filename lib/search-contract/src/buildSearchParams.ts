@@ -140,6 +140,9 @@ export function buildSearchParams(
     sp.radius_km = c.nearRadiusKm;
   }
 
+  if (c.listingMode === "sale") sp.is_request = false;
+  if (c.listingMode === "buy") sp.is_request = true;
+
   if (cursor) sp.cursor = cursor;
   return sp;
 }

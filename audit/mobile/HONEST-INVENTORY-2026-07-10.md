@@ -6,11 +6,14 @@ Rules applied: no fake “all green”, no deleted account/section journeys, no 
 
 | Layer | Truth |
 |-------|--------|
-| Local branch code (M01–M25 + Discover facet gate) | Present in workspace |
-| Automated tests offline | Pass where env allows (`search-contract`, `lib-hardening`, `icons`); mapClusters DB vitest needs `DATABASE_URL` |
-| Live Replit `banco-ca-oom.replit.app` | **STALE** — `market_country` ignored; map clusters lack `is_bookable` / `price_display` |
-| Real-device DoD | **OPEN** until redeploy + Expo/device QA |
-| OPS O16 | **OPEN** (secrets / EAS / staging smoke) — not a code lie |
+| Local branch code (M01–M31 + waves 6–9) | Present in workspace |
+| Automated tests offline | **PASS** — lib-hardening **47/47**, search-contract **37+**, production-confidence **17/17** (--skip-typecheck) |
+| Live Replit wave 6 | **FRESH** — ISO reject + map `is_bookable`/`price_display` |
+| Live Replit wave 8 | **STALE** — `seller.social_links` not on live JSON |
+| Real-device DoD | **OPEN** until redeploy wave 8 + Expo/device QA |
+| OPS O16 | **OPEN** (secrets / EAS / staging upload smoke) |
+
+Proof artifact: `audit/mobile/live-probes/2026-07-10-full-deploy-proof.json`
 
 ## Account / section journeys — still present
 
@@ -20,29 +23,25 @@ Rules applied: no fake “all green”, no deleted account/section journeys, no 
 | Business activities (developer, car_dealer, …) | Intact | Not roles; hub routes remain |
 | `host` booking / `bank` RFQ axes | Intact | Not removed by stabilize |
 | Create categories + rent / import / supply | Intact | CTAs + engines remain |
-| Discover → supply hub + car import CTA | Intact | Intentionally kept (journey entry, not a wrong duplicate of chrome) |
-| Profile business menu | Intact | M17 |
+| Discover → supply hub + car import CTA | Intact | Journey entry, not wrong duplicate |
+| Profile business menu | Intact | M17 + wave 9 overflow (saved, notifications) |
 
-**Risk (not deletion):** `market_country` can hide untagged listings after deploy — sellers must stamp ISO; preference defaults EG.
+## Wave 9 product (local code)
 
-## Duplicate / misplaced options
+| Item | Status |
+|------|--------|
+| Search: sale vs buy chips | ✅ `listing_mode` contract |
+| B = Potential (not heart primary) | ✅ `BReactionButton` |
+| Profile ⋮ vs camera corners | ✅ RTL-aware |
+| Messenger send + viewer close RTL | ✅ |
+| Create listing geocode label | ✅ after GPS |
 
-| Finding | Action |
-|---------|--------|
-| Endless country chips | Already removed (M07) |
-| Discover engines without facet gate | **Fixed** — same `visibleEngines` as Search chrome |
-| Car brand chips when no car inventory | **Fixed** — hide when facets prove `category.car === 0` |
-| Import CTA + car `import` engine | **Kept both** — CTA is journey entry; engine is filter. Not “wrong place” |
-| Fuel / transmission in engine bar + FilterSheet | **Left** — dual entry is intentional depth vs quick filter; removing either weakens power |
-| Discover engines skip vs chrome | Was the real bug; now aligned |
+**Deferred (not blockers):** map inside LocationPicker · per-hub maps · near-me web · persistent Potential state
 
 ## Safe next (only if it improves)
 
-1. Redeploy API + mobile to Replit (or staging) so live matches local M23/M24.
-2. Re-run `LIVE-DEPLOY-PROBE.md` — expect EG ≠ SA when data tagged; map keys include bookable/price.
-3. Device checklist per ID in ACCEPTANCE + EXTENDED + SUCCESS-CERT.
-4. Do **not** strip import/supply/rent/business paths for “cleanup aesthetics”.
-
-## Code change this pass
-
-- `SearchDiscover.tsx`: facet-gate expanded engines; gate popular brands on car inventory.
+1. Redeploy Replit from `origin/main` → wave 8 FRESH.
+2. `node audit/mobile/scripts/post-redeploy-verify.mjs` → exit 0.
+3. `CLERK_BEARER_TOKEN` → `staging-p0-smoke.mjs`.
+4. EAS preview + `DEVICE-QA-SECTION-COMPANIES.md`.
+5. Do **not** strip import/supply/rent/business paths for “cleanup aesthetics”.

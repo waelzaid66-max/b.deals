@@ -1,22 +1,18 @@
 # BANCO Store — Completion & Status Report
 
-_Last updated: 2026-07-10 — `main` @ `1aecea5` (wave 6 product truth). Live Replit **FRESH**. Device QA + upload smoke still OPEN._
+_Last updated: 2026-07-10 — `main` @ `3b40782` (waves 6–8 merged; wave 9 UX local). Live Replit: wave 6 **FRESH**, wave 8 **STALE**. Device QA + upload smoke **OPEN**._
 
-> **Release line:** worktree branch `fix/mobile-master-stabilize` (see `git log -1` / `git status`). Mobile regression via `pnpm --filter @workspace/banco-mobile run test` (icons + lib + resilience + universal-links). Staging smoke still **OPS** (secrets). Website does **not** block mobile (O17 SKIP).
-
-This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin · Banco Market/dealer-os · API Server · shared libs · optional banco-web). It records what is **done and verified**, the **architecture**, and the **honest remaining items** with the reason each is or isn't locally verifiable.
+> **Release line:** `main`. Mobile regression via `pnpm run ops:full-verify` (local) + `pnpm run ops:probe-full` (live). Website does **not** block mobile (O17 SKIP).
 
 ---
 
 ## 1. How verification works here
 
-- **Backend (api-server):** large vitest suite (needs `DATABASE_URL` / CI Postgres). Includes geo map/list parity, map clusters, rental_term, industrial isolation, material gate (pure unit).
-- **Mobile regression:** `test:icons` + `test:lib` + `test:resilience` + `test:universal-links` (CI `mobile-regression` runs all four).
-- **Search isolation proofs:** `audit/mobile/scripts/proof-isolation.mjs` + `proof-create-fields.mjs`.
-- **ESLint:** `pnpm run lint` on `scripts/**`.
-- **Type safety:** `pnpm run typecheck` (core excludes consumer web; website has its own workflow).
-- **API contract:** `lib/api-spec/openapi.yaml` → orval → `lib/api-client-react` + `lib/api-zod`.
-- **Build:** CI Linux. Local Windows may need `pnpm install --ignore-scripts` when `preinstall` needs `sh`.
+- **Backend (api-server):** vitest suite (needs `DATABASE_URL` / CI Postgres).
+- **Mobile regression:** `test:icons` + `test:lib` + `test:resilience` + `test:universal-links` + **lib-hardening 47/47**.
+- **Search contract:** `pnpm --filter @workspace/search-contract run test` (listingMode + URL round-trip).
+- **Live probes:** `pnpm run ops:probe-full` — honest wave 6 + wave 8 matrix.
+- **API contract:** `lib/api-spec/openapi.yaml` → orval → clients.
 
 ---
 
@@ -24,62 +20,28 @@ This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin
 
 | Area | What | Verification |
 |---|---|---|
-| **P0 security** | Upload IDOR claims, LIKE escape, deleted-user visibility, ACL owner IDs | `audit/fixes/C-01…H-03`, commit history on main |
-| **Mobile stabilize M01–M31 + wave 6** | Profile social links, custom car draft, rental copy, touch/modals | lib-hardening **36/36** |
-| **Server-side map clustering** | `GET /v1/search/map` + bookable/price on single pins | **live FRESH** (probe 2026-07-10) |
-| **Market country** | list + map + feed filter; create stamps `specs.market_country` | search-contract + home feed asserts |
-| **Rental systems** | per-country law terms; rent engine gate | FilterSheet + SearchControls |
-| **Billing B1–B4** | invoices/PDF/CSV without Paymob | test:lib |
-| **Expo/EAS config** | preview APK + production AAB profiles | `eas.json`, production-readiness checklists |
+| **P0 security** | Upload IDOR, LIKE escape, ACL | audit/fixes C-01…H-03 |
+| **Mobile M01–M31 + waves 6–9** | Profile, search, map, B=Potential, sale/buy filter | lib-hardening **47/47** |
+| **Wave 8 API (code)** | `seller.social_links` on listing detail | ListingService + code-gate |
+| **Wave 8 API (live)** | — | **STALE** until Replit redeploy |
+| **Server map clustering** | bookable/price on pins | live FRESH (wave 6) |
+| **Market country** | list + map + feed | search-contract |
 
 ---
 
-## 3. Content / i18n (reviewed — sound)
+## 3. Honest remaining items (need your environment)
 
-- Mobile i18n EN/AR with `ar: typeof en` parity at typecheck.
-- AI assistant language follows user input when key present.
-
----
-
-## 4. Honest remaining items (need your environment)
-
-| Item | Status | Why it needs you |
+| Item | Status | Action |
 |---|---|---|
-| **API live** | Replit **FRESH** @ `1aecea5` | `node audit/mobile/scripts/ops-next-step.mjs` |
-| **Local automated** | **PASS** | `pnpm run confidence` **19/19** |
-| **Image-upload byte path** | OPS | Object Storage + device |
-| **OTP / Google / Apple / GPS / Push / AI key** | OPS | Clerk + secrets |
-| **Staging P0 smoke + upload_claims table** | O16 OPEN | `STAGING-REQUIRED-SECRETS.md` |
-| **EAS preview install + Device QA** | OPEN | `MOBILE-PUBLISH-SUCCESS-GATE.md` §2–3 |
-| **Store production submit** | NO-GO until above | Play / App Store consoles |
+| **Replit wave 8** | STALE | Redeploy `main` → `post-redeploy-verify` exit 0 |
+| **staging-p0-smoke upload** | BLOCKED | `CLERK_BEARER_TOKEN` in `.secrets/local.env` |
+| **EAS preview + Device QA** | OPEN | `MOBILE-PUBLISH-SUCCESS-GATE.md` |
+| **Store production** | NO-GO | After device QA |
 
-These are flagged rather than faked — nothing was marked "done" that wasn't actually verified.
+```bash
+pnpm run ops:full-verify    # local only — must pass before redeploy
+pnpm run ops:next           # code gate + live probes
+pnpm run ops:post-redeploy  # after Replit redeploy
+```
 
----
-
-## 5. Sections, journeys & "no feature blocks another"
-
-The four browse companies (cars · real-estate · facilities · materials) plus host (Profile) and B2B (Business hub) stay isolated. Filters that don't apply to a section are absent, never conflicting. List / map / feed share the same attribute + market gates.
-
----
-
-## 6. Path to mobile publish success
-
-Follow **`audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md`** only:
-
-1. Redeploy API from this branch  
-2. Live probe green  
-3. Staging smoke + upload_claims  
-4. EAS preview on device  
-5. Device QA matrix  
-6. Then production EAS / stores  
-
-Website / Paymob remain optional SKIP and must not block mobile.
-
----
-
-## Consolidation
-
-- Canonical readiness: `audit/production-readiness/FULL-READINESS-STATUS-PLAN.md`
-- Mobile gate: `audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md`
-- Open OPS: `audit/production-readiness/OPEN-ITEMS-BACKLOG.md` → **O16 only**
+**Canonical docs:** `MASTER-TRUTH-INVENTORY-AR.md` · `FULL-STABLE-SNAPSHOT-2026-07-10.md`

@@ -1,11 +1,11 @@
 # NEXT OPS — Redeploy Replit from stabilize branch
 
 **Goal:** Make live API **FRESH** so Device QA / EAS claims are honest.  
-**Branch:** `fix/mobile-master-stabilize`  
-**Tip commit:** `f8273d0` (pull latest before redeploy)  
+**Branch:** `main` @ `3b40782` (موجة 8: `5939849`)
+**Tip commit:** `3b40782` / ميزة موجة 8: `5939849`  
 **Repo:** `https://github.com/waelzaid66-max/-BANCO-CA-OOM-.git`
 
-Live host (`https://banco-ca-oom.replit.app`) is **STALE** until this branch is what the API runs.
+**2026-07-10:** المضيف الحي **FRESH لموجة 6** (ISO + خريطة) لكن **STALE لموجة 8** — حقل `seller.social_links` غير موجود في JSON الحي. أعد النشر من `origin/main`.
 
 ---
 
@@ -25,7 +25,8 @@ node audit/mobile/scripts/ops-next-step.mjs      # code gate + live probe
 | Local confidence | PASS | كود الفرع سليم |
 | `pre-redeploy-code-gate` | PASS @ `f8273d0` | بعد redeploy يجب أن يمر probe |
 | Live `healthz` + `readyz` | PASS | السيرفر شغّال |
-| Live probe | **FRESH** | `EGYPT→400`, map فيه `is_bookable`/`price_display` |
+| Live probe (موجة 6) | **FRESH** | `EGYPT→400`, map فيه `is_bookable`/`price_display` |
+| probe-wave8-seller-social | **STALE** | `seller` بلا `social_links` — أعد النشر من `main` |
 | `CLERK_BEARER_TOKEN` | missing | upload smoke لاحقاً |
 | `DATABASE_URL` | missing | schema verify لاحقاً |
 
@@ -35,8 +36,8 @@ node audit/mobile/scripts/ops-next-step.mjs      # code gate + live probe
 
 ```bash
 git fetch origin
-git checkout fix/mobile-master-stabilize
-git pull --ff-only origin fix/mobile-master-stabilize
+git checkout main
+git pull --ff-only origin main
 pnpm install --frozen-lockfile
 pnpm --filter @workspace/db run push-force
 ```
@@ -88,11 +89,9 @@ Then Device QA: `audit/mobile/DEVICE-QA-SECTION-COMPANIES.md` + ACCEPTANCE.
 
 ---
 
-## 4) Optional — GitHub PR
+## 4) GitHub
 
-https://github.com/waelzaid66-max/-BANCO-CA-OOM-/pull/new/fix/mobile-master-stabilize
-
-Merge into `main` only if Replit tracks `main` instead of direct checkout.
+`fix/mobile-master-stabilize` merged into `main`. Replit must track **`main`** only.
 
 ---
 

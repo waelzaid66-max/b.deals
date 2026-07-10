@@ -16,6 +16,9 @@ export type SearchSort =
 
 export type PaymentType = "any" | "installment";
 
+/** Browse sale listings vs buyer requests (is_request). */
+export type ListingMode = "all" | "sale" | "buy";
+
 /** Default radius when the user enables "Near me" (km). */
 export const DEFAULT_NEAR_RADIUS_KM = 25;
 
@@ -50,6 +53,8 @@ export interface SearchCriteria {
   nearLat: number | null;
   nearLng: number | null;
   nearRadiusKm: number;
+  /** Sale vs buyer-request filter — maps to API is_request when not "all". */
+  listingMode: ListingMode;
 }
 
 export const DEFAULT_CRITERIA: SearchCriteria = {
@@ -77,6 +82,7 @@ export const DEFAULT_CRITERIA: SearchCriteria = {
   nearLat: null,
   nearLng: null,
   nearRadiusKm: DEFAULT_NEAR_RADIUS_KM,
+  listingMode: "all",
 };
 
 /**
@@ -121,7 +127,8 @@ export function hasActiveCriteria(c: SearchCriteria): boolean {
     !!c.material ||
     c.industrialType !== "all" ||
     c.marketCountry !== DEFAULT_CRITERIA.marketCountry ||
-    c.nearMeEnabled
+    c.nearMeEnabled ||
+    c.listingMode !== "all"
   );
 }
 
@@ -151,5 +158,6 @@ export function criteriaKey(c: SearchCriteria): string {
     c.nearLat,
     c.nearLng,
     c.nearRadiusKm,
+    c.listingMode,
   ]);
 }

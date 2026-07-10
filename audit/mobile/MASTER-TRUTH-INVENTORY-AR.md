@@ -1,8 +1,9 @@
 # جرد الحقيقة الرئيسي — موبايل BANCO (صادق)
 
 **التاريخ:** 2026-07-10  
-**الفرع:** `main` @ `5939849`  
-**الوسم:** `v1.1.3-seller-social-2026-07-10` (aws-virgen `d386f52`)
+**الفرع:** `main` @ `3b40782` (موجة 8: `5939849` · موجة 9 UX محلي)  
+**الوسم:** `v1.1.3-seller-social-2026-07-10` → aws-virgen `d386f52`  
+**إثبات حي:** `audit/mobile/live-probes/2026-07-10-full-deploy-proof.json` (أو `probe-full-deploy.mjs`)
 **القاعدة الذهبية:** اختبار محلي أخضر ≠ API حي ≠ جهاز حقيقي. لا نُعلن «جاهز» بدون الثلاثة.
 
 ---
@@ -25,7 +26,7 @@
 ```
 L0  كود الفرع المحلي     → معظم الإصلاحات هنا
 L1  اختبارات node/offline → 31+34 اختبار — لا تغطي الشاشة
-L2  API حي (Replit)      → **FRESH** (probe 2026-07-10) — smoke يحتاج Clerk JWT
+L2  API حي (Replit)      → **FRESH موجة 6** — **STALE موجة 8** (`social_links` غير موجود على البائع حتى إعادة النشر)
 L3  EAS / Expo على جهاز  → لم يُنفَّذ checklist الجهاز بعد
 L4  متجر / إنتاج         → O16 مفتوح (أسرار، smoke)
 ```
@@ -61,16 +62,30 @@ L4  متجر / إنتاج         → O16 مفتوح (أسرار، smoke)
 | موجة 4 (lead، إشعارات، بروفايل، فلاتر) | ✅ | ✅ FRESH | ❌ |
 | موجة 5 (خريطة، لغة، rental hub، touch) | ✅ | ✅ FRESH | ❌ |
 | موجة 6 (بروفايل روابط، ماركة مخصصة، نصوص إيجار) | ✅ | ✅ FRESH | ❌ |
+| موجة 7 (بوابة ضيف، مالك، تحقق معالج) | ✅ | ✅ FRESH | ❌ |
+| موجة 8 (روابط بائع على الإعلان + تعديل أرقام) | ✅ | ❌ **STALE** — أعد نشر API | ❌ |
+| موجة 9 (بيع/شراء، B=Potential، بروفايل، ماسنجر، موقع إنشاء) | ✅ محلي | ⚪ لا يغيّر API | ❌ |
 
 ---
+
+## موجة 9 — ملخص المنتج (كود محلي)
+
+| الميزة | الملفات الرئيسية | ملاحظة |
+|--------|------------------|--------|
+| فلتر بيع vs شراء | `search.tsx`, `lib/search-contract` | `listing_mode` في الرابط |
+| B = Potential | `BReactionButton.tsx`, `SmartAssetCard`, `listing/[id]` | ليس قلب/like |
+| بروفايل | `profile.tsx` | قائمة ⋮: محفوظ + إشعارات؛ تعديل واحد |
+| ماسنجر RTL | `messages/[id].tsx` | أيقونة إرسال + إغلاق المعاينة |
+| موقع عند الإنشاء | `listings/create.tsx` | geocode بعد GPS |
+
+**مؤجّل (لا يمنع النشر):** خريطة داخل LocationPicker · خرائط مدمجة لكل hub · near-me ويب · Potential دائم عبر الجلسات
 
 ## خطة العمل على مراحل (بدون تخريب)
 
 ### المرحلة A — تثبيت الكود (لا ميزات جديدة)
-1. مراجعة diff موجات 4+5  
-2. `node artifacts/banco-mobile/tests/lib-hardening.test.mjs`  
-3. `node scripts/production-confidence-check.mjs`  
-4. commit على `fix/mobile-master-stabilize` **عند طلبك فقط**
+1. مراجعة diff موجات 4–9  
+2. `pnpm run ops:full-verify` (أو lib-hardening + search-contract + confidence)  
+3. commit على `main` **عند طلبك فقط**
 
 ### المرحلة B — OPS (أنت أو Replit)
 1. تدوير الأسرار المكشوفة → `.secrets/local.env` (انظر `scripts/local.env.example`)  
@@ -105,9 +120,10 @@ L4  متجر / إنتاج         → O16 مفتوح (أسرار، smoke)
 
 | البند | القيمة |
 |-------|--------|
-| اختبارات lib-hardening | **36/36** |
-| Live probe | **FRESH** @ `1aecea5` |
+| اختبارات lib-hardening | **47/47** (يشمل موجة 9) |
+| Live probe موجة 6 | **FRESH** |
+| Live probe موجة 8 | **STALE** — `seller.social_links` |
 | Device QA | **OPEN** |
-| نسبة «منجز حقيقي» تقديرياً | **~75% كود + API** · **~25% جهاز + smoke upload** |
+| نسبة «منجز حقيقي» تقديرياً | **~80% كود** · **~70% API (جزئي)** · **~25% جهاز + smoke upload** |
 
 *هذا الملف هو المرجع العربي الوحيد للحقيقة — حدّثه عند كل موجة، لا تكرر ادعاءات في الشات فقط.*

@@ -309,6 +309,21 @@ export default function CreateListingScreen() {
         accuracy: Location.Accuracy.Balanced,
       });
       setPin({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      try {
+        const places = await Location.reverseGeocodeAsync({
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude,
+        });
+        const place = places[0];
+        if (place && !locationValue?.trim()) {
+          const label = [place.district, place.city, place.region]
+            .filter(Boolean)
+            .join(", ");
+          if (label) setLocation(label);
+        }
+      } catch {
+        // display label optional when reverse geocode unavailable
+      }
     } catch {
       // location is optional — never surface as a blocking error
     } finally {

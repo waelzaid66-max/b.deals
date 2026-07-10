@@ -50,6 +50,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AppText } from "@/components/AppText";
+import { BReactionButton } from "@/components/BReactionButton";
 import { DealRatingChip } from "@/components/DealRatingChip";
 import { BookingCard } from "@/components/BookingCard";
 import { LinkedListings } from "@/components/LinkedListings";
@@ -128,6 +129,7 @@ export default function ListingDetailScreen() {
   >("idle");
   const [selectedPlan, setSelectedPlan] = useState(0);
   const [openingChat, setOpeningChat] = useState(false);
+  const [potentialFlash, setPotentialFlash] = useState(false);
   const [marking, setMarking] = useState(false);
   const hasSignaled = useRef(false);
 
@@ -1581,34 +1583,61 @@ export default function ListingDetailScreen() {
         />
       </Pressable>
 
-      <Pressable
+      <View
         style={[
           styles.floatBtn,
           isRTL ? { left: 16 } : { right: 16 },
           { top: topOffset },
         ]}
-        onPress={() => {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          const feedItem: FeedItem = {
-            id: listing.id,
-            media_preview: listing.media?.[0]?.url ?? "",
-            price_display: listing.price_display,
-            title: listing.title,
-            location: listing.location,
-            trust_signal: listing.seller?.name ?? "",
-            has_video: listing.media?.some((m) => m.type === "video") ?? false,
-            is_sponsored: false,
-          };
-          toggleSave(feedItem);
-        }}
         testID="listing-save"
       >
-        <Ionicons
-          name={saved ? "heart" : "heart-outline"}
-          size={22}
-          color={saved ? colors.primary : "#FFFFFF"}
+        <BReactionButton
+          saved={saved}
+          potentialActive={potentialFlash}
+          saveIcon={
+            listing.category === "car"
+              ? "car"
+              : listing.category === "real_estate"
+                ? "key"
+                : listing.category === "industrial"
+                  ? "business"
+                  : "bookmark"
+          }
+          onPotential={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            setPotentialFlash(true);
+            void sendBehaviorSignal({
+              session_id: sessionId,
+              listing_id: listing.id,
+              action: "interested",
+              category: listing.category ?? undefined,
+            }).catch(() => {});
+            setTimeout(() => setPotentialFlash(false), 1200);
+          }}
+          onSave={() => {
+            const feedItem: FeedItem = {
+              id: listing.id,
+              media_preview: listing.media?.[0]?.url ?? "",
+              price_display: listing.price_display,
+              title: listing.title,
+              location: listing.location,
+              trust_signal: listing.seller?.name ?? "",
+              has_video: listing.media?.some((m) => m.type === "video") ?? false,
+              is_sponsored: false,
+            };
+            toggleSave(feedItem);
+          }}
+          onAngry={() => {
+            void sendBehaviorSignal({
+              session_id: sessionId,
+              listing_id: listing.id,
+              action: "angry",
+              category: listing.category ?? undefined,
+            }).catch(() => {});
+          }}
+          height={26}
         />
-      </Pressable>
+      </View>
 
       <View
         style={[
