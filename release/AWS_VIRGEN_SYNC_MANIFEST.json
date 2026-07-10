@@ -1,13 +1,13 @@
 {
   "schema": "banco-aws-virgen-sync/1",
-  "generatedAt": "2026-07-10T13:41:15.590Z",
+  "generatedAt": "2026-07-10T13:55:15.215Z",
   "releaseTag": "v1.1.0-stabilize-2026-07-10",
   "primaryRepository": "waelzaid66-max/-BANCO-CA-OOM-",
   "awsVirgenRepository": "waelzaid66-max/aws-virgen",
   "commit": {
-    "full": "d531c142de14605b4e02264dd3812ee429d85088",
-    "short": "d531c14",
-    "subject": "chore(release): website audit bundle, banco-web scaffold, aws-virgen manifest"
+    "full": "42bc716602a85ecfd70d5dcdc04325f8b1a83308",
+    "short": "42bc716",
+    "subject": "fix(mobile): listing modal touch-safe + filter sort accents + virgen PS1"
   },
   "syncPolicy": "merge primary main into aws-virgen main (full tree, history preserved)",
   "ci": {
