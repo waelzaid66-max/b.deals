@@ -215,15 +215,16 @@ export const CAR_MODELS: Record<string, string[]> = {
 };
 
 /**
- * Brands the backend has seeded and will resolve to a brand_id on create.
- * Anything outside this set is rejected by strict normalization.
+ * Legacy suggestion markers — preferred chips + exact dbName for seeded rows.
+ * NOT a publish allowlist. Interactive create uses lenient + autoLearn; the
+ * create picker shows the full catalogue + custom brand. Bulk import may warn
+ * without autoLearn but never blocks app sellers.
  */
 export const CREATE_SAFE_BRANDS: CarBrand[] = CAR_BRANDS.filter((b) => b.createSafe);
 
 /**
- * Exact model names seeded in the DB, per brand value. The create model picker
- * only offers these (plus an "Other" path that omits specs.model so the backend
- * infers leniently from the title) — guaranteeing a create never gets rejected.
+ * Seeded model names per brand — suggestion list for the picker. "Other model"
+ * omits specs.model so lenient normalization infers from the title.
  */
 export const CREATE_SAFE_MODELS: Record<string, string[]> = {
   audi: ["A4"],
@@ -303,6 +304,21 @@ const BRAND_BY_VALUE: Record<string, CarBrand> = Object.fromEntries(
 
 export function brandByValue(value: string | undefined): CarBrand | undefined {
   return value ? BRAND_BY_VALUE[value] : undefined;
+}
+
+/** Restore catalogue or custom brand from a listing-draft `carBrandValue`. */
+export function carBrandFromDraftValue(value: string): CarBrand | null {
+  if (!value) return null;
+  if (value.startsWith("custom:")) {
+    const label = value.slice("custom:".length);
+    return {
+      value,
+      en: label,
+      ar: label,
+      country: "other",
+    };
+  }
+  return BRAND_BY_VALUE[value] ?? null;
 }
 
 export function brandLabel(brand: CarBrand, isRTL: boolean): string {

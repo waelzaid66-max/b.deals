@@ -60,7 +60,7 @@ import { KeyboardAwareScrollViewCompat } from "@/components/KeyboardAwareScrollV
 import { LocationPicker } from "@/components/LocationPicker";
 import { PermissionRationaleModal } from "@/components/PermissionRationaleModal";
 import { SmartAssetCard } from "@/components/SmartAssetCard";
-import { type CarBrand, brandLabel, CAR_BRANDS } from "@/constants/cars";
+import { type CarBrand, brandLabel, CAR_BRANDS, carBrandFromDraftValue } from "@/constants/cars";
 import {
   INDUSTRIAL_TYPES,
   visibleSpecFieldsFor,
@@ -357,7 +357,7 @@ export default function CreateListingScreen() {
         setSpecs(d.specs);
         setCustomSpecs(d.customSpecs);
         setCarBrand(
-          d.carBrandValue ? CAR_BRANDS.find((b) => b.value === d.carBrandValue) ?? null : null,
+          d.carBrandValue ? carBrandFromDraftValue(d.carBrandValue) : null,
         );
         setCarModel(d.carModel);
         setIndustrialType(d.industrialType);

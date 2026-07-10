@@ -209,9 +209,6 @@ export default function ProfileScreen() {
   const [displayTitleDraft, setDisplayTitleDraft] = useState("");
   const [categoryLabelDraft, setCategoryLabelDraft] = useState("");
   const [bioDraft, setBioDraft] = useState("");
-  const [phoneIsoDraft, setPhoneIsoDraft] = useState("EG");
-  const [phoneNumberDraft, setPhoneNumberDraft] = useState("");
-  const [showPhoneCountryPicker, setShowPhoneCountryPicker] = useState(false);
   const queryClient = useQueryClient();
 
   const isSigningIn = signInStatus === "fetching";
@@ -398,24 +395,12 @@ export default function ProfileScreen() {
       typeof meta.categoryLabel === "string" ? meta.categoryLabel : "",
     );
     setBioDraft(typeof meta.bio === "string" ? meta.bio : "");
-    const parsed = parsePhone(meQuery.data?.data?.phone);
-    setPhoneIsoDraft(parsed.iso);
-    setPhoneNumberDraft(parsed.number);
     setShowEditProfile(true);
   };
 
   const saveProfile = async () => {
     if (savingProfile) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    const country = countryByIso(phoneIsoDraft);
-    const national = phoneNumberDraft.trim();
-    if (national && !isValidNationalNumber(national, country)) {
-      Alert.alert(
-        t("profile.editProfileError"),
-        t("create.phoneFormatHint", { sample: country.sample }),
-      );
-      return;
-    }
     setSavingProfile(true);
     try {
       await user?.update({
@@ -425,10 +410,6 @@ export default function ProfileScreen() {
           categoryLabel: categoryLabelDraft.trim(),
           bio: bioDraft.trim(),
         },
-      });
-      // Phone lives on Banco /me (not Clerk metadata). Empty clears the field.
-      await updateMe({
-        phone: national ? toE164(national, country) : null,
       });
       await user?.reload();
       await queryClient.invalidateQueries({ queryKey: getGetMeQueryKey() });
@@ -824,13 +805,16 @@ export default function ProfileScreen() {
     const responseRate =
       typeof metrics?.response_rate === "number" ? metrics.response_rate : null;
 
-    // Profile-completion nudge (own profile only): the three signals that make a
-    // seller trustworthy + reachable. Each missing item is a one-tap fix. The
-    // whole block vanishes once complete — no nagging.
+    // Profile-completion nudge: photo + bio + public contact links (not account
+    // phone — that is optional at signup until OTP; listing phones live on ads).
     const completionItems = [
       { key: "photo", done: !!user.hasImage, onPress: () => setShowPhotoRationale(true) },
       { key: "bio", done: !!bio, onPress: openEditProfile },
-      { key: "phone", done: !!meQuery.data?.data?.phone?.trim(), onPress: openEditProfile },
+      {
+        key: "social",
+        done: social.some((l) => l.value?.trim()),
+        onPress: openSocialEdit,
+      },
     ];
     const completionMissing = completionItems.filter((i) => !i.done);
     const statNum = (n: number | undefined) =>
@@ -1206,30 +1190,75 @@ export default function ProfileScreen() {
               {bio || t("profile.bioEmpty")}
             </AppText>
           </Pressable>
-          {/* numberOfLines above: 3 lines reads like Instagram without pushing
-              the trust row off-screen; tap opens the editor either way. */}
 
-          {meQuery.data?.data?.phone?.trim() ? (
-            <Pressable onPress={openEditProfile} testID="profile-phone">
+        {/* Server-backed social links — primary public contact (not account phone). */}
+        <View style={styles.socialSection}>
+          <View
+            style={[
+              styles.socialHeader,
+              { flexDirection: isRTL ? "row-reverse" : "row" },
+            ]}
+          >
+            <AppText style={[styles.socialTitle, { color: colors.foreground }]}>
+              {t("profile.socialLinks")}
+            </AppText>
+            {social.length === 0 ? (
               <AppText
                 style={[
-                  styles.profilePhone,
+                  styles.socialHint,
                   {
                     color: colors.mutedForeground,
                     textAlign: isRTL ? "right" : "left",
                   },
                 ]}
               >
-                {(() => {
-                  const parsed = parsePhone(meQuery.data?.data?.phone);
-                  const country = countryByIso(parsed.iso);
-                  return parsed.number
-                    ? `+${country.dial} ${parsed.number}`
-                    : meQuery.data?.data?.phone;
-                })()}
+                {t("profile.addSocial")}
               </AppText>
+            ) : null}
+          </View>
+          <View
+            style={[
+              styles.socialRow,
+              { flexDirection: isRTL ? "row-reverse" : "row" },
+            ]}
+          >
+            {social.map((l) => (
+              <Pressable
+                key={l.platform}
+                onPress={() => Linking.openURL(socialHref(l)).catch(() => {})}
+                style={[
+                  styles.socialBtn,
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    borderRadius: colors.radius,
+                  },
+                ]}
+                testID={`social-${l.platform}`}
+              >
+                <Ionicons
+                  name={socialIcon(l.platform)}
+                  size={18}
+                  color={colors.foreground}
+                />
+              </Pressable>
+            ))}
+            <Pressable
+              onPress={openSocialEdit}
+              style={[
+                styles.socialBtn,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.primary + "55",
+                  borderRadius: colors.radius,
+                },
+              ]}
+              testID="social-edit"
+            >
+              <Feather name="edit-2" size={15} color={colors.primary} />
             </Pressable>
-          ) : null}
+          </View>
+        </View>
 
           {meQuery.data?.data?.account_number && (
             <AppText
@@ -1373,69 +1402,6 @@ export default function ProfileScreen() {
               </AppText>
             </View>
           ))}
-        </View>
-
-        {/* Server-backed social links + edit */}
-        <View style={styles.socialSection}>
-          <View
-            style={[
-              styles.socialHeader,
-              { flexDirection: isRTL ? "row-reverse" : "row" },
-            ]}
-          >
-            <AppText style={[styles.socialTitle, { color: colors.foreground }]}>
-              {t("profile.socialLinks")}
-            </AppText>
-            {social.length === 0 ? (
-              <AppText
-                style={[styles.socialHint, { color: colors.mutedForeground }]}
-              >
-                {t("profile.addSocial")}
-              </AppText>
-            ) : null}
-          </View>
-        <View
-          style={[
-            styles.socialRow,
-            { flexDirection: isRTL ? "row-reverse" : "row" },
-          ]}
-        >
-          {social.map((l) => (
-            <Pressable
-              key={l.platform}
-              onPress={() => Linking.openURL(socialHref(l)).catch(() => {})}
-              style={[
-                styles.socialBtn,
-                {
-                  backgroundColor: colors.card,
-                  borderColor: colors.border,
-                  borderRadius: colors.radius,
-                },
-              ]}
-              testID={`social-${l.platform}`}
-            >
-              <Ionicons
-                name={socialIcon(l.platform)}
-                size={18}
-                color={colors.foreground}
-              />
-            </Pressable>
-          ))}
-          <Pressable
-            onPress={openSocialEdit}
-            style={[
-              styles.socialBtn,
-              {
-                backgroundColor: colors.card,
-                borderColor: colors.primary + "55",
-                borderRadius: colors.radius,
-              },
-            ]}
-            testID="social-edit"
-          >
-            <Feather name="edit-2" size={15} color={colors.primary} />
-          </Pressable>
-        </View>
         </View>
 
         {/* Instagram-style content tabs → REAL screens */}
@@ -2088,90 +2054,6 @@ export default function ProfileScreen() {
                 </AppText>
               </View>
 
-              <View style={styles.editField}>
-                <AppText
-                  style={[
-                    styles.editLabel,
-                    {
-                      color: colors.foreground,
-                      textAlign: isRTL ? "right" : "left",
-                    },
-                  ]}
-                >
-                  {t("profile.phoneLabel")}
-                </AppText>
-                <View
-                  style={[
-                    styles.editPhoneRow,
-                    { flexDirection: isRTL ? "row-reverse" : "row" },
-                  ]}
-                >
-                  <Pressable
-                    onPress={() => {
-                      Haptics.selectionAsync();
-                      setShowPhoneCountryPicker(true);
-                    }}
-                    style={[
-                      styles.editDialBtn,
-                      {
-                        borderColor: colors.border,
-                        borderRadius: colors.radius,
-                        backgroundColor: colors.secondary,
-                        flexDirection: isRTL ? "row-reverse" : "row",
-                      },
-                    ]}
-                    testID="edit-phone-country"
-                  >
-                    <AppText style={styles.editDialFlag}>
-                      {countryByIso(phoneIsoDraft).flag}
-                    </AppText>
-                    <AppText
-                      style={[styles.editDialCode, { color: colors.foreground }]}
-                    >
-                      +{countryByIso(phoneIsoDraft).dial}
-                    </AppText>
-                    <Feather
-                      name="chevron-down"
-                      size={16}
-                      color={colors.mutedForeground}
-                    />
-                  </Pressable>
-                  <TextInput
-                    value={phoneNumberDraft}
-                    onChangeText={setPhoneNumberDraft}
-                    placeholder={countryByIso(phoneIsoDraft).sample}
-                    placeholderTextColor={colors.mutedForeground}
-                    keyboardType="phone-pad"
-                    autoCorrect={false}
-                    style={[
-                      styles.editInput,
-                      styles.editPhoneInput,
-                      {
-                        color: colors.foreground,
-                        backgroundColor: colors.secondary,
-                        borderColor: colors.border,
-                        borderRadius: colors.radius,
-                        textAlign: isRTL ? "right" : "left",
-                      },
-                    ]}
-                    testID="edit-phone-number"
-                  />
-                </View>
-                <AppText
-                  style={[
-                    styles.editCounter,
-                    {
-                      color: colors.mutedForeground,
-                      textAlign: isRTL ? "right" : "left",
-                    },
-                  ]}
-                >
-                  {t("create.phoneFormatHint", {
-                    sample: countryByIso(phoneIsoDraft).sample,
-                  })}
-                </AppText>
-              </View>
-
               <Pressable
                 onPress={saveProfile}
                 disabled={savingProfile}
@@ -2217,15 +2099,6 @@ export default function ProfileScreen() {
           </View>
         </Modal>
 
-        <CountryCodePicker
-          visible={showPhoneCountryPicker}
-          selectedIso={phoneIsoDraft}
-          onClose={() => setShowPhoneCountryPicker(false)}
-          onSelect={(iso) => {
-            setPhoneIsoDraft(iso);
-            setShowPhoneCountryPicker(false);
-          }}
-        />
         <CountryCodePicker
           visible={showSignupPhoneCountryPicker}
           selectedIso={signupPhoneIso}
@@ -2739,6 +2612,18 @@ export default function ProfileScreen() {
             ]}
           >
             {t("profile.phoneLabel")}
+          </AppText>
+          <AppText
+            style={[
+              styles.accountTypeLabel,
+              {
+                color: colors.mutedForeground,
+                textAlign: isRTL ? "right" : "left",
+                marginBottom: 6,
+              },
+            ]}
+          >
+            {t("profile.phoneOptional")}
           </AppText>
           <View
             style={[
@@ -3438,7 +3323,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Inter_400Regular",
     flex: 1,
-    textAlign: "right",
   },
   socialRow: {
     gap: 10,

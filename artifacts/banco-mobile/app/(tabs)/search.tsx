@@ -103,9 +103,8 @@ const CATEGORIES: FilterCategory[] = [
   "materials",
 ];
 
-// Quick brand chips = popular brands that actually have live inventory (the
-// create-safe set). The full rich catalogue is reachable via the "All brands"
-// picker; brands with no inventory there honestly return empty results.
+// Quick brand chips = all popular catalogue brands (suggestions). Full catalogue
+// + custom brand is in the create picker; empty inventory → honest empty results.
 const QUICK_BRANDS: CarBrand[] = POPULAR_BRANDS;
 
 // Section-scoped attrs — shared CLEAR_SECTION_ATTRS from search-contract
