@@ -23,9 +23,9 @@ node audit/mobile/scripts/ops-next-step.mjs      # code gate + live probe
 | Check | Result | Meaning |
 |-------|--------|---------|
 | Local confidence | PASS | كود الفرع سليم |
-| `pre-redeploy-code-gate` | PASS @ `47e009a` | بعد redeploy يجب أن يمر probe |
-| Live `healthz` + `readyz` | PASS | السيرفر شغّال — لكن **كود قديم** |
-| Live probe | **STALE** | `EGYPT→200`, map بدون `is_bookable`/`price_display` |
+| `pre-redeploy-code-gate` | PASS @ `f8273d0` | بعد redeploy يجب أن يمر probe |
+| Live `healthz` + `readyz` | PASS | السيرفر شغّال |
+| Live probe | **FRESH** | `EGYPT→400`, map فيه `is_bookable`/`price_display` |
 | `CLERK_BEARER_TOKEN` | missing | upload smoke لاحقاً |
 | `DATABASE_URL` | missing | schema verify لاحقاً |
 

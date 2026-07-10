@@ -4,7 +4,7 @@
 
 One backend, one typed API contract, four user surfaces. Built to publish anything tradeable ("the market is the source of truth" — never block a valid trade), then learn from the data it receives.
 
-> 📋 **Live status & verification evidence:** [STATUS_REPORT.md](STATUS_REPORT.md) · [docs/DEPLOYMENT_GUIDES.md](docs/DEPLOYMENT_GUIDES.md) · Replit: [replit.md](replit.md) · Security: [SECURITY.md](SECURITY.md) · [threat_model.md](threat_model.md)
+> 📋 **Live status & verification evidence:** [STATUS_REPORT.md](STATUS_REPORT.md) · [release/FULL-STABLE-SNAPSHOT-2026-07-10.md](release/FULL-STABLE-SNAPSHOT-2026-07-10.md) · [DUAL_REPO_STATUS.md](DUAL_REPO_STATUS.md) · [docs/DEPLOYMENT_GUIDES.md](docs/DEPLOYMENT_GUIDES.md) · Replit: [replit.md](replit.md) · Security: [SECURITY.md](SECURITY.md) · [threat_model.md](threat_model.md)
 
 **Production GitHub repositories (same product, same `main` line):**
 

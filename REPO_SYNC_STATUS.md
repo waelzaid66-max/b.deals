@@ -1,70 +1,17 @@
-# BANCO — حالة مزامنة الريبوهات (نسخة الإنتاج)
+# Repo sync status
 
-**التاريخ:** 2026-07-09  
-**HEAD على `main` (origin):** `3a95afa`  
-**aws-virgen `main`:** `39b1e63` (مزامَن + tag `v1.0.0-rc.2`)  
-**مرجع موحّد:** `DUAL_REPO_STATUS.md`
+**Updated:** 2026-07-10
 
-## GitHub Actions CI على `main`
+| Repo | Branch | Tag | Status |
+|------|--------|-----|--------|
+| `-BANCO-CA-OOM-` | `main` | `v1.1.0-stabilize-2026-07-10` | Push after merge stabilize |
+| `aws-virgen` | `main` | `v1.1.0-stabilize-2026-07-10` | `publish-aws-virgen-rc.sh` |
 
-| Run | الحالة |
-|-----|--------|
-| [28979326703](https://github.com/waelzaid66-max/-BANCO-CA-OOM-/actions/runs/28979326703) | ✅ 5/5 (Typecheck، API tests، ESLint، GCP gate، Mobile) |
+**Handoff:** `release/FULL-STABLE-SNAPSHOT-2026-07-10.md`
 
-**Tag:** `v1.0.0-rc.2`  
-**أداة aws-virgen:** `scripts/publish-aws-virgen-rc.sh v1.0.0-rc.2`
-
----
-
-## الريموتات
-
-| الاسم | GitHub URL | دور | `main` @ |
-|-------|------------|-----|----------|
-| **origin** | `waelzaid66-max/-BANCO-CA-OOM-` | مصدر العمل | `3a95afa` ✅ |
-| **aws-virgen** | `waelzaid66-max/aws-virgen` | AWS EC2/CD | `39b1e63` ✅ |
-
-> **نطاق رسمي:** الريبوهان أعلاه فقط. لا مرآات.
-
----
-
-## تقارير التشغيل (Replit + GCP + AWS)
-
-| التقرير | المسار |
-|---------|--------|
-| تسليم الوكيل | `release/PRIMARY_AGENT_HANDOFF.md` |
-| تشغيل موحّد | `release/REPLIT_GOOGLE_AWS_UNIFIED_RUNBOOK.md` |
-| GCP كامل | `deploy/gcp/reports/00-README.md` |
-| مشغّلات Google | `deploy/gcp/TRIGGER_MIGRATION.md` |
-| AWS | `deploy/aws/reports/00-README.md` |
-| فهرس النشر | `docs/DEPLOYMENT_GUIDES.md` |
-
----
-
-## أوامر الإغلاق على Replit (مالك المستودع)
+**Live API:** FRESH @ `https://banco-ca-oom.replit.app`
 
 ```bash
-git pull origin main
-gh auth status   # يجب حساب waelzaid66-max وليس bot
-
-export AWS_VIRGEN_SYNC_TOKEN="$(gh auth token)"   # PAT بصلاحية repo على aws-virgen
-./scripts/publish-aws-virgen-rc.sh v1.0.0-rc.2
-
-./scripts/push-mirror-remotes.sh
-
-pnpm install --frozen-lockfile
-pnpm run typecheck && pnpm run lint && pnpm run confidence
-pnpm --filter @workspace/api-server test
+node audit/mobile/scripts/ops-next-step.mjs
+./scripts/publish-aws-virgen-rc.sh v1.1.0-stabilize-2026-07-10
 ```
-
----
-
-## قرار الإصدار
-
-| النطاق | الحكم |
-|--------|--------|
-| كود + CI على الأساسي | **GO** |
-| aws-virgen + مرآات | **GO** بعد أوامر الدفع أعلاه |
-| GCP Console triggers + أسرار حية | **GO WITH FIXES** |
-| متاجر عالمية | **NO GO** حتى OPS (EAS، smoke staging) |
-
-*يُحدَّث بعد كل دفع.*
