@@ -1,6 +1,6 @@
 # BANCO Store — Completion & Status Report
 
-_Last updated: 2026-07-10 — Mobile stabilize M01–M31 on `fix/mobile-master-stabilize`; security P0 closed; Live Replit still STALE until API redeploy. Canonical mobile publish gate: `audit/mobile/MOBILE-PUBLISH-SUCCESS-GATE.md`._
+_Last updated: 2026-07-10 — `main` @ `1aecea5` (wave 6 product truth). Live Replit **FRESH**. Device QA + upload smoke still OPEN._
 
 > **Release line:** worktree branch `fix/mobile-master-stabilize` (see `git log -1` / `git status`). Mobile regression via `pnpm --filter @workspace/banco-mobile run test` (icons + lib + resilience + universal-links). Staging smoke still **OPS** (secrets). Website does **not** block mobile (O17 SKIP).
 
@@ -25,9 +25,8 @@ This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin
 | Area | What | Verification |
 |---|---|---|
 | **P0 security** | Upload IDOR claims, LIKE escape, deleted-user visibility, ACL owner IDs | `audit/fixes/C-01…H-03`, commit history on main |
-| **Mobile stabilize M01–M27** | Profile phone, create permissions, home paint, search chrome, market picker, map, isolation | ACCEPTANCE + lib-hardening |
-| **Section companies M28–M31** | material filter, CLEAR_SECTION_ATTRS, web parity, hub new_law, feed `market_country` | proof-isolation + create-fields |
-| **Server-side map clustering** | `GET /v1/search/map` + bookable/price on single pins (local code) | DB tests when DATABASE_URL set; **live STALE** |
+| **Mobile stabilize M01–M31 + wave 6** | Profile social links, custom car draft, rental copy, touch/modals | lib-hardening **36/36** |
+| **Server-side map clustering** | `GET /v1/search/map` + bookable/price on single pins | **live FRESH** (probe 2026-07-10) |
 | **Market country** | list + map + feed filter; create stamps `specs.market_country` | search-contract + home feed asserts |
 | **Rental systems** | per-country law terms; rent engine gate | FilterSheet + SearchControls |
 | **Billing B1–B4** | invoices/PDF/CSV without Paymob | test:lib |
@@ -46,7 +45,7 @@ This is the live status of the BANCO Store monorepo (Banco Mobile · Banco Admin
 
 | Item | Status | Why it needs you |
 |---|---|---|
-| **API redeploy** | Live Replit **STALE** (code gate PASS @ tip; probe fails until redeploy) | `pnpm run ops:next` → `NEXT-OPS-REPLIT-REDEPLOY.md` |
+| **API live** | Replit **FRESH** @ `1aecea5` | `node audit/mobile/scripts/ops-next-step.mjs` |
 | **Local automated** | **PASS** | `pnpm run confidence` **19/19** |
 | **Image-upload byte path** | OPS | Object Storage + device |
 | **OTP / Google / Apple / GPS / Push / AI key** | OPS | Clerk + secrets |

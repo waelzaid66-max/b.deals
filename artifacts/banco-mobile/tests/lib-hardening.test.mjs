@@ -597,6 +597,26 @@ test("profile overflow menu must not steal touches from menu rows", () => {
   );
 });
 
+test("profile card prioritizes social links over account phone", () => {
+  const profile = fs.readFileSync(PROFILE, "utf8");
+  assert.doesNotMatch(
+    profile,
+    /testID="profile-phone"/,
+    "account phone must not display on the profile card — links are the public contact surface",
+  );
+  assert.match(profile, /testID="social-edit"/, "social link editor must stay on profile");
+  assert.match(
+    profile,
+    /key:\s*"social"/,
+    "profile completion nudge must target social links, not account phone",
+  );
+  assert.doesNotMatch(
+    profile,
+    /complete_phone|key:\s*"phone"/,
+    "profile completion must not nag for account phone",
+  );
+});
+
 test("profile menu routes are registered in root stack", () => {
   const layout = fs.readFileSync(LAYOUT, "utf8");
   const profile = fs.readFileSync(PROFILE, "utf8");

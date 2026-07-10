@@ -14,28 +14,29 @@
 
 ## SHA والوسم المستهدف
 
-| الريبو | الفرع | Tag |
-|--------|--------|-----|
-| **-BANCO-CA-OOM-** | `main` ← merge من `fix/mobile-master-stabilize` | `v1.1.0-stabilize-2026-07-10` @ `7822215` |
-| **aws-virgen** | `main` (merge من الأساسي) | `v1.1.0-stabilize-2026-07-10` @ `99c486b` ✅ |
+| الريبو | الفرع | Tag | SHA |
+|--------|--------|-----|-----|
+| **-BANCO-CA-OOM-** | `main` | `v1.1.1-product-truth-2026-07-10` | `1aecea5` |
+| **aws-virgen** | `main` (مزامنة من الأساسي) | `v1.1.1-product-truth-2026-07-10` | ⏳ بعد `publish-aws-virgen-rc` |
 
 ```bash
-git fetch origin main && git rev-parse origin/main
-node audit/mobile/scripts/ops-next-step.mjs   # LIVE FRESH متوقع
+git fetch origin main && git rev-parse origin/main   # 1aecea5
+node audit/mobile/scripts/ops-next-step.mjs          # LIVE FRESH
 ```
 
 ---
 
-## التحقق المحلي (2026-07-10)
+## التحقق المحلي (2026-07-10 — موجة 6)
 
 | المصدر | النتيجة |
 |--------|---------|
-| production-confidence | ✅ 19/19 |
-| lib-hardening | ✅ 34/34 |
-| pre-redeploy-code-gate | ✅ PASS |
-| Live probe (Replit) | ✅ **FRESH** |
+| production-confidence | ✅ **19/19** |
+| lib-hardening | ✅ **36/36** (بروفايل: روابط ≠ هاتف) |
+| pre-redeploy-code-gate | ✅ PASS @ `1aecea5` |
+| post-redeploy-verify | ✅ **FRESH** |
+| Live probe (Replit) | ✅ **FRESH** — `badIsoStatus=400`, map `is_bookable` + `price_display`, EG≠SA |
 | Device QA | ❌ OPEN |
-| staging-p0-smoke | ⚠️ يحتاج `CLERK_BEARER_TOKEN` |
+| staging-p0-smoke (upload) | ⚠️ يحتاج `CLERK_BEARER_TOKEN` |
 
 ---
 
@@ -43,7 +44,14 @@ node audit/mobile/scripts/ops-next-step.mjs   # LIVE FRESH متوقع
 
 ```bash
 export AWS_VIRGEN_SYNC_TOKEN="<PAT classic repo scope>"
-./scripts/publish-aws-virgen-rc.sh v1.1.0-stabilize-2026-07-10
+./scripts/publish-aws-virgen-rc.sh v1.1.1-product-truth-2026-07-10
+```
+
+أو PowerShell:
+
+```powershell
+$env:AWS_VIRGEN_SYNC_TOKEN = "<PAT>"
+.\scripts\publish-aws-virgen-rc.ps1 v1.1.1-product-truth-2026-07-10
 ```
 
 أو: Actions → **Sync aws-virgen (full main)** (سر `AWS_VIRGEN_SYNC_TOKEN`).

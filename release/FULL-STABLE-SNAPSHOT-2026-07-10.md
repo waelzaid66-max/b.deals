@@ -1,8 +1,8 @@
 # BANCO — نسخة مستقرة كاملة للتجربة (Snapshot)
 
 **التاريخ:** 2026-07-10  
-**الوسم المقترح:** `v1.1.0-stabilize-2026-07-10`  
-**الفرع المصدر:** `fix/mobile-master-stabilize` → **`main`** (بعد الدمج)  
+**الوسم:** `v1.1.1-product-truth-2026-07-10` @ `1aecea5`  
+**الفرع المصدر:** `main`  
 **الريبوهان الرسميان:**
 
 | الريبو | URL | الدور |
@@ -18,19 +18,21 @@
 git fetch origin main fix/mobile-master-stabilize
 git rev-parse origin/main                    # بعد هذا الدمج
 node scripts/production-confidence-check.mjs # 19/19
-node artifacts/banco-mobile/tests/lib-hardening.test.mjs  # 34/34
-node audit/mobile/scripts/pre-redeploy-code-gate.mjs      # PASS
+node artifacts/banco-mobile/tests/lib-hardening.test.mjs  # 36/36
+node audit/mobile/scripts/pre-redeploy-code-gate.mjs      # PASS @ 1aecea5
 node audit/mobile/scripts/ops-next-step.mjs             # LIVE FRESH
+node audit/mobile/scripts/post-redeploy-verify.mjs      # FRESH + health smoke
 ```
 
 | البوابة | النتيجة | ملاحظة |
 |---------|---------|--------|
 | production-confidence | **19/19** | proofs + contract + mobile regression |
-| lib-hardening | **34/34** | بروفايل touch + routes + auth gate |
+| lib-hardening | **36/36** | بروفايل social + routes + touch |
 | pre-redeploy-code-gate | **PASS** | market_country + map bookable/price |
-| Live probe (Replit) | **FRESH** | `badIsoStatus=400`, `is_bookable` + `price_display` |
+| Live probe (Replit) | **FRESH** | probe `2026-07-10-wave6-fresh.json` |
+| post-redeploy-verify | **FRESH** | health + readyz 2/2 |
 | Device QA | **OPEN** | لم يُنفَّذ على جهاز حقيقي |
-| staging-p0-smoke | **يحتاج** `CLERK_BEARER_TOKEN` | بعد FRESH |
+| staging-p0-smoke (upload) | **BLOCKED** | يحتاج `CLERK_BEARER_TOKEN` |
 
 **API حي:** `https://banco-ca-oom.replit.app`
 

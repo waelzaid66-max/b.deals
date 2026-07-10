@@ -1,6 +1,6 @@
 # تقرير فحص شامل — 2026-07-10
 
-**الفرع:** `fix/mobile-master-stabilize`  
+**الفرع:** `main` @ `1aecea5` (wave 6 product truth)  
 **القاعدة:** لا أخضر مزيف — كود ≠ Live ≠ جهاز ≠ متجر  
 **الغرض:** مراجعة كل ما سبق (M01–M31، P0 أمان، عزل الشركات، OPS) + إصلاح عميق للثغرات المكتشفة في هذه الجلسة.
 
@@ -10,15 +10,15 @@
 
 | الطبقة | الحالة | ملاحظة |
 |--------|--------|--------|
-| بوابة `pnpm run confidence` | **PASS 19/19** | typecheck + 34 mobile + 35 contract + proofs + C-02 + API sanitize |
-| كود عزل الأقسام (محلي) | **مُحسَّن** | 8 إصلاحات جذرية (انظر §3) |
-| Live Replit | **STALE** | لم يُنشر الفرع بعد — `badIsoStatus=200`، map بدون bookable/price |
+| بوابة `pnpm run confidence` | **PASS 19/19** | typecheck + 36 lib-hardening + contract + proofs |
+| كود عزل الأقسام (محلي) | **مُحسَّن** | wave 6: بروفايل روابط + ماركة مخصصة |
+| Live Replit | **FRESH** | `1aecea5` على الإنتاج — ISO 400، map bookable/price، EG≠SA |
 | Smoke كامل (upload) | **BLOCKED** | `CLERK_BEARER_TOKEN` غير موجود في `.secrets/local.env` |
 | Schema verify من PC | **BLOCKED** | `DATABASE_URL` → ENOTFOUND (شبكة/DNS) |
 | EAS | **جاهز تقنياً** | `EXPO_TOKEN` موجود — ينتظر FRESH + Device QA |
 | Website / Paymob | **خارج النطاق** | O17 SKIP، B5 معطّل |
 
-**الخلاصة:** مسار **كود الموبايل + أمان + عزل** مغلق وموثّق. **النشر التشغيلي** ما زال يبدأ بـ **redeploy Replit** ثم Wave B.
+**الخلاصة:** مسار **كود + API حي** أخضر على `1aecea5`. المتبقي: **smoke upload + Device QA + EAS**.
 
 ---
 

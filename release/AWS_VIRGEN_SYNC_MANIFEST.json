@@ -1,13 +1,13 @@
 {
   "schema": "banco-aws-virgen-sync/1",
-  "generatedAt": "2026-07-10T13:55:15.215Z",
-  "releaseTag": "v1.1.0-stabilize-2026-07-10",
+  "generatedAt": "2026-07-10T14:33:23.887Z",
+  "releaseTag": "v1.1.1-product-truth-2026-07-10",
   "primaryRepository": "waelzaid66-max/-BANCO-CA-OOM-",
   "awsVirgenRepository": "waelzaid66-max/aws-virgen",
   "commit": {
-    "full": "42bc716602a85ecfd70d5dcdc04325f8b1a83308",
-    "short": "42bc716",
-    "subject": "fix(mobile): listing modal touch-safe + filter sort accents + virgen PS1"
+    "full": "1aecea5a55df52a55840c6290d547d6755f93950",
+    "short": "1aecea5",
+    "subject": "fix(mobile): restore profile social links as primary contact surface"
   },
   "syncPolicy": "merge primary main into aws-virgen main (full tree, history preserved)",
   "ci": {

@@ -1,7 +1,7 @@
 # بوابة نجاح نشر الموبايل — من أول الأهداف إلى الآن
 
 **التاريخ:** 2026-07-10  
-**الفرع:** `main` · tag `v1.1.0-stabilize-2026-07-10`  
+**الفرع:** `main` · tag `v1.1.1-product-truth-2026-07-10` @ `1aecea5`  
 **القاعدة:** لا أخضر مزيف. الكود ≠ الجهاز ≠ Live ≠ المتجر.
 
 ---
@@ -27,7 +27,7 @@
 | طبقة | الحالة | دليل |
 |------|--------|------|
 | كود محلي M01–M31 + أمان P0 | **CLOSED** | `MOBILE-STABILIZE-PROGRESS.md`, `audit/fixes/C-01…` |
-| اختبارات أوتوماتيك محلية | **PASS** (إعادة فحص عميق 2026-07-10) | `FULL-DEEP-VERIFICATION-2026-07-10.md` — mobile 34/34 · contract 33/33 · material 4/4 · proofs ok |
+| اختبارات أوتوماتيك محلية | **PASS** | mobile lib-hardening **36/36** · production-confidence **19/19** |
 | Live Replit API | **FRESH** | `ops-next-step.mjs` — ISO reject + map bookable/price |
 | Device QA | **OPEN** | `DEVICE-QA-SECTION-COMPANIES.md` لم يُنفَّذ |
 | OPS O16 | **OPEN** | أسرار + smoke + EAS |
