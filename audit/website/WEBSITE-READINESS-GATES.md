@@ -113,7 +113,7 @@
 - [x] `pnpm run ops:website-ci` — mirror محلي لـ `ci-website.yml`
 - [x] Docker `deploy/aws/Dockerfile.banco-web` + `ci-website-docker.yml`
 - [ ] خريطة حية على staging (`MAP=true` + Google key) — بعد API FRESH
-- [ ] FilterSheet parity كامل مع الموبايل (حقول نادرة) — W3.1
+- [x] FilterSheet parity مع الموبايل (W3.1): `natural_gas`/`cvt`، industry/origin في facets، inventory gating
 
 ### G-W5 (إنتاج بائع)
 

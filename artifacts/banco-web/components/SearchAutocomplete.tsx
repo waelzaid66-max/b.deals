@@ -33,16 +33,6 @@ function itemStyle(locale: "ar" | "en"): React.CSSProperties {
   };
 }
 
-function SearchAutocompleteDisabled() {
-  const locale = useSearchLocale();
-  const copy = searchUiCopy(locale);
-
-  return (
-    <div style={panelStyle}>
-      <small style={{ color: "var(--banco-muted)" }}>{copy.autocompleteDisabled}</small>
-    </div>
-  );
-}
 
 function SearchAutocompleteLive({
   query,
@@ -119,7 +109,7 @@ function SearchAutocompleteSuggestions({
 
 export function SearchAutocomplete({ enabled, query, onSelect }: SearchAutocompleteProps) {
   if (!enabled) {
-    return <SearchAutocompleteDisabled />;
+    return null;
   }
 
   return <SearchAutocompleteLive query={query} onSelect={onSelect} />;

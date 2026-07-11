@@ -34,7 +34,7 @@ function SearchLiveResultsPreview({ fallbackItems }: { fallbackItems: FeedItem[]
       >
         {copy.previewNote}
       </p>
-      <SearchResultsSection items={fallbackItems} />
+      <SearchResultsSection items={fallbackItems} linkable={false} />
       <SearchPaginationControls liveEnabled={false} hasLiveNextCursor={false} />
     </>
   );

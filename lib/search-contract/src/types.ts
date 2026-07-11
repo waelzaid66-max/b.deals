@@ -132,6 +132,11 @@ export function hasActiveCriteria(c: SearchCriteria): boolean {
   );
 }
 
+/** When section/engine/market changes, exit sticky map (not on every filter tweak). */
+export function mapAnchorKey(c: SearchCriteria): string {
+  return `${c.category}|${c.engineKey}|${c.marketCountry}`;
+}
+
 export function criteriaKey(c: SearchCriteria): string {
   return JSON.stringify([
     c.q.trim(),

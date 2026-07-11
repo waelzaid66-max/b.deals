@@ -44,6 +44,11 @@ export function getPublicListingShareUrl(listingId: string): string {
 }
 
 /** Deep link matching mobile scheme (`bancooom://listing/:id`). */
-export function getAppListingDeepLink(listingId: string): string {
-  return `bancooom://listing/${listingId}`;
+export function getAppListingDeepLink(
+  listingId: string,
+  focus?: "booking",
+): string {
+  const base = `bancooom://listing/${listingId}`;
+  if (focus) return `${base}?focus=${focus}`;
+  return base;
 }

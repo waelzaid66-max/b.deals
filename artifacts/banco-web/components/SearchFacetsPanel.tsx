@@ -8,18 +8,24 @@ import {
 } from "@workspace/api-client-react";
 import {
   buildSearchUrlParams,
+  facetSectionsForCategory,
+  type FacetSectionKey,
   parseSearchCriteriaFromUrl,
 } from "@workspace/search-contract";
+import type { Category } from "@workspace/taxonomy/categories";
 import { applyFacetToCriteria } from "../lib/facet-filters";
 import { clampSearchLimit, searchConfig } from "../lib/search-config";
 import { formatFacetValue } from "../lib/search-labels";
 import { FACET_SECTION_LABELS, searchUiCopy } from "../lib/search-ui-copy";
+import { MATERIAL_FACET_OPTIONS } from "../lib/inventory-facets";
 import { trackSearchEvent } from "../lib/telemetry";
 import { useSearchLocale } from "../lib/use-search-locale";
 import type { SiteLocale } from "../lib/hub-config";
 
 type SearchFacetsPanelProps = {
   enabled: boolean;
+  /** Browse company from URL criteria — drives which facet sections render. */
+  browseCategory: Category;
   category?: GetFacetsCategory;
 };
 
@@ -60,14 +66,17 @@ function topEntries(record: Record<string, number>, max = searchConfig.facets.to
 function FacetContent({
   data,
   locale,
+  browseCategory,
   onPick,
 }: {
   data: FacetCounts;
   locale: SiteLocale;
+  browseCategory: Category;
   onPick: (section: string, value: string) => void;
 }) {
   const sectionLabels = FACET_SECTION_LABELS[locale];
-  const sections: Array<[string, Record<string, number> | undefined]> = [
+  const allowed = new Set<FacetSectionKey>(facetSectionsForCategory(browseCategory));
+  const sections: Array<[FacetSectionKey, Record<string, number> | undefined]> = [
     ["category", data.category],
     ["offer_type", data.offer_type],
     ["payment_plan", data.payment_plan],
@@ -76,13 +85,24 @@ function FacetContent({
     ["fuel_type", data.fuel_type],
     ["transmission", data.transmission],
     ["industrial_type", data.industrial_type],
+    ["industry", data.industry],
+    ["origin_type", data.origin_type],
+    ["material", (data as FacetCounts & { material?: Record<string, number> }).material],
   ];
 
   return (
     <div style={{ display: "grid", gap: "0.85rem", marginTop: "0.75rem" }}>
       {sections.map(([key, record]) => {
-        if (!record) return null;
-        const entries = topEntries(record);
+        if (!allowed.has(key)) {
+          return null;
+        }
+        let entries: Array<[string, number]> = [];
+        if (record) {
+          entries = topEntries(record);
+        }
+        if (key === "material" && entries.length === 0) {
+          entries = MATERIAL_FACET_OPTIONS.map((name) => [name, 0]);
+        }
         if (entries.length === 0) return null;
         return (
           <div key={key}>
@@ -95,7 +115,8 @@ function FacetContent({
                   style={facetChipStyle()}
                   onClick={() => onPick(key, name)}
                 >
-                  {formatFacetValue(name, locale)} ({count})
+                  {formatFacetValue(name, locale)}
+                  {count > 0 ? ` (${count})` : ""}
                 </button>
               ))}
             </div>
@@ -118,7 +139,13 @@ function SearchFacetsPanelDisabled() {
   );
 }
 
-function SearchFacetsPanelLive({ category }: { category?: GetFacetsCategory }) {
+function SearchFacetsPanelLive({
+  browseCategory,
+  category,
+}: {
+  browseCategory: Category;
+  category?: GetFacetsCategory;
+}) {
   const locale = useSearchLocale();
   const copy = searchUiCopy(locale);
   const router = useRouter();
@@ -143,8 +170,15 @@ function SearchFacetsPanelLive({ category }: { category?: GetFacetsCategory }) {
       </p>
       {query.isLoading ? (
         <p style={{ margin: "0.5rem 0 0", color: "var(--banco-muted)" }}>{copy.facetsLoading}</p>
-      ) : query.isError ? null : data ? (
-        <FacetContent data={data} locale={locale} onPick={onPick} />
+      ) : query.isError ? (
+        <p style={{ margin: "0.5rem 0 0", color: "#ff6b6b" }}>{copy.facetsError}</p>
+      ) : data ? (
+        <FacetContent
+          data={data}
+          locale={locale}
+          browseCategory={browseCategory}
+          onPick={onPick}
+        />
       ) : (
         <p style={{ margin: "0.5rem 0 0", color: "var(--banco-muted)" }}>{copy.facetsEmpty}</p>
       )}
@@ -152,10 +186,16 @@ function SearchFacetsPanelLive({ category }: { category?: GetFacetsCategory }) {
   );
 }
 
-export function SearchFacetsPanel({ enabled, category }: SearchFacetsPanelProps) {
+export function SearchFacetsPanel({
+  enabled,
+  browseCategory,
+  category,
+}: SearchFacetsPanelProps) {
   if (!enabled) {
     return <SearchFacetsPanelDisabled />;
   }
 
-  return <SearchFacetsPanelLive category={category} />;
+  return (
+    <SearchFacetsPanelLive browseCategory={browseCategory} category={category} />
+  );
 }

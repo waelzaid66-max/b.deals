@@ -29,6 +29,7 @@ type SearchMapSurfaceProps = {
   viewport: MapViewport;
   totalListings: number;
   onViewportChange?: (viewport: MapViewport) => void;
+  compact?: boolean;
 };
 
 export function SearchMapSurface({
@@ -36,6 +37,7 @@ export function SearchMapSurface({
   viewport,
   totalListings,
   onViewportChange,
+  compact = false,
 }: SearchMapSurfaceProps) {
   const hasGoogleKey = searchConfig.map.googleMapsApiKey.length > 0;
   if (hasGoogleKey && onViewportChange) {
@@ -45,6 +47,7 @@ export function SearchMapSurface({
         viewport={viewport}
         totalListings={totalListings}
         onViewportChange={onViewportChange}
+        compact={compact}
       />
     );
   }
@@ -54,6 +57,7 @@ export function SearchMapSurface({
       clusters={clusters}
       viewport={viewport}
       totalListings={totalListings}
+      compact={compact}
     />
   );
 }

@@ -4,12 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CLEAR_SECTION_ATTRS,
-  enginesForCategory,
+  DEFAULT_CRITERIA,
   engineByKey,
   parseSearchCriteriaFromUrl,
   buildSearchUrlParams,
   type SearchCriteria,
 } from "@workspace/search-contract";
+import { accentForCategory } from "@workspace/design-tokens";
 import type { Category, IndustrialSubtype } from "@workspace/taxonomy/categories";
 import { FACILITIES_TYPES, MATERIALS_TYPES } from "@workspace/taxonomy/categories";
 import {
@@ -37,6 +38,13 @@ import {
   rentalTermsForWebMarket,
   sanitizeRentalTermForWebMarket,
 } from "../lib/search-markets";
+import {
+  useInventoryFacets,
+  visibleCategories,
+  visibleEngines,
+  visibleIndustrialTypes,
+  MATERIAL_FACET_OPTIONS,
+} from "../lib/inventory-facets";
 
 type SearchControlsProps = {
   liveEnabled: boolean;
@@ -66,7 +74,7 @@ const fieldStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   border: "1px solid var(--banco-border)",
   borderRadius: 10,
-  background: "#0f0f0f",
+  background: "var(--banco-card)",
   color: "var(--banco-fg)",
   padding: "0.55rem 0.7rem",
   fontSize: "0.9rem",
@@ -95,34 +103,21 @@ const chipWrapStyle: React.CSSProperties = {
   marginTop: "0.5rem",
 };
 
-function chipStyle(active: boolean): React.CSSProperties {
+function chipStyle(active: boolean, accent = "var(--banco-primary)"): React.CSSProperties {
   return {
-    border: "1px solid var(--banco-border)",
+    border: `1px solid ${active ? accent : "var(--banco-border)"}`,
     borderRadius: 999,
     padding: "0.35rem 0.7rem",
     fontSize: "0.8rem",
     cursor: "pointer",
-    background: active ? "var(--banco-primary)" : "transparent",
+    background: active ? accent : "transparent",
     color: active ? "#fff" : "var(--banco-muted)",
   };
 }
 
 const INDUSTRY_OPTIONS = Object.values(SearchListingsIndustry);
 const ORIGIN_OPTIONS = Object.values(SearchListingsOriginType);
-const MATERIAL_OPTIONS = [
-  "steel",
-  "aluminum",
-  "copper",
-  "plastic_resin",
-  "paper",
-  "chemical",
-  "textile_fiber",
-  "rubber",
-  "glass",
-  "wood",
-  "cement",
-  "other",
-] as const;
+const MATERIAL_OPTIONS = MATERIAL_FACET_OPTIONS;
 
 /**
  * Web search filters — aligned with `@workspace/search-contract` and mobile
@@ -141,26 +136,48 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
     [searchParams],
   );
 
+  const { globalFacets, scopedFacets } = useInventoryFacets(
+    committed.category as Category,
+  );
+
   const [draft, setDraft] = useState<SearchCriteria>(committed);
 
   useEffect(() => {
     setDraft(committed);
   }, [committed]);
 
-  const engines =
-    enginesForCategory(draft.category as Category)?.filter((e) => !e.requiresFacet) ??
-    [];
+  const engines = visibleEngines(draft.category as Category, scopedFacets);
 
-  const industrialSubtypes: IndustrialSubtype[] =
+  const industrialSubtypeSource: IndustrialSubtype[] =
     draft.category === "facilities"
       ? FACILITIES_TYPES
       : draft.category === "materials"
         ? MATERIALS_TYPES
         : [];
 
+  const industrialSubtypes = (() => {
+    const gated = visibleIndustrialTypes(industrialSubtypeSource, scopedFacets);
+    const active = draft.industrialType;
+    if (
+      active !== "all" &&
+      industrialSubtypeSource.length > 0 &&
+      !gated.includes(active as IndustrialSubtype)
+    ) {
+      return [...gated, active as IndustrialSubtype];
+    }
+    return gated;
+  })();
+
   const selectedEngine = engineByKey(draft.category, draft.engineKey);
   const showRentalChips =
     draft.category === "real_estate" && selectedEngine?.params.offer_type === "rent";
+
+  const showPayment =
+    draft.category === "all" ||
+    draft.category === "car" ||
+    draft.category === "real_estate";
+
+  const sectionAccentColor = accentForCategory(draft.category);
 
   const showIndustry =
     (draft.category === "facilities" || draft.category === "materials") &&
@@ -181,7 +198,15 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
     }),
   );
 
-  const categoryOptions: Category[] = ["all", "car", "real_estate", "facilities", "materials"];
+  const categoryOptions = (() => {
+    const base: Category[] = ["all", "car", "real_estate", "facilities", "materials"];
+    const gated = visibleCategories(base, globalFacets);
+    const active = draft.category as Category;
+    if (active !== "all" && !gated.includes(active)) {
+      return [...gated, active];
+    }
+    return gated;
+  })();
   const sortOptions: SearchCriteria["sort"][] = [
     "recommended",
     "newest",
@@ -189,8 +214,8 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
     "price_desc",
     "popular",
   ];
-  const fuelOptions = ["petrol", "diesel", "electric", "hybrid"] as const;
-  const transmissionOptions = ["automatic", "manual"] as const;
+  const fuelOptions = ["petrol", "diesel", "electric", "hybrid", "natural_gas"] as const;
+  const transmissionOptions = ["automatic", "manual", "cvt"] as const;
 
   const selectCategory = (category: SearchCriteria["category"]) => {
     setDraft((s) => {
@@ -271,9 +296,22 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
 
   const resetFilters = () => {
     trackSearchEvent("search_reset", { liveEnabled });
-    router.replace(
-      `${pathname}?category=car&sort=recommended&location=cairo&limit=${searchConfig.limits.default}`,
+    const preservedCategory = draft.category;
+    const next: SearchCriteria = {
+      ...DEFAULT_CRITERIA,
+      category: preservedCategory,
+    };
+    const limit = clampSearchLimit(
+      Number(searchParams.get("limit") ?? searchConfig.limits.default),
     );
+    router.replace(`${pathname}?${buildSearchUrlParams(next, { limit }).toString()}`);
+  };
+
+  const activeChip = (active: boolean) => chipStyle(active, sectionAccentColor);
+  const primaryBtn: React.CSSProperties = {
+    ...buttonStyle,
+    background: sectionAccentColor,
+    borderColor: sectionAccentColor,
   };
 
   return (
@@ -491,7 +529,7 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
           <div style={chipWrapStyle}>
             <button
               type="button"
-              style={chipStyle(draft.industrialType === "all")}
+              style={activeChip(draft.industrialType === "all")}
               onClick={() => selectIndustrialType("all")}
             >
               {copy.allChip}
@@ -500,7 +538,7 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
               <button
                 key={subtype}
                 type="button"
-                style={chipStyle(draft.industrialType === subtype)}
+                style={activeChip(draft.industrialType === subtype)}
                 onClick={() => selectIndustrialType(subtype)}
               >
                 {formatIndustrialSubtype(subtype, locale)}
@@ -520,7 +558,7 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
               <button
                 key={value}
                 type="button"
-                style={chipStyle(draft.industry === value)}
+                style={activeChip(draft.industry === value)}
                 onClick={() =>
                   setDraft((s) => ({
                     ...s,
@@ -545,7 +583,7 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
               <button
                 key={value}
                 type="button"
-                style={chipStyle(draft.material === value)}
+                style={activeChip(draft.material === value)}
                 onClick={() =>
                   setDraft((s) => ({
                     ...s,
@@ -570,7 +608,7 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
               <button
                 key={value}
                 type="button"
-                style={chipStyle(draft.originType === value)}
+                style={activeChip(draft.originType === value)}
                 onClick={() =>
                   setDraft((s) => ({
                     ...s,
@@ -587,25 +625,69 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
 
       <div style={{ marginTop: "0.75rem" }}>
         <span style={{ color: "var(--banco-muted)", fontSize: "0.9rem" }}>
+          {copy.listingModeLabel}
+        </span>
+        <div style={chipWrapStyle}>
+          {(["all", "sale", "buy"] as const).map((mode) => (
+            <button
+              key={mode}
+              type="button"
+              style={activeChip(draft.listingMode === mode)}
+              onClick={() => setDraft((s) => ({ ...s, listingMode: mode }))}
+            >
+              {mode === "all"
+                ? copy.listingModeAll
+                : mode === "sale"
+                  ? copy.listingModeSale
+                  : copy.listingModeBuy}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {showPayment ? (
+      <div style={{ marginTop: "0.75rem" }}>
+        <span style={{ color: "var(--banco-muted)", fontSize: "0.9rem" }}>
           {copy.paymentLabel}
         </span>
         <div style={chipWrapStyle}>
           <button
             type="button"
-            style={chipStyle(draft.paymentType === "any")}
+            style={activeChip(draft.paymentType === "any")}
             onClick={() => setDraft((s) => ({ ...s, paymentType: "any" }))}
           >
             {copy.anyOption}
           </button>
           <button
             type="button"
-            style={chipStyle(draft.paymentType === "installment")}
+            style={activeChip(draft.paymentType === "installment")}
             onClick={() => setDraft((s) => ({ ...s, paymentType: "installment" }))}
           >
             {copy.installmentChip}
           </button>
         </div>
       </div>
+      ) : null}
+
+      {engines.length > 1 ? (
+        <div style={{ marginTop: "0.75rem" }}>
+          <span style={{ color: "var(--banco-muted)", fontSize: "0.9rem" }}>
+            {copy.engineLabel}
+          </span>
+          <div style={chipWrapStyle}>
+            {engines.map((engine) => (
+              <button
+                key={engine.key}
+                type="button"
+                style={activeChip(draft.engineKey === engine.key)}
+                onClick={() => selectEngine(engine.key)}
+              >
+                {formatEngineLabel(engine.key, locale)}
+              </button>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {showRentalChips ? (
         <div style={{ marginTop: "0.75rem" }}>
@@ -617,7 +699,7 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
               <button
                 key={chip.value}
                 type="button"
-                style={chipStyle(draft.rentalTerm === chip.value)}
+                style={activeChip(draft.rentalTerm === chip.value)}
                 onClick={() =>
                   setDraft((s) => ({
                     ...s,
@@ -633,28 +715,8 @@ export function SearchControls({ liveEnabled }: SearchControlsProps) {
         </div>
       ) : null}
 
-      {engines.length > 0 ? (
-        <div style={{ marginTop: "0.75rem" }}>
-          <span style={{ color: "var(--banco-muted)", fontSize: "0.9rem" }}>
-            {copy.engineLabel}
-          </span>
-          <div style={chipWrapStyle}>
-            {engines.map((engine) => (
-              <button
-                key={engine.key}
-                type="button"
-                style={chipStyle(draft.engineKey === engine.key)}
-                onClick={() => selectEngine(engine.key)}
-              >
-                {formatEngineLabel(engine.key, locale)}
-              </button>
-            ))}
-          </div>
-        </div>
-      ) : null}
-
       <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.9rem", flexWrap: "wrap" }}>
-        <button type="button" onClick={applyFilters} style={buttonStyle}>
+        <button type="button" onClick={applyFilters} style={primaryBtn}>
           {copy.apply}
         </button>
         <button type="button" onClick={resetFilters} style={secondaryButtonStyle}>

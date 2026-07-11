@@ -6,9 +6,17 @@ export type ListingUiCopy = {
   category: string;
   status: string;
   seller: string;
+  sellerAbout: string;
   share: string;
   openInApp: string;
   publicLink: string;
+  contactTitle: string;
+  contactCall: string;
+  contactWhatsApp: string;
+  contactChat: string;
+  contactBooking: string;
+  contactAppHint: string;
+  requestBadge: string;
   sponsored: string;
   video: string;
   notFoundTitle: string;
@@ -26,9 +34,17 @@ const COPY: Record<SiteLocale, ListingUiCopy> = {
     category: "الفئة",
     status: "الحالة",
     seller: "البائع",
+    sellerAbout: "عن البائع",
     share: "مشاركة",
     openInApp: "فتح في التطبيق",
     publicLink: "رابط عام",
+    contactTitle: "تواصل مع البائع",
+    contactCall: "اتصال",
+    contactWhatsApp: "واتساب",
+    contactChat: "محادثة",
+    contactBooking: "حجز إقامة",
+    contactAppHint: "الاتصال والحجز والمحادثة متاحان في تطبيق BANCO — نفس تجربة الجوال.",
+    requestBadge: "طلب شراء",
     sponsored: "ممول",
     video: "فيديو",
     notFoundTitle: "الإعلان غير متاح",
@@ -44,9 +60,17 @@ const COPY: Record<SiteLocale, ListingUiCopy> = {
     category: "Category",
     status: "Status",
     seller: "Seller",
+    sellerAbout: "About the seller",
     share: "Share",
     openInApp: "Open in app",
     publicLink: "Public link",
+    contactTitle: "Contact seller",
+    contactCall: "Call",
+    contactWhatsApp: "WhatsApp",
+    contactChat: "Message",
+    contactBooking: "Book stay",
+    contactAppHint: "Call, chat, and booking run in the BANCO app — same as mobile.",
+    requestBadge: "Wanted to buy",
     sponsored: "Sponsored",
     video: "Video",
     notFoundTitle: "Listing unavailable",

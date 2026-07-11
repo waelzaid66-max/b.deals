@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { bancoCssVariables, bancoGoogleFontsUrl } from "@workspace/design-tokens";
+import { bancoBrand, bancoCssVariables, bancoGoogleFontsUrl } from "@workspace/design-tokens";
 import { SearchAnalyticsBootstrap } from "../components/SearchAnalyticsBootstrap";
 import { ApiClientBootstrap } from "../components/ApiClientBootstrap";
 import { SiteChrome } from "../components/SiteChrome";
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#e11d48",
+  themeColor: bancoBrand.red,
 };
 
 export default function RootLayout({

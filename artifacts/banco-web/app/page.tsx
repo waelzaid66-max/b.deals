@@ -1,7 +1,8 @@
 import { JsonLd } from "../components/JsonLd";
 import { HomeFeedTeaser } from "../components/HomeFeedTeaser";
 import { HomeTrendingStrip } from "../components/HomeTrendingStrip";
-import { bancoBrand } from "@workspace/design-tokens";
+import { SectionIcon, type SectionIconVariant } from "../components/SectionIcon";
+import { bancoBrand, hubAccent } from "@workspace/design-tokens";
 import { collectionPageJsonLd } from "../lib/structured-data";
 import { pageMetadata } from "../lib/page-metadata";
 
@@ -18,7 +19,7 @@ const gridStyle: React.CSSProperties = {
   marginTop: "1.25rem",
 };
 
-const hubCardStyle: React.CSSProperties = {
+const hubCardStyle = (accent: string): React.CSSProperties => ({
   border: "1px solid var(--banco-border)",
   borderRadius: "var(--banco-radius)",
   background: "var(--banco-card)",
@@ -26,7 +27,45 @@ const hubCardStyle: React.CSSProperties = {
   textDecoration: "none",
   color: "var(--banco-fg)",
   display: "block",
-};
+  borderTop: `3px solid ${accent}`,
+});
+
+const HUBS: Array<{
+  href: string;
+  accent: string;
+  icon: SectionIconVariant;
+  titleAr: string;
+  descAr: string;
+}> = [
+  {
+    href: "/search",
+    accent: hubAccent.general,
+    icon: "search",
+    titleAr: "بحث عام",
+    descAr: "فلاتر، خريطة، ونتائج حية",
+  },
+  {
+    href: "/cars",
+    accent: hubAccent.cars,
+    icon: "cars",
+    titleAr: "سيارات",
+    descAr: "بيع وتقسيط",
+  },
+  {
+    href: "/real-estate",
+    accent: hubAccent.real_estate,
+    icon: "real_estate",
+    titleAr: "عقارات",
+    descAr: "بيع وإيجار",
+  },
+  {
+    href: "/industrial",
+    accent: hubAccent.industrial,
+    icon: "industrial",
+    titleAr: "صناعي",
+    descAr: "منشآت ومواد",
+  },
+];
 
 export const metadata = pageMetadata({
   title: "BANCO — سيارات وعقارات وصناعي",
@@ -61,30 +100,23 @@ export default function HomePage() {
         موقع المستهلك التكميلي — بحث موحّد مع تطبيق الجوال عبر عقد البحث المشترك.
       </p>
       <nav style={gridStyle} aria-label="مراكز التصفح">
-        <a href="/search" style={hubCardStyle}>
-          <strong>بحث عام</strong>
-          <p style={{ margin: "0.35rem 0 0", color: "var(--banco-muted)", fontSize: "0.9rem" }}>
-            فلاتر، خريطة، ونتائج حية
-          </p>
-        </a>
-        <a href="/cars" style={hubCardStyle}>
-          <strong>سيارات</strong>
-          <p style={{ margin: "0.35rem 0 0", color: "var(--banco-muted)", fontSize: "0.9rem" }}>
-            بيع وتقسيط
-          </p>
-        </a>
-        <a href="/real-estate" style={hubCardStyle}>
-          <strong>عقارات</strong>
-          <p style={{ margin: "0.35rem 0 0", color: "var(--banco-muted)", fontSize: "0.9rem" }}>
-            بيع وإيجار
-          </p>
-        </a>
-        <a href="/industrial" style={hubCardStyle}>
-          <strong>صناعي</strong>
-          <p style={{ margin: "0.35rem 0 0", color: "var(--banco-muted)", fontSize: "0.9rem" }}>
-            منشآت ومواد
-          </p>
-        </a>
+        {HUBS.map((hub) => (
+          <a key={hub.href} href={hub.href} style={hubCardStyle(hub.accent)}>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.45rem",
+              }}
+            >
+              <SectionIcon variant={hub.icon} size={18} color={hub.accent} />
+              <strong>{hub.titleAr}</strong>
+            </span>
+            <p style={{ margin: "0.35rem 0 0", color: "var(--banco-muted)", fontSize: "0.9rem" }}>
+              {hub.descAr}
+            </p>
+          </a>
+        ))}
       </nav>
       <HomeTrendingStrip />
       <HomeFeedTeaser />

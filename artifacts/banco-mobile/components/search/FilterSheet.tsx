@@ -725,7 +725,7 @@ export function FilterSheet({
                       styles.chip,
                       {
                         backgroundColor: active
-                          ? colors.primary
+                          ? chipAccent
                           : colors.secondary,
                       },
                     ]}

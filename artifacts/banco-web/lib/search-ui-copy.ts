@@ -27,6 +27,10 @@ export type SearchUiCopy = {
   industryLabel: string;
   originLabel: string;
   materialLabel: string;
+  listingModeLabel: string;
+  listingModeAll: string;
+  listingModeSale: string;
+  listingModeBuy: string;
   marketCountryLabel: string;
   apply: string;
   reset: string;
@@ -44,6 +48,7 @@ export type SearchUiCopy = {
   facetsIntro: string;
   facetsLoading: string;
   facetsEmpty: string;
+  facetsError: string;
   previewNote: string;
   stateLoading: string;
   stateEmpty: string;
@@ -128,6 +133,10 @@ const COPY: Record<SiteLocale, SearchUiCopy> = {
     industryLabel: "القطاع الصناعي",
     originLabel: "الأصل",
     materialLabel: "الخامة",
+    listingModeLabel: "نوع الإعلان",
+    listingModeAll: "الكل",
+    listingModeSale: "للبيع",
+    listingModeBuy: "مطلوب شراء",
     marketCountryLabel: "سوق الدولة",
     apply: "تطبيق",
     reset: "إعادة ضبط",
@@ -145,6 +154,7 @@ const COPY: Record<SiteLocale, SearchUiCopy> = {
     facetsIntro: "اضغط على أي خيار لتطبيقه فوراً على البحث.",
     facetsLoading: "جاري التحميل…",
     facetsEmpty: "لا توجد فلاتر متاحة حالياً.",
+    facetsError: "تعذّر تحميل الفلاتر — جرّب تحديث الصفحة أو تعديل البحث.",
     previewNote:
       "معاينة محلية — فعّل NEXT_PUBLIC_WEB_SEARCH_LIVE=true لنتائج حية من الـ API.",
     stateLoading: "جاري تحميل النتائج…",
@@ -211,6 +221,10 @@ const COPY: Record<SiteLocale, SearchUiCopy> = {
     industryLabel: "Industry sector",
     originLabel: "Origin",
     materialLabel: "Material",
+    listingModeLabel: "Listing type",
+    listingModeAll: "All",
+    listingModeSale: "For sale",
+    listingModeBuy: "Wanted to buy",
     marketCountryLabel: "Market country",
     apply: "Apply",
     reset: "Reset",
@@ -228,6 +242,7 @@ const COPY: Record<SiteLocale, SearchUiCopy> = {
     facetsIntro: "Tap a value to apply it to the search immediately.",
     facetsLoading: "Loading…",
     facetsEmpty: "No facets available right now.",
+    facetsError: "Could not load facets — refresh or adjust your search.",
     previewNote:
       "Local preview — set NEXT_PUBLIC_WEB_SEARCH_LIVE=true for live API results.",
     stateLoading: "Loading results…",
@@ -283,6 +298,9 @@ export const FACET_SECTION_LABELS: Record<SiteLocale, Record<string, string>> = 
     fuel_type: "الوقود",
     transmission: "ناقل الحركة",
     industrial_type: "النوع الصناعي",
+    industry: "الصناعة",
+    origin_type: "المصدر",
+    material: "الخامة",
   },
   en: {
     category: "Category",
@@ -293,5 +311,8 @@ export const FACET_SECTION_LABELS: Record<SiteLocale, Record<string, string>> = 
     fuel_type: "Fuel",
     transmission: "Transmission",
     industrial_type: "Industrial type",
+    industry: "Industry",
+    origin_type: "Origin",
+    material: "Material",
   },
 };

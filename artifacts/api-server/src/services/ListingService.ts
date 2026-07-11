@@ -1,3 +1,4 @@
+import { clerkClient } from "@clerk/express";
 import { db } from "@workspace/db";
 import {
   listings,
@@ -34,6 +35,29 @@ import type { CreateListingSchema } from "../validators/schemas";
 import type { z } from "zod";
 
 const objectStorageService = getObjectStorageService();
+
+async function getSellerPresentational(clerkId: string | null | undefined): Promise<{
+  bio: string | null;
+  display_title: string | null;
+}> {
+  if (!clerkId) return { bio: null, display_title: null };
+  try {
+    const clerkUser = await clerkClient.users.getUser(clerkId);
+    const pub = (clerkUser.publicMetadata ?? {}) as Record<string, unknown>;
+    const unsafe = (clerkUser.unsafeMetadata ?? {}) as Record<string, unknown>;
+    const bioRaw =
+      (typeof pub.bio === "string" ? pub.bio : "") ||
+      (typeof unsafe.bio === "string" ? unsafe.bio : "");
+    const titleRaw =
+      (typeof pub.displayTitle === "string" ? pub.displayTitle : "") ||
+      (typeof unsafe.displayTitle === "string" ? unsafe.displayTitle : "");
+    const bio = bioRaw.trim() || null;
+    const display_title = titleRaw.trim() || null;
+    return { bio, display_title };
+  } catch {
+    return { bio: null, display_title: null };
+  }
+}
 
 type CreateListingInput = z.infer<typeof import("../validators/schemas").CreateListingSchema>;
 
@@ -580,7 +604,7 @@ export async function getListingDetail(listingId: string, viewerClerkId?: string
 
   const isOwner = viewerClerkId && viewerClerkId === listing.seller_clerk_id;
 
-  const [mediaRows, paymentRows, attrRows, linkedListings, contactToken, sellerSocialLinks] =
+  const [mediaRows, paymentRows, attrRows, linkedListings, contactToken, sellerSocialLinks, sellerPresentational] =
     await Promise.all([
     db
       .select()
@@ -599,6 +623,7 @@ export async function getListingDetail(listingId: string, viewerClerkId?: string
     listing.user_id
       ? getSocialLinksForUserId(listing.user_id)
       : Promise.resolve([]),
+    getSellerPresentational(listing.seller_clerk_id),
   ]);
 
   const payment = normalizePaymentOptions(paymentRows);
@@ -683,6 +708,8 @@ export async function getListingDetail(listingId: string, viewerClerkId?: string
       role: listing.seller_role ?? "individual",
       is_verified: listing.is_verified ?? false,
       social_links: sellerSocialLinks,
+      bio: sellerPresentational.bio,
+      display_title: sellerPresentational.display_title,
     },
     interactions: {
       views: listing.views ?? 0,

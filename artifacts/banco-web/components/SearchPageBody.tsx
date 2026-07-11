@@ -2,6 +2,7 @@ import {
   buildSearchParams,
   parseSearchCriteriaFromUrl,
 } from "@workspace/search-contract";
+import type { Category } from "@workspace/taxonomy/categories";
 import { parseSearchViewFromUrl } from "../lib/map-contract";
 import type { FeedItem } from "@workspace/api-client-react";
 import { SearchLiveResults } from "./SearchLiveResults";
@@ -51,30 +52,70 @@ const pillStyle: React.CSSProperties = {
   textDecoration: "none",
 };
 
-const mockResults: FeedItem[] = [
-  {
-    id: "preview-1",
-    media_preview: "",
-    price_display: "1,250,000 EGP",
-    title: "Toyota Corolla 2021",
-    location: "New Cairo",
-    trust_signal: "Verified",
-    has_video: false,
-    is_sponsored: false,
-    category: "car",
-  },
-  {
-    id: "preview-2",
-    media_preview: "",
-    price_display: "3,400,000 EGP",
-    title: "Apartment 180m",
-    location: "Sheikh Zayed",
-    trust_signal: "Trusted Seller",
-    has_video: false,
-    is_sponsored: false,
-    category: "real_estate",
-  },
-];
+const mockResultsByCategory: Partial<Record<Category, FeedItem[]>> = {
+  car: [
+    {
+      id: "preview-car-1",
+      media_preview: "",
+      price_display: "1,250,000 EGP",
+      title: "Toyota Corolla 2021",
+      location: "New Cairo",
+      trust_signal: "Verified",
+      has_video: false,
+      is_sponsored: false,
+      category: "car",
+    },
+  ],
+  real_estate: [
+    {
+      id: "preview-re-1",
+      media_preview: "",
+      price_display: "3,400,000 EGP",
+      title: "Apartment 180m",
+      location: "Sheikh Zayed",
+      trust_signal: "Trusted Seller",
+      has_video: false,
+      is_sponsored: false,
+      category: "real_estate",
+    },
+  ],
+  facilities: [
+    {
+      id: "preview-fac-1",
+      media_preview: "",
+      price_display: "12,000,000 EGP",
+      title: "Factory space 1200m²",
+      location: "10th of Ramadan",
+      trust_signal: "Verified",
+      has_video: false,
+      is_sponsored: false,
+      category: "industrial",
+    },
+  ],
+  materials: [
+    {
+      id: "preview-mat-1",
+      media_preview: "",
+      price_display: "45,000 EGP / ton",
+      title: "Steel coils — import",
+      location: "Alexandria",
+      trust_signal: "Trusted Seller",
+      has_video: false,
+      is_sponsored: false,
+      category: "industrial",
+    },
+  ],
+};
+
+function previewItemsForCategory(category: Category): FeedItem[] {
+  if (category === "all") {
+    return [
+      ...(mockResultsByCategory.car ?? []),
+      ...(mockResultsByCategory.real_estate ?? []),
+    ];
+  }
+  return mockResultsByCategory[category] ?? mockResultsByCategory.car ?? [];
+}
 
 const COPY = {
   ar: {
@@ -122,8 +163,9 @@ export function SearchPageBody({
   const mapSearchEnabled = searchConfig.map.enabled;
   const searchEnabled = searchConfig.searchEnabled;
   const view = parseSearchViewFromUrl(searchParams);
-  const showMapView = searchEnabled && mapSearchEnabled && view === "map";
+  const mapExpanded = view === "map";
   const pageHeading = buildSearchHeading(criteria, locale);
+  const previewItems = previewItemsForCategory(criteria.category as Category);
 
   if (!searchEnabled) {
     return (
@@ -153,25 +195,24 @@ export function SearchPageBody({
         <SearchControls liveEnabled={liveSearchEnabled} />
         {mapSearchEnabled ? <SearchViewToggle view={view} /> : null}
 
-        {showMapView ? (
+        <SearchLiveResults
+          enabled={liveSearchEnabled}
+          criteria={apiParams}
+          fallbackItems={previewItems}
+        />
+        <SearchFacetsPanel
+          enabled={liveSearchEnabled}
+          browseCategory={criteria.category as Category}
+          category={apiParams.category}
+        />
+        {mapSearchEnabled ? (
           <SearchMapPanel
             mapEnabled={mapSearchEnabled}
             liveEnabled={liveSearchEnabled}
             criteria={criteria}
+            compact={!mapExpanded}
           />
-        ) : (
-          <>
-            <SearchLiveResults
-              enabled={liveSearchEnabled}
-              criteria={apiParams}
-              fallbackItems={mockResults}
-            />
-            <SearchFacetsPanel
-              enabled={liveSearchEnabled}
-              category={apiParams.category}
-            />
-          </>
-        )}
+        ) : null}
       </SearchQueryProvider>
     </main>
   );

@@ -1,5 +1,7 @@
 import type {
   SearchListingsFuelType,
+  SearchListingsIndustry,
+  SearchListingsOriginType,
   SearchListingsTransmission,
 } from "@workspace/api-client-react";
 import type { Category, IndustrialType } from "@workspace/taxonomy/categories";
@@ -96,5 +98,83 @@ export function applyFacetToCriteria(
     return next;
   }
 
+  if (section === "industry") {
+    if (next.category !== "facilities" && next.category !== "materials") {
+      return next;
+    }
+    if (
+      next.category === "materials" &&
+      (next.industrialType === "all" || next.industrialType === "raw_material")
+    ) {
+      return next;
+    }
+    next.industry = value as SearchListingsIndustry;
+    return next;
+  }
+
+  if (section === "origin_type") {
+    if (next.category !== "materials") return next;
+    next.originType = value as SearchListingsOriginType;
+    return next;
+  }
+
+  if (section === "material") {
+    if (next.category !== "materials") return next;
+    if (
+      next.industrialType !== "all" &&
+      next.industrialType !== "raw_material"
+    ) {
+      return next;
+    }
+    next.material = value;
+    return next;
+  }
+
   return next;
+}
+
+/** Facet bucket keys returned by GET /facets. */
+export const FACET_SECTION_KEYS = [
+  "category",
+  "offer_type",
+  "payment_plan",
+  "property_type",
+  "condition",
+  "fuel_type",
+  "transmission",
+  "industrial_type",
+  "industry",
+  "origin_type",
+  "material",
+] as const;
+
+export type FacetSectionKey = (typeof FACET_SECTION_KEYS)[number];
+
+/**
+ * Which facet sections belong to each browse company — mirrors mobile
+ * FilterSheet gating so web never surfaces car fuel chips on real-estate.
+ */
+export function facetSectionsForCategory(
+  category: Category,
+): FacetSectionKey[] {
+  switch (category) {
+    case "car":
+      return ["condition", "payment_plan", "fuel_type", "transmission"];
+    case "real_estate":
+      return ["offer_type", "property_type", "payment_plan"];
+    case "facilities":
+      return ["industrial_type", "industry"];
+    case "materials":
+      return ["industrial_type", "origin_type", "material", "industry"];
+    case "all":
+    default:
+      return [
+        "category",
+        "offer_type",
+        "condition",
+        "payment_plan",
+        "property_type",
+        "industrial_type",
+      ];
+  }
 }

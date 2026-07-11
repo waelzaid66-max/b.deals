@@ -5,7 +5,7 @@ export {
   enginesForCategory,
 } from "./engines";
 export { buildSearchParams } from "./buildSearchParams";
-export { applyFacetToCriteria } from "./facets";
+export { applyFacetToCriteria, facetSectionsForCategory, FACET_SECTION_KEYS, type FacetSectionKey } from "./facets";
 export { ENGINE_HUB_QUERIES, GOLDEN_HUB_QUERIES } from "./hub-links";
 export {
   buildMapClusterParams,
@@ -25,6 +25,7 @@ export {
   DEFAULT_CRITERIA,
   DEFAULT_NEAR_RADIUS_KM,
   criteriaKey,
+  mapAnchorKey,
   hasActiveCriteria,
   type ListingMode,
   type PaymentType,

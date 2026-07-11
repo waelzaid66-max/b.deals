@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   APIProvider,
   Map,
@@ -8,6 +9,7 @@ import {
   type MapCameraChangedEvent,
 } from "@vis.gl/react-google-maps";
 import type { MapCluster } from "@workspace/api-client-react";
+import { bancoBrand } from "@workspace/design-tokens";
 import {
   boundsLiteralToViewport,
   viewportCenter,
@@ -22,9 +24,16 @@ type SearchGoogleMapProps = {
   viewport: MapViewport;
   totalListings: number;
   onViewportChange: (viewport: MapViewport) => void;
+  compact?: boolean;
 };
 
-function ClusterMarkers({ clusters }: { clusters: MapCluster[] }) {
+function ClusterMarkers({
+  clusters,
+  onListingClick,
+}: {
+  clusters: MapCluster[];
+  onListingClick: (listingId: string) => void;
+}) {
   return (
     <>
       {clusters.map((cluster, index) => {
@@ -33,15 +42,21 @@ function ClusterMarkers({ clusters }: { clusters: MapCluster[] }) {
             ? cluster.price_display?.trim() ||
               (cluster.is_bookable ? "Bookable" : "1")
             : String(cluster.count);
+        const listingId = cluster.listing_id;
         return (
           <Marker
             key={`${cluster.lat}-${cluster.lng}-${index}`}
             position={{ lat: cluster.lat, lng: cluster.lng }}
             label={{
               text: label,
-              color: "#111111",
+              color: bancoBrand.black,
               fontWeight: "700",
             }}
+            onClick={
+              listingId
+                ? () => onListingClick(listingId)
+                : undefined
+            }
           />
         );
       })}
@@ -54,13 +69,23 @@ export function SearchGoogleMap({
   viewport,
   totalListings,
   onViewportChange,
+  compact = false,
 }: SearchGoogleMapProps) {
   const locale = useSearchLocale();
   const copy = searchUiCopy(locale);
+  const router = useRouter();
   const center = viewportCenter(viewport);
+  const mapHeight = compact ? 200 : 320;
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onViewportChangeRef = useRef(onViewportChange);
   onViewportChangeRef.current = onViewportChange;
+
+  const handleListingClick = useCallback(
+    (listingId: string) => {
+      router.push(`/listing/${listingId}`);
+    },
+    [router],
+  );
 
   useEffect(
     () => () => {
@@ -85,7 +110,7 @@ export function SearchGoogleMap({
         style={{
           position: "relative",
           marginTop: "0.75rem",
-          minHeight: 320,
+          minHeight: mapHeight,
           borderRadius: "var(--banco-radius)",
           border: "1px solid var(--banco-border)",
           overflow: "hidden",
@@ -97,10 +122,10 @@ export function SearchGoogleMap({
           defaultZoom={viewport.zoom}
           gestureHandling="greedy"
           reuseMaps
-          style={{ width: "100%", height: 320 }}
+          style={{ width: "100%", height: mapHeight }}
           onCameraChanged={handleCameraChanged}
         >
-          <ClusterMarkers clusters={clusters} />
+          <ClusterMarkers clusters={clusters} onListingClick={handleListingClick} />
         </Map>
         <div
           style={{

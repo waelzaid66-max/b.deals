@@ -6,6 +6,7 @@ import {
   type GetFeedCategory,
 } from "@workspace/api-client-react";
 import { ListingCard } from "./ListingCard";
+import { searchConfig } from "../lib/search-config";
 
 const sectionStyle: React.CSSProperties = {
   marginTop: "1.25rem",
@@ -35,8 +36,22 @@ type HubFeedTeaserProps = {
   locale?: "ar" | "en";
 };
 
-const VIEW_ALL = { ar: "عرض الكل", en: "View all" } as const;
-const LOADING = { ar: "جاري التحميل…", en: "Loading…" } as const;
+const COPY = {
+  ar: {
+    viewAll: "عرض الكل",
+    loading: "جاري التحميل…",
+    error: "تعذّر تحميل الإعلانات — جرّب البحث مباشرة.",
+    empty: "لا توجد إعلانات في هذا القسم حالياً.",
+    cta: "انتقل إلى البحث",
+  },
+  en: {
+    viewAll: "View all",
+    loading: "Loading…",
+    error: "Could not load listings — try search directly.",
+    empty: "No listings in this section right now.",
+    cta: "Go to search",
+  },
+} as const;
 
 export function HubFeedTeaser({
   title,
@@ -44,6 +59,28 @@ export function HubFeedTeaser({
   searchHref,
   locale = "ar",
 }: HubFeedTeaserProps) {
+  const copy = COPY[locale];
+  const liveEnabled = searchConfig.liveSearchEnabled;
+
+  if (!liveEnabled) {
+    return (
+      <section style={sectionStyle}>
+        <div style={headerStyle}>
+          <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{title}</h2>
+          <Link href={searchHref} style={{ color: "var(--banco-primary)", fontWeight: 600 }}>
+            {copy.viewAll}
+          </Link>
+        </div>
+        <p style={{ color: "var(--banco-muted)", marginTop: "0.5rem", lineHeight: 1.6 }}>
+          {copy.empty}{" "}
+          <Link href={searchHref} style={{ color: "var(--banco-primary)", fontWeight: 600 }}>
+            {copy.cta}
+          </Link>
+        </p>
+      </section>
+    );
+  }
+
   const query = useGetFeed({ limit: 6, category });
   const items = query.data?.data ?? [];
 
@@ -51,13 +88,37 @@ export function HubFeedTeaser({
     return (
       <section style={sectionStyle}>
         <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{title}</h2>
-        <p style={{ color: "var(--banco-muted)", marginTop: "0.5rem" }}>{LOADING[locale]}</p>
+        <p style={{ color: "var(--banco-muted)", marginTop: "0.5rem" }}>{copy.loading}</p>
       </section>
     );
   }
 
   if (query.isError || items.length === 0) {
-    return null;
+    return (
+      <section style={sectionStyle}>
+        <div style={headerStyle}>
+          <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{title}</h2>
+          <Link href={searchHref} style={{ color: "var(--banco-primary)", fontWeight: 600 }}>
+            {copy.viewAll}
+          </Link>
+        </div>
+        <p style={{ color: "var(--banco-muted)", marginTop: "0.5rem", lineHeight: 1.6 }}>
+          {query.isError ? copy.error : copy.empty}
+        </p>
+        <Link
+          href={searchHref}
+          style={{
+            display: "inline-block",
+            marginTop: "0.5rem",
+            color: "var(--banco-primary)",
+            fontWeight: 600,
+            textDecoration: "none",
+          }}
+        >
+          {copy.cta} →
+        </Link>
+      </section>
+    );
   }
 
   return (
@@ -65,7 +126,7 @@ export function HubFeedTeaser({
       <div style={headerStyle}>
         <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{title}</h2>
         <Link href={searchHref} style={{ color: "var(--banco-primary)", fontWeight: 600 }}>
-          {VIEW_ALL[locale]}
+          {copy.viewAll}
         </Link>
       </div>
       <ul style={listStyle}>

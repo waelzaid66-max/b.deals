@@ -127,6 +127,8 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
               <Link href={copy.carsHref}>{copy.cars}</Link>
               {" · "}
               <Link href={copy.realEstateHref}>{copy.realEstate}</Link>
+              {" · "}
+              <Link href={copy.industrialHref}>{copy.industrial}</Link>
             </p>
           </div>
           <div>

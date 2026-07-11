@@ -261,6 +261,10 @@ export interface Seller {
   phone?: string | null;
   /** Public profile social chips surfaced on listing detail for buyers. */
   social_links?: SocialLink[];
+  /** Seller bio from public profile — visible on listing detail. */
+  bio?: string | null;
+  /** Display title / business name from public profile. */
+  display_title?: string | null;
 }
 
 export type ListingDetailCategory = typeof ListingDetailCategory[keyof typeof ListingDetailCategory];

@@ -27,6 +27,7 @@ type SearchResultsSectionProps = {
   title?: string;
   intro?: string;
   hideHeader?: boolean;
+  linkable?: boolean;
 };
 
 export function SearchResultsSection({
@@ -34,6 +35,7 @@ export function SearchResultsSection({
   title,
   intro,
   hideHeader = false,
+  linkable = true,
 }: SearchResultsSectionProps) {
   const locale = useSearchLocale();
   const copy = searchUiCopy(locale);
@@ -51,7 +53,7 @@ export function SearchResultsSection({
       <ul style={listStyle}>
         {items.map((item) => (
           <li key={item.id}>
-            <ListingCard item={item} locale={locale} />
+            <ListingCard item={item} locale={locale} linkable={linkable} />
           </li>
         ))}
       </ul>

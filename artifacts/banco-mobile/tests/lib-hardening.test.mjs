@@ -228,11 +228,11 @@ test("search buttons stay isolated — no host hub / no dual fuel engines", () =
     "facet normalize must clear rentalTerm when dropping rent engine",
   );
 
-  // Sticky map exits on full criteriaKey (fuel/material/years included).
+  // Map exits on section/engine/market change — rental/price tweaks stay on map.
   assert.match(
     search,
-    /criteriaMapKey = criteriaKey\(criteria\)/,
-    "map exit must use full criteriaKey",
+    /mapSectionKey = mapAnchorKey\(criteria\)/,
+    "map exit must use mapAnchorKey (section/engine/market)",
   );
 
   // Autocomplete scoped to active company.

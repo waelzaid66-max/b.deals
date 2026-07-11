@@ -23,6 +23,22 @@ import {
   type SocialLinkPlatform,
 } from "@workspace/api-client-react";
 import React, { useEffect, useRef, useState } from "react";
+import type { UserResource } from "@clerk/types";
+
+function readClerkPresentational(
+  user: UserResource | null | undefined,
+  key: "bio" | "displayTitle" | "categoryLabel",
+): string {
+  if (!user) return "";
+  const pub = user.publicMetadata ?? {};
+  const unsafe = user.unsafeMetadata ?? {};
+  const pubVal = pub[key];
+  const unsafeVal = unsafe[key];
+  const raw =
+    (typeof pubVal === "string" ? pubVal : "") ||
+    (typeof unsafeVal === "string" ? unsafeVal : "");
+  return raw.trim();
+}
 import {
   ActivityIndicator,
   Alert,
@@ -389,14 +405,9 @@ export default function ProfileScreen() {
   const openEditProfile = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setShowMenu(false);
-    const meta = (user?.unsafeMetadata ?? {}) as Record<string, unknown>;
-    setDisplayTitleDraft(
-      typeof meta.displayTitle === "string" ? meta.displayTitle : "",
-    );
-    setCategoryLabelDraft(
-      typeof meta.categoryLabel === "string" ? meta.categoryLabel : "",
-    );
-    setBioDraft(typeof meta.bio === "string" ? meta.bio : "");
+    setDisplayTitleDraft(readClerkPresentational(user, "displayTitle"));
+    setCategoryLabelDraft(readClerkPresentational(user, "categoryLabel"));
+    setBioDraft(readClerkPresentational(user, "bio"));
     setShowEditProfile(true);
   };
 
@@ -408,6 +419,12 @@ export default function ProfileScreen() {
       await user?.update({
         unsafeMetadata: {
           ...(user.unsafeMetadata ?? {}),
+          displayTitle: displayTitleDraft.trim(),
+          categoryLabel: categoryLabelDraft.trim(),
+          bio: bioDraft.trim(),
+        },
+        publicMetadata: {
+          ...(user.publicMetadata ?? {}),
           displayTitle: displayTitleDraft.trim(),
           categoryLabel: categoryLabelDraft.trim(),
           bio: bioDraft.trim(),
@@ -789,14 +806,12 @@ export default function ProfileScreen() {
 
     const metrics = metricsQuery.data?.data;
     const social = socialQuery.data?.data ?? [];
-    // Presentational identity fields persisted in Clerk unsafeMetadata (Task #143).
+    // Presentational identity — prefer publicMetadata (same as listing API).
     const meta = (user.unsafeMetadata ?? {}) as Record<string, unknown>;
     const coverUrl = typeof meta.coverUrl === "string" ? meta.coverUrl : "";
-    const displayTitle =
-      typeof meta.displayTitle === "string" ? meta.displayTitle : "";
-    const categoryLabel =
-      typeof meta.categoryLabel === "string" ? meta.categoryLabel : "";
-    const bio = typeof meta.bio === "string" ? meta.bio : "";
+    const displayTitle = readClerkPresentational(user, "displayTitle");
+    const categoryLabel = readClerkPresentational(user, "categoryLabel");
+    const bio = readClerkPresentational(user, "bio");
     const displayName = user.firstName ?? t("profile.member");
     const userEmail = user.emailAddresses[0]?.emailAddress ?? "";
     // Verification reflects the account state from /me (UserState), not metrics.
@@ -2051,6 +2066,17 @@ export default function ProfileScreen() {
                   ]}
                 >
                   {t("profile.bioLabel")}
+                </AppText>
+                <AppText
+                  style={[
+                    styles.editHint,
+                    {
+                      color: colors.mutedForeground,
+                      textAlign: isRTL ? "right" : "left",
+                    },
+                  ]}
+                >
+                  {t("profile.bioHint")}
                 </AppText>
                 <TextInput
                   value={bioDraft}
@@ -3847,6 +3873,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "Inter_600SemiBold",
     marginBottom: 6,
+  },
+  editHint: {
+    fontSize: 12,
+    fontFamily: "Inter_400Regular",
+    marginBottom: 8,
+    lineHeight: 18,
   },
   editInput: {
     borderWidth: 1,

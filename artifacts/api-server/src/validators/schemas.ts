@@ -324,6 +324,9 @@ export const ListingDetailSchema = z
         // Public profile chips (instagram, linkedin, website, whatsapp) — not
         // listing contact_phones; those stay in specs for lead reveal.
         social_links: z.array(SocialLinkSchema),
+        // Presentational identity — synced from Clerk publicMetadata (Task #143).
+        bio: z.string().nullable().optional(),
+        display_title: z.string().nullable().optional(),
         // phone intentionally omitted — only obtainable via POST /leads/contact
         // to ensure every phone reveal is a server-observed billable contact event.
       })
@@ -353,6 +356,8 @@ export const ListingDetailSchema = z
     // Additive: seller opted this listing in to WhatsApp contact (opt-in only,
     // default false). The detail CTA gates the WhatsApp button on it.
     whatsapp_enabled: z.boolean().nullable(),
+    // True when this is a buyer "request/wanted" post rather than a sale listing.
+    is_request: z.boolean().optional(),
   })
   .strict();
 

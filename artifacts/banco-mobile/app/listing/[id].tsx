@@ -1407,6 +1407,16 @@ export default function ListingDetailScreen() {
                     )}
                   </View>
                   <View style={[styles.sellerMetaRow, { flexDirection: rowDir }]}>
+                    {listing.seller.display_title ? (
+                      <AppText
+                        style={[
+                          styles.sellerRole,
+                          { color: colors.foreground, fontWeight: "600" },
+                        ]}
+                      >
+                        {listing.seller.display_title}
+                      </AppText>
+                    ) : null}
                     {sellerRoleLabel ? (
                       <AppText
                         style={[
@@ -1443,6 +1453,16 @@ export default function ListingDetailScreen() {
                       </View>
                     ) : null}
                   </View>
+                  {listing.seller.bio ? (
+                    <AppText
+                      style={[
+                        styles.sellerBio,
+                        { color: colors.mutedForeground, textAlign },
+                      ]}
+                    >
+                      {listing.seller.bio}
+                    </AppText>
+                  ) : null}
                   {company?.stats ? (
                     <View style={[styles.trustRow, { flexDirection: rowDir }]}>
                       <View style={styles.trustStat}>
@@ -3043,6 +3063,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "Inter_400Regular",
     textTransform: "capitalize",
+  },
+  sellerBio: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    lineHeight: 19,
+    marginTop: 4,
   },
   reportBtn: {
     alignItems: "center",

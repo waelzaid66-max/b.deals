@@ -382,6 +382,14 @@ components:
           description: Public seller profile links (Task #38). Empty when none set.
           items:
             $ref: "#/components/schemas/SocialLink"
+        bio:
+          type: string
+          nullable: true
+          description: Public seller bio shown on listing detail (from Clerk profile).
+        display_title:
+          type: string
+          nullable: true
+          description: Public display title / business name on listing detail.
 
     ListingDetail:
       type: object

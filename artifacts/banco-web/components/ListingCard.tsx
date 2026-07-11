@@ -35,9 +35,11 @@ const metaStyle: React.CSSProperties = {
 type ListingCardProps = {
   item: FeedItem;
   locale?: SiteLocale;
+  /** Preview/demo cards must not link to missing listing IDs. */
+  linkable?: boolean;
 };
 
-export function ListingCard({ item, locale: localeProp }: ListingCardProps) {
+export function ListingCard({ item, locale: localeProp, linkable = true }: ListingCardProps) {
   const detectedLocale = useSearchLocale();
   const locale = localeProp ?? detectedLocale;
   const copy = listingUiCopy(locale);
@@ -47,8 +49,8 @@ export function ListingCard({ item, locale: localeProp }: ListingCardProps) {
   if (item.has_video) badges.push(copy.video);
   if (item.trust_signal) badges.push(item.trust_signal);
 
-  return (
-    <Link href={`/listing/${item.id}`} style={cardStyle}>
+  const body = (
+    <>
       {item.media_preview ? (
         <img src={item.media_preview} alt={item.title} style={mediaStyle} />
       ) : (
@@ -71,6 +73,20 @@ export function ListingCard({ item, locale: localeProp }: ListingCardProps) {
         {formatApiCategoryLabel(item.category, locale)}
         {badges.length > 0 ? ` · ${badges.join(" · ")}` : ""}
       </p>
+    </>
+  );
+
+  if (!linkable) {
+    return (
+      <div style={{ ...cardStyle, cursor: "default" }} aria-disabled="true">
+        {body}
+      </div>
+    );
+  }
+
+  return (
+    <Link href={`/listing/${item.id}`} style={cardStyle}>
+      {body}
     </Link>
   );
 }

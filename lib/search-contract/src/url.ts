@@ -1,4 +1,5 @@
 import type { Category } from "@workspace/taxonomy/categories";
+import { engineByKey } from "./engines";
 import { buildSearchParams } from "./buildSearchParams";
 import {
   DEFAULT_CRITERIA,
@@ -73,17 +74,24 @@ export function parseSearchCriteriaFromUrl(
   const nearLng = asNumber(searchParams.near_lng);
   const nearMeEnabled = nearLat != null && nearLng != null;
 
+  const category = asCategory(searchParams.category);
+  const engineKey = first(searchParams.engine) ?? DEFAULT_CRITERIA.engineKey;
+  const engine = engineByKey(category, engineKey);
+  const rentalTermRaw = first(searchParams.rental_term) ?? null;
+  const rentalTerm =
+    engine?.params.offer_type === "rent" ? rentalTermRaw : null;
+
   return {
     ...DEFAULT_CRITERIA,
     q: first(searchParams.q) ?? "",
-    category: asCategory(searchParams.category),
-    engineKey: first(searchParams.engine) ?? DEFAULT_CRITERIA.engineKey,
+    category,
+    engineKey,
     sort: asSort(searchParams.sort),
     minPrice: first(searchParams.min_price) ?? "",
     maxPrice: first(searchParams.max_price) ?? "",
     location: first(searchParams.location) ?? "",
     paymentType: asPaymentType(searchParams.payment_type),
-    rentalTerm: first(searchParams.rental_term) ?? null,
+    rentalTerm,
     brand: first(searchParams.brand) ?? null,
     model: first(searchParams.model) ?? null,
     fuelType: (first(searchParams.fuel_type) as SearchCriteria["fuelType"]) ?? null,

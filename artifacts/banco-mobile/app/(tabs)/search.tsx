@@ -75,8 +75,8 @@ import {
   CLEAR_SECTION_ATTRS,
   DEFAULT_CRITERIA,
   SearchCriteria,
-  criteriaKey,
   hasActiveCriteria,
+  mapAnchorKey,
   type PaymentType,
   type SearchSort,
 } from "@/lib/searchParams";
@@ -267,16 +267,14 @@ export default function SearchScreen() {
     if (!inResultsView && mapMode) setMapMode(false);
   }, [inResultsView, mapMode]);
 
-  // Sticky map is a trap: ANY criteria change (fuel, material, years, price…)
-  // returns to the list so each section's results stay the default surface.
-  // Explore-on-map still latches wantMap after the next fetch.
-  const criteriaMapKey = criteriaKey(criteria);
-  const prevCriteriaMapKey = useRef(criteriaMapKey);
+  // Exit map only when browse section/engine/market changes — not on rental/price tweaks.
+  const mapSectionKey = mapAnchorKey(criteria);
+  const prevMapSectionKey = useRef(mapSectionKey);
   useEffect(() => {
-    if (prevCriteriaMapKey.current === criteriaMapKey) return;
-    prevCriteriaMapKey.current = criteriaMapKey;
+    if (prevMapSectionKey.current === mapSectionKey) return;
+    prevMapSectionKey.current = mapSectionKey;
     setMapMode(false);
-  }, [criteriaMapKey]);
+  }, [mapSectionKey]);
 
   // "Explore on map" from discover: the results that decide whether a map is
   // even possible haven't loaded yet, so latch the intent. Flip to map mode the
@@ -920,7 +918,7 @@ export default function SearchScreen() {
           )}
         </View>
 
-        {!!draftQuery.trim() && (
+        {(!!draftQuery.trim() || hasActiveCriteria(criteria)) && (
           <Pressable
             onPress={handleSaveSearch}
             disabled={searchSaved}

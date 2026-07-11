@@ -49,8 +49,8 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
   }, [soundEnabled]);
 
   useEffect(() => {
-    // Play SFX through the normal media channel; don't hijack the silent switch.
-    setAudioModeAsync({ playsInSilentMode: false }).catch(() => {});
+    // Respect silent switch off by default; users who enable sounds expect cues.
+    setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
     (async () => {
       try {
         const [s, n] = await AsyncStorage.multiGet([SOUND_KEY, NOTIF_KEY]);

@@ -17,6 +17,8 @@ type SearchMapPanelProps = {
   mapEnabled: boolean;
   liveEnabled: boolean;
   criteria: SearchCriteria;
+  /** Compact height when map is secondary (#2) beside list results. */
+  compact?: boolean;
 };
 
 const panelStyle: React.CSSProperties = {
@@ -74,7 +76,13 @@ function SearchMapPanelDisabled() {
   );
 }
 
-function SearchMapPanelMock({ viewport }: { viewport: MapViewport }) {
+function SearchMapPanelMock({
+  viewport,
+  compact,
+}: {
+  viewport: MapViewport;
+  compact?: boolean;
+}) {
   const locale = useSearchLocale();
   const copy = searchUiCopy(locale);
   const total = mockClusters.reduce((sum, cluster) => sum + cluster.count, 0);
@@ -83,12 +91,23 @@ function SearchMapPanelMock({ viewport }: { viewport: MapViewport }) {
     <section style={panelStyle}>
       <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{copy.mapMockTitle}</h2>
       <p style={{ ...mutedStyle, marginTop: "0.5rem" }}>{copy.mapMockBody}</p>
-      <SearchMapSurface clusters={mockClusters} viewport={viewport} totalListings={total} />
+      <SearchMapSurface
+        clusters={mockClusters}
+        viewport={viewport}
+        totalListings={total}
+        compact={compact}
+      />
     </section>
   );
 }
 
-function SearchMapPanelLive({ criteria }: { criteria: SearchCriteria }) {
+function SearchMapPanelLive({
+  criteria,
+  compact,
+}: {
+  criteria: SearchCriteria;
+  compact?: boolean;
+}) {
   const locale = useSearchLocale();
   const copy = searchUiCopy(locale);
   const [viewport, setViewport] = useState<MapViewport>(() => getDefaultMapViewport());
@@ -172,13 +191,19 @@ function SearchMapPanelLive({ criteria }: { criteria: SearchCriteria }) {
           viewport={viewport}
           totalListings={total}
           onViewportChange={handleViewportChange}
+          compact={compact}
         />
       )}
     </section>
   );
 }
 
-export function SearchMapPanel({ mapEnabled, liveEnabled, criteria }: SearchMapPanelProps) {
+export function SearchMapPanel({
+  mapEnabled,
+  liveEnabled,
+  criteria,
+  compact = false,
+}: SearchMapPanelProps) {
   const viewport = getDefaultMapViewport();
 
   if (!mapEnabled) {
@@ -186,8 +211,8 @@ export function SearchMapPanel({ mapEnabled, liveEnabled, criteria }: SearchMapP
   }
 
   if (!liveEnabled) {
-    return <SearchMapPanelMock viewport={viewport} />;
+    return <SearchMapPanelMock viewport={viewport} compact={compact} />;
   }
 
-  return <SearchMapPanelLive criteria={criteria} />;
+  return <SearchMapPanelLive criteria={criteria} compact={compact} />;
 }
